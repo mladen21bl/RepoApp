@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body_class %}template-blogpage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <p>Ime: {{ page.agent.ime }}</p>
+    <p>Prezime: {{ page.agent.prezime }}</p>
+    <p>Email: {{ page.agent.email }}</p>
+    <p>Telefon: {{ page.agent.telefon }}</p>
+    <p><a href="{{ page.get_parent.url }}">Return to lista agenata</a></p>
+{% endblock %}

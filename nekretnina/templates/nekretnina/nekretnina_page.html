@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <p>Naziv: {{ page.nekretnina.naziv }}</p>
+    <p>Površina: {{ page.nekretnina.povrsina }}</p>
+    <p>Cena: {{ page.nekretnina.cena }}</p>
+    <p>Opis: {{ page.nekretnina.opis }}</p>
+    <p>Status: {{ page.nekretnina.status }}</p>
+    <p>Vrsta nekretnine: {{ page.nekretnina.vrsta_nekretnine }}</p>
+    <p>SLika</p>
+    {% for slika in page.nekretnina.galerija_slika.all %}
+      <img src="{{ slika.slika.url }}" alt="Slika nekretnine">
+    {% endfor %}
+    <img src="{{ page.nekretnina.slika.url }}" alt="Slika nekretnine">
+    <p><a href="{{ page.get_parent.url }}">Return to lista nekretnina</a></p>
+
+    <h2>Kontaktirajte nas</h2>
+    {% if form_sent %}
+        <p>Hvala vam na vašem upitu!</p>
+    {% else %}
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Pošalji">
+        </form>
+    {% endif %}
+{% endblock %}

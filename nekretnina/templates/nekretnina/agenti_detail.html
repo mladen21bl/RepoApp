@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+
+<h1>Agent Details</h1>
+<p>Ime: {{ agent.ime }}</p>
+<p>Prezime: {{ agent.prezime }}</p>
+<p>Email: {{ agent.email }}</p>
+<p>Telefon: {{ agent.telefon }}</p>
+<p>Nekretnine agenta {{ agent.ime }}:</p>
+{% for a in agent.nekretnine.all %}
+  <li>{{ a.naziv }}</li>
+{% endfor %}
+
+<h2>Inbox</h2>
+<ul>
+  {% for kontakt_forma in agent.inbox.all %}
+    <p>Poruka od:{{ kontakt_forma.ime }}</p>
+    <p>Upit za: ({{ kontakt_forma.naziv_nekretnine }})</p>
+    <p>{{ kontakt_forma.poruka }}</p>
+    <br><br>
+  {% empty %}
+    <li>No messages in the inbox.</li>
+  {% endfor %}
+
+</ul>
+{% endblock %}

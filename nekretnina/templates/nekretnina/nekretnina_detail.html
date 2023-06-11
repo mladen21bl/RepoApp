@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <p>Naziv: {{ detail.naziv }}</p>
+    <p>Površina: {{ detail.povrsina }}</p>
+    <p>Cijena: {{ detail.cena }}</p>
+    <p>Opis: {{ detail.opis }}</p>
+    <p>Status: {{ detail.status }}</p>
+    <p>Vrsta nekretnine: {{ detail.vrsta }}</p>
+    <p>Mjesto: {{ detail.mjesto }}</p>
+
+    <div class="image-grid">
+        <div class="image-box">
+            <img src="{{ detail.slika1.url }}" alt="Slika 1">
+        </div>
+        <div class="image-box">
+            <img src="{{ detail.slika2.url }}" alt="Slika 2">
+        </div>
+        <div class="image-box">
+            <img src="{{ detail.slika3.url }}" alt="Slika 3">
+        </div>
+        <div class="image-box">
+            <img src="{{ detail.slika4.url }}" alt="Slika 4">
+        </div>
+    </div>
+
+    {% if detail.vrsta == 'kuca' or detail.vrsta == 'vikendica' %}
+        <p>Dvoriste: {{ detail.get_dvoriste_display }}</p>
+        <p>Bazen: {{ detail.get_bazen_display }}</p>
+        <p>Garaza: {{ detail.get_garaza_display }}</p>
+    {% endif %}
+
+    {% if detail.vrsta == 'stan' or detail.vrsta == 'garsonjera' %}
+      <p>Centralno grijanje: {{ detail.get_centralno_grijanje_display }}</p>
+      <p>Lift: {{ detail.get_lift_display }}</p>
+  {% endif %}
+
+  {% if detail.vrsta == 'poslovni_prostor' %}
+      <p>Parking: {{ detail.get_parking_display }}</p>
+      <p>Klima: {{ detail.get_klima_display }}</p>
+  {% endif %}
+
+  <!-- Forma za unos podataka -->
+  <div class="container">
+    <form action="{% url 'nekretnina:kontakt_forma' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="nekretnina_pk" value="{{ detail.id }}">
+      <input type="hidden" name="naziv_nekretnine" value="{{ detail.naziv }}">
+      <div class="form-group">
+        <label for="ime">Ime:</label>
+        <input type="text" class="form-control" id="ime" name="ime" required>
+      </div>
+      <div class="form-group">
+        <label for="poruka">Poruka:</label>
+        <textarea class="form-control" id="poruka" name="poruka" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Pošalji</button>
+    </form>
+  </div>
+</body>
+</html>
+
+<style>
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  margin-bottom: 20px;
+  width: 400px; /* Povećana širina na 400px */
+  height: 400px; /* Povećana visina na 400px */
+}
+
+.image-box {
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
+}
+
+.image-box img {
+  position: absolute;
+  width: 200px; /* Promijenjena širina na 200px */
+  height: 200px; /* Promijenjena visina na 200px */
+  object-fit: cover;
+}
+
+#container {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+</style>
+
+{% endblock %}
