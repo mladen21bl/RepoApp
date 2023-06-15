@@ -1,8 +1,43 @@
 {% extends "base.html" %}
 
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
 
 {% block content %}
+<style>
+
+#container {
+  margin-left: 30px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 40px;
+}
+
+.image-box {
+    background-color: green;
+    padding: 5px;
+    text-align: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.post-title {
+    font-family: 'Times New Roman', sans-serif;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+</style>
 
 <div class="container">
 
@@ -123,56 +158,55 @@
         <label for="povrsina_do">Kvadratura (do):</label>
         <input type="number" id="povrsina_do" name="povrsina_do" value="{{ request.GET.povrsina_do }}">
     </div>
+    </div>
 
 
 
 
-
-    <button type="submit">Filtriraj</button
+    <button type="submit">Filtriraj</button>
 
 <div class="image-grid">
-    {% for nekretnina in lista %}
+      {% for nekretnina in lista %}
         <a href="{% url 'nekretnina:nekretnina_detail' pk=nekretnina.pk %}" style="text-decoration: none;">
-            <div class="image-box">
-                <img src="{{ nekretnina.slika.url }}" alt="{{ nekretnina.naziv }}" style="width: 300px; height: 200px;">
-                <h2 class="post-title">{{ nekretnina.naziv }}</h2>
-            </div>
+          <div class="image-box">
+            {% for slika in nekretnina.slike.all %}
+            <img src="{{ slika.url }}" alt="{{ slika.image.title }}" style="width: 300px; height: 200px;"/>
+            {% endfor %}
+            <h2 class="post-title">{{ nekretnina.naziv }}</h2>
+          </div>
         </a>
-    {% endfor %}
+      {% endfor %}
 </div>
+      {% if page_obj.has_other_pages %}
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+          {% if page_obj.number > 1 %}
+            <a href="?category={{ request.GET.category|urlencode }}&page=1">1</a>
+            {% if page_obj.number > 4 %}
+              ...
+            {% endif %}
+          {% endif %}
 
-</div>
+          {% if page_obj.number > 3 %}
+            <span>...</span>
+          {% endif %}
+
+          {% if page_obj.number > 2 %}
+            <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.number|add:"-1" }}">{{ page_obj.number|add:"-1" }}</a>
+          {% endif %}
+
+          <span class="current-page">{{ page_obj.number }}</span>
+
+          {% if page_obj.number < page_obj.paginator.num_pages %}
+            <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.number|add:"1" }}">{{ page_obj.number|add:"1" }}</a>
+          {% endif %}
+
+          {% if page_obj.number < page_obj.paginator.num_pages %}
+            {% if page_obj.number < page_obj.paginator.num_pages|add:"-3" %}
+              ...
+            {% endif %}
+            <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+          {% endif %}
+      {% endif %}
+
+    </div>
 {% endblock %}
-
-
-
-#container {
-  margin-left: 30px;
-}
-
-.image-grid {
-    height: 50px;
-    max-width: 50px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 20px;
-}
-
-.image-box {
-    background-color: #f2f2f2;
-    padding: 10px;
-    text-align: center;
-}
-
-.image-box img {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-    object-position: center;
-}
-
-.post-title {
-    font-family: 'Times New Roman', sans-serif;
-    color: #ffffff;
-    margin-top: 10px;
-}

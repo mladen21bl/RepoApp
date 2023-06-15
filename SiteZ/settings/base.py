@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.urls import reverse_lazy
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.modeladmin",
+    "wagtail.contrib.settings",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     "wagtail",
     "modelcluster",
     "taggit",
+    "imagekit",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -155,11 +158,13 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
+LOGIN_REDIRECT_URL = 'nekretnina:indexview'
 
+from django.urls import reverse_lazy
 # Wagtail settings
-
+WAGTAILMEDIA_MEDIA_MODEL = 'wagtailimages.Image'
+WAGTAILMEDIA_MEDIA_MODEL_DIR = 'media/original_images'
 WAGTAIL_SITE_NAME = "SiteZ"
-
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
 WAGTAILSEARCH_BACKENDS = {"default": {"BACKEND": "wagtail.search.backends.database",}}
@@ -167,3 +172,6 @@ WAGTAILSEARCH_BACKENDS = {"default": {"BACKEND": "wagtail.search.backends.databa
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
+WAGTAILIMAGES_IMAGE_MODEL_DIR = 'original_images'
+WAGTAILIMAGES_IMAGE_MODEL_IMAGE_FIELD = 'file'
+WAGTAILIMAGES_IMAGE_MODEL = 'wagtailimages.Image'

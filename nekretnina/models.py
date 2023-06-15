@@ -13,15 +13,56 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 
-class Korisnik(models.Model):
-    ime = models.CharField(max_length=255, unique=True)
-    sifra = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
-    odobreno = models.BooleanField(default=False)
+
+
+
+
+class KontaktForma(models.Model):
+    ime = models.CharField(max_length=255)
+    upit = models.CharField(max_length=700)
+    naziv_nekretnine = models.CharField(max_length=255)
+    ime_agenta = models.CharField(max_length=255, default="007")
+
 
     def __str__(self):
         return self.ime
 
+
+class Poruke(models.Model):
+    ime = models.CharField(max_length=255)
+    tekst = models.CharField(max_length=700)
+    forma = models.ForeignKey('KontaktForma', related_name='poruke', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.ime
+
+
+class Korisnik(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default="")
+    ime = models.CharField(max_length=255, unique=True)
+    sifra = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    odobreno = models.BooleanField(default=False)
+    inbox = models.ManyToManyField(KontaktForma, blank=True)
+
+    def __str__(self):
+        return self.ime
+
+
+class Agent(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default="")
+    ime = models.CharField(max_length=255)
+    sifra = models.CharField(max_length=255)
+    prezime = models.CharField(max_length=255)
+    email = models.EmailField()
+    telefon = models.CharField(max_length=20)
+    inbox = models.ManyToManyField(KontaktForma, blank=True)
+
+    def __str__(self):
+        return self.email
+
+    def get_admin_display_title(self):
+        return f'{self.ime} {self.prezime}'
 
 
 
@@ -33,27 +74,6 @@ class AgentIndexPage(Page):
     ]
 
 
-class KontaktForma(models.Model):
-    ime = models.CharField(max_length=255)
-    poruka = models.CharField(max_length=700, default="nema")
-    naziv_nekretnine = models.CharField(max_length=255, default="imeneko") 
-
-    def __str__(self):
-        return self.ime
-
-
-class Agent(models.Model):
-    ime = models.CharField(max_length=255)
-    prezime = models.CharField(max_length=255)
-    email = models.EmailField()
-    telefon = models.CharField(max_length=20)
-    inbox = models.ManyToManyField(KontaktForma, blank=True)
-
-    def __str__(self):
-        return f'{self.ime} {self.prezime}'
-
-    def get_admin_display_title(self):
-        return f'{self.ime} {self.prezime}'
 
 class AgentPage(Page):
     agent = models.ForeignKey(Agent, null=True, blank=True, on_delete=models.SET_NULL)
@@ -110,7 +130,7 @@ class Nekretnina(models.Model):
         ('poslovni_prostor', 'Poslovni prostor'),
     ]
 
-    naziv = models.CharField(max_length=255)
+    naziv = models.CharField(max_length=255, unique=True)
     povrsina = models.DecimalField(max_digits=10, decimal_places=2)
     cena = models.DecimalField(max_digits=10, decimal_places=2)
     opis = models.TextField()
@@ -118,14 +138,11 @@ class Nekretnina(models.Model):
     vrsta = models.CharField(max_length=35, choices=VRSTA_CHOICES, default='stan')
     grad = models.CharField(max_length=15, choices=GRAD_CHOICES, default='banjaluka')
     mjesto = models.CharField(max_length=15, choices=MJESTO_CHOICES, default='centar')
-    slika = models.ImageField(upload_to='nekretnine_slike/', default="nekretnine_slike/berza.jpg")
-
-    slika1 = models.ImageField(upload_to='nekretnine_slike/', default="nekretnine_slike/berza.jpg")
-    slika2 = models.ImageField(upload_to='nekretnine_slike/', default="nekretnine_slike/berza.jpg")
-    slika3 = models.ImageField(upload_to='nekretnine_slike/', default="nekretnine_slike/berza.jpg")
-    slika4 = models.ImageField(upload_to='nekretnine_slike/', default="nekretnine_slike/berza.jpg")
-
-
+    slike = models.ManyToManyField(
+        Image,
+        blank=True,
+        related_name='nekretnina_slike'
+    )
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
     dvoriste = models.BooleanField(default=False)
     garaza = models.BooleanField(default=False)
