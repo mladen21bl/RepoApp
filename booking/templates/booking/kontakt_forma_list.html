@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+<style>
+.box {
+  border: 1px solid #ccc;
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.container {
+  width: 400px;
+  height: 600px;
+  padding-top: 30px;
+  text-align: center;
+}
+</style>
+<div class="container">
+<p>Inbox:</p>
+{% for upit in upiti %}
+    {% if user.username == upit.ime or user.username == upit.ime_agenta or request.user.is_superuser %}
+        <div class="box">
+            <a href="{% url 'booking:upit_detalj' pk=upit.pk %}" class="box-link">Upit za: {{ upit.naziv_nekretnine }} Salje: {{ upit.ime }}</a>
+        </div>
+    {% endif %}
+{% endfor %}
+
+</div>
+{% endblock %}

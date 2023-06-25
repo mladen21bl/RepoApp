@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <h1>Agent Details</h1>
+    <p>Username: {{ agent.username }}</p>
+    <p>Email: {{ agent.email }}</p>
+    <p>Telefon: {{ agent.telefon }}</p>
+    <p>Nekretnine agenta {{ agent.username }}:</p>
+    {% for a in agent.nekretnine.all %}
+        <li>{{ a.naziv }}</li>
+    {% endfor %}
+
+
+
+
+{% endblock %}
