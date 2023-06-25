@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+
+{% block content %}
+<style>
+
+#container {
+  margin-left: 30px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 40px;
+}
+
+.image-box {
+    background-color: green;
+    padding: 5px;
+    text-align: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.post-title {
+    font-family: 'Times New Roman', sans-serif;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+</style>
+
+<div class="container">
+
+<h1>{{ page.title }}</h1>
+
+<div class="filters">
+  <form method="GET" action="">
+
+    <div class="filter">
+      <label for="id_grad">Grad:</label>
+      <select name="grad" id="id_grad">
+          <option value="">-- Sve --</option>
+          {% for choice in grad_choices %}
+              <option value="{{ choice.0 }}" {% if choice.0 == selected_grad %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+      </select>
+    </div>
+
+
+    <div class="filter">
+      <label for="id_mjesto">Mjesto:</label>
+      <select name="mjesto" id="id_mjesto">
+          <option value="">-- Sva --</option>
+          {% for choice in mjesto_choices %}
+              <option value="{{ choice.0 }}" {% if choice.0 == selected_mjesto %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter">
+      <label for="id_vrsta">Vrsta:</label>
+      <select name="vrsta" id="id_vrsta">
+          <option value="">-- Sve --</option>
+          {% for choice in vrsta_choices %}
+              <option value="{{ choice.0 }}" {% if choice.0 == selected_vrsta %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+      </select>
+    </div>
+
+    {% if selected_vrsta == 'kuca' or selected_vrsta == 'vikendica' %}
+        <div class="filter">
+            <label for="dvoriste">Dvoriste:</label>
+            <input type="checkbox" id="dvoriste" name="dvoriste" {% if request.GET.dvoriste %}checked{% endif %}>
+        </div>
+
+        <div class="filter">
+            <label for="bazen">Bazen:</label>
+            <input type="checkbox" id="bazen" name="bazen" {% if request.GET.bazen %}checked{% endif %}>
+        </div>
+
+        <div class="filter">
+            <label for="garaza">Garaza:</label>
+            <input type="checkbox" id="garaza" name="garaza" {% if request.GET.garaza %}checked{% endif %}>
+        </div>
+    {% endif %}
+
+
+    {% if selected_vrsta == 'stan' or selected_vrsta == 'garsonjera' %}
+        <div class="filter">
+            <label for="centralno_grijanje">Centralno grijanje:</label>
+            <input type="checkbox" id="centralno_grijanje" name="centralno_grijanje" {% if request.GET.centralno_grijanje %}checked{% endif %}>
+        </div>
+
+
+        <div class="filter">
+            <label for="lift">Lift:</label>
+            <input type="checkbox" id="lift" name="lift" {% if request.GET.lift %}checked{% endif %}>
+        </div>
+    {% endif %}
+
+    {% if selected_vrsta == 'poslovni_prostor' %}
+        <div class="filter">
+            <label for="parking">Parking:</label>
+            <input type="checkbox" id="parking" name="parking" {% if request.GET.parking %}checked{% endif %}>
+        </div>
+
+
+        <div class="filter">
+            <label for="klima">Klima:</label>
+            <input type="checkbox" id="klima" name="klima" {% if request.GET.klima %}checked{% endif %}>
+        </div>
+    {% endif %}
+
+    <div class="filter">
+        <label for="id_status">Status:</label>
+        <select name="status" id="id_status">
+            <option value="">-- Svi --</option>
+            {% for choice in status_choices %}
+                <option value="{{ choice.0 }}" {% if choice.0 == selected_status %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="filter">
+        <label for="naziv">Naziv:</label>
+        <input type="text" id="naziv" name="naziv" value="{{ request.GET.naziv }}">
+    </div>
+
+    <div class="filter">
+        <label for="cena_od">Cena (od):</label>
+        <input type="number" id="cena_od" name="cena_od" value="{{ request.GET.cena_od }}">
+    </div>
+
+    <div class="filter">
+        <label for="cena_do">Cena (do):</label>
+        <input type="number" id="cena_do" name="cena_do" value="{{ request.GET.cena_do }}">
+    </div>
+
+
+
+
+    <div class="filter">
+        <label for="povrsina_od">Kvadratura (od):</label>
+        <input type="number" id="povrsina_od" name="povrsina_od" value="{{ request.GET.povrsina_od }}">
+    </div>
+
+    <div class="filter">
+        <label for="povrsina_do">Kvadratura (do):</label>
+        <input type="number" id="povrsina_do" name="povrsina_do" value="{{ request.GET.povrsina_do }}">
+    </div>
+    </div>
+
+
+
+
+    <button type="submit">Filtrirajjj</button>
+
+<div class="image-grid">
+      {% for nekretnina in lista %}
+        <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" style="text-decoration: none;">
+          {% with nekretnina.main_image as main_image %}
+              {% if main_image %}{% image main_image fill-160x100 %}{% endif %}
+          {% endwith %}
+            <h2 class="post-title">{{ nekretnina.naziv }}</h2>
+        </a>
+      {% endfor %}
+</div>
+      {% if page_obj.has_other_pages %}
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+          {% if page_obj.number > 1 %}
+            <a href="?category={{ request.GET.category|urlencode }}&page=1">1</a>
+            {% if page_obj.number > 4 %}
+              ...
+            {% endif %}
+          {% endif %}
+
+          {% if page_obj.number > 3 %}
+            <span>...</span>
+          {% endif %}
+
+          {% if page_obj.number > 2 %}
+            <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.number|add:"-1" }}">{{ page_obj.number|add:"-1" }}</a>
+          {% endif %}
+
+          <span class="current-page">{{ page_obj.number }}</span>
+
+          {% if page_obj.number < page_obj.paginator.num_pages %}
+            <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.number|add:"1" }}">{{ page_obj.number|add:"1" }}</a>
+          {% endif %}
+
+          {% if page_obj.number < page_obj.paginator.num_pages %}
+            {% if page_obj.number < page_obj.paginator.num_pages|add:"-3" %}
+              ...
+            {% endif %}
+            <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+          {% endif %}
+      {% endif %}
+
+    </div>
+{% endblock %}
