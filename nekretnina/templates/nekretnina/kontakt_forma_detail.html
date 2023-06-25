@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+<style>
+.poruka {
+  border: 1px solid #ccc;
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.container {
+  width: 400px;
+  height: 600px;
+  padding-top: 30px;
+  text-align: center;
+}
+
+</style>
+<div class="container">
+
+<div class="poruka">
+  <p>{{ upit.ime }}: {{ upit.upit }}</p>
+  <p>Upit za: {{ upit.naziv_nekretnine }}</p>
+</div>
+
+{% for poruka in upit.poruke.all %}
+  <div class="poruka">
+    <p>{{ poruka.ime }}: {{ poruka.tekst }}</p>
+  </div>
+{% endfor %}
+
+<a href="{% url 'nekretnina:odgovor' pk=upit.pk %}">Odgovori</a>
+
+</div>
+{% endblock %}
