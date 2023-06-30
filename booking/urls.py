@@ -20,10 +20,13 @@ from .views import (
     OdgovorView,
     NekretninaList,
     BookingDetail,
-    ForgotView,
-    VerificationSuccessView,
+    forgot_password,
+    ResetPasswordView,
+    TemplateView,
+    SentView,
     BookingCreateView,
     BookingDeleteView,
+    BookingEditView,
 )
 
 
@@ -50,12 +53,13 @@ urlpatterns = [
     path('nekretnine/<int:pk>/', BookingDetail.as_view(), name='nekretnina_detail'),
     path('nekretnine/create/', BookingCreateView.as_view(), name='booking_create'),
     path('nekretnine/<int:pk>/delete', BookingDeleteView.as_view(), name='booking_delete'),
-
+    path('nekretnine/<int:pk>/edit', BookingEditView.as_view(), name='booking_edit'),
 
     path('prijava/', CustomLoginView.as_view(), name='prijava'),
     path('logout/', CustomLogoutView, name='logout'),
 
-    path('forgot/', ForgotView.as_view(), name='forgot'),
-    path('verification/', VerificationSuccessView.as_view(), name='verification'),
+    path('forgot-password/', forgot_password, name='forgot_password'),
+    path('forgot-password/sent', SentView.as_view(), name='sent'),
+    path('reset-password/<str:uidb64>/<str:token>/', ResetPasswordView.as_view(), name='reset_password'),
 
 ]
