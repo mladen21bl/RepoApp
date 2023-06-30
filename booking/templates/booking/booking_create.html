@@ -9,6 +9,7 @@
   <h1>Create Booking Page</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+<<<<<<< HEAD
     {{ form.media }}
 
     <div class="form-group">
@@ -112,14 +113,25 @@
 
     <button type="submit">Submit</button>
   </form>
+=======
+    {{ form.as_p }}>
+
+  <button type="submit">Kreiraj</button>
+</form>
+>>>>>>> origin/master
 </div>
 
 <style>
   .login-container {
     text-align: center;
     margin: auto;
+<<<<<<< HEAD
     max-width: 870px;
     padding: 10px;
+=======
+    max-width: 400px;
+    padding: 20px;
+>>>>>>> origin/master
     background-color: #f1f1f1;
     border-radius: 10px;
   }

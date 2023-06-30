@@ -129,6 +129,7 @@
 
         <button type="submit">Filtrirajjj</button>
 
+<<<<<<< HEAD
         {% for post in page.get_children %}
     {% with post=post.specific %}
         <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
@@ -141,5 +142,19 @@
         {{ post.body|richtext }}
     {% endwith %}
 {% endfor %}
+=======
+   {% for post in page.get_children %}
+       {% with post=post.specific %}
+           <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+
+           {% with post.main_image as main_image %}
+               {% if main_image %}{% image main_image fill-160x100 %}{% endif %}
+           {% endwith %}
+
+           <p>{{ post.intro }}</p>
+           {{ post.body|richtext }}
+       {% endwith %}
+   {% endfor %}
+>>>>>>> origin/master
 
 {% endblock %}

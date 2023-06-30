@@ -67,6 +67,7 @@
       </select>
     </div>
 
+<<<<<<< HEAD
 
     <div class="filter">
       <label for="id_orjentacija">Orjentacija:</label>
@@ -78,6 +79,8 @@
       </select>
     </div>
 
+=======
+>>>>>>> origin/master
     <div class="filter">
       <label for="id_vrsta">Vrsta:</label>
       <select name="vrsta" id="id_vrsta">
@@ -174,16 +177,26 @@
 
 
 
+<<<<<<< HEAD
     <button type="submit">Filtriraj</button>
+=======
+    <button type="submit">Filtrirajjj</button>
+>>>>>>> origin/master
 
 <div class="image-grid">
       {% for nekretnina in lista %}
         <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" style="text-decoration: none;">
+<<<<<<< HEAD
               {% with nekretnina.slike.first as first_image %}
               {% if first_image %}
                 {% image first_image width-400 %}
               {% endif %}
             {% endwith %}
+=======
+          {% with nekretnina.main_image as main_image %}
+              {% if main_image %}{% image main_image fill-160x100 %}{% endif %}
+          {% endwith %}
+>>>>>>> origin/master
             <h2 class="post-title">{{ nekretnina.naziv }}</h2>
         </a>
       {% endfor %}

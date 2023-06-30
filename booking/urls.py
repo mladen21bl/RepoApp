@@ -20,6 +20,7 @@ from .views import (
     OdgovorView,
     NekretninaList,
     BookingDetail,
+<<<<<<< HEAD
     forgot_password,
     ResetPasswordView,
     TemplateView,
@@ -27,6 +28,12 @@ from .views import (
     BookingCreateView,
     BookingDeleteView,
     BookingEditView,
+=======
+    ForgotView,
+    VerificationSuccessView,
+    BookingCreateView,
+    BookingDeleteView,
+>>>>>>> origin/master
 )
 
 
@@ -53,13 +60,22 @@ urlpatterns = [
     path('nekretnine/<int:pk>/', BookingDetail.as_view(), name='nekretnina_detail'),
     path('nekretnine/create/', BookingCreateView.as_view(), name='booking_create'),
     path('nekretnine/<int:pk>/delete', BookingDeleteView.as_view(), name='booking_delete'),
+<<<<<<< HEAD
     path('nekretnine/<int:pk>/edit', BookingEditView.as_view(), name='booking_edit'),
+=======
+
+>>>>>>> origin/master
 
     path('prijava/', CustomLoginView.as_view(), name='prijava'),
     path('logout/', CustomLogoutView, name='logout'),
 
+<<<<<<< HEAD
     path('forgot-password/', forgot_password, name='forgot_password'),
     path('forgot-password/sent', SentView.as_view(), name='sent'),
     path('reset-password/<str:uidb64>/<str:token>/', ResetPasswordView.as_view(), name='reset_password'),
+=======
+    path('forgot/', ForgotView.as_view(), name='forgot'),
+    path('verification/', VerificationSuccessView.as_view(), name='verification'),
+>>>>>>> origin/master
 
 ]

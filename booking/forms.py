@@ -1,6 +1,7 @@
 from django import forms
 from .models import BookingPage
 from wagtail.fields import RichTextField
+<<<<<<< HEAD
 from django.forms import ModelForm
 from ckeditor.widgets import CKEditorWidget
 from wagtail.images.models import Image
@@ -18,9 +19,18 @@ class BookingPageForm(forms.ModelForm):
         queryset=Image.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
+=======
+
+class BookingPageForm(forms.ModelForm):
+>>>>>>> origin/master
 
     class Meta:
         model = BookingPage
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
+<<<<<<< HEAD
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
                   'klima', 'agent', 'slike']
+=======
+                  'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking', 'klima',
+                  'agent']
+>>>>>>> origin/master

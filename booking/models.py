@@ -5,13 +5,19 @@ from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.search import index
 from django.contrib.auth.models import User
+<<<<<<< HEAD
 from wagtail.images.models import Image
+=======
+>>>>>>> origin/master
 
 # Create your models here.
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/master
 class KontaktForma(models.Model):
     ime = models.CharField(max_length=255)
     upit = models.CharField(max_length=700)
@@ -34,10 +40,17 @@ class Poruke(models.Model):
 
 class Korisnik(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default="")
+<<<<<<< HEAD
     username = models.CharField(max_length=255, unique=True)
     sifra = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     odobreno = models.BooleanField(default=False)
+=======
+    username = models.CharField(max_length=255, unique=True, default="kevin")
+    sifra = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    odobreno = models.BooleanField(default=True)
+>>>>>>> origin/master
     inbox = models.ManyToManyField(KontaktForma, blank=True)
 
     def __str__(self):
@@ -50,9 +63,12 @@ class Agent(models.Model):
     sifra = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     telefon = models.CharField(max_length=20)
+<<<<<<< HEAD
     inbox = models.ManyToManyField(KontaktForma, blank=True)
     is_agent = models.BooleanField(default=True)
 
+=======
+>>>>>>> origin/master
 
     def __str__(self):
         return self.username
@@ -217,6 +233,7 @@ class BookingPage(Page):
         ('poslovni_prostor', 'Poslovni prostor'),
     ]
 
+<<<<<<< HEAD
     ORJENTACIJA_CHOICES = [
         ('Lijeva obala Vrbasa', 'lijeva_obala_vrbasa'),
         ('Desna obala Vrbasa', 'desna_obala_vrbasa'),
@@ -237,6 +254,14 @@ class BookingPage(Page):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
     vrsta = models.CharField(max_length=35, choices=VRSTA_CHOICES, default='stan')
     orjentacija = models.CharField(max_length=35, choices=ORJENTACIJA_CHOICES, default='desna_obala_vrbasa')
+=======
+    naziv = models.CharField(max_length=255, unique=True)
+    povrsina = models.DecimalField(max_digits=10, decimal_places=2)
+    cena = models.DecimalField(max_digits=10, decimal_places=2)
+    opis = RichTextField(default="Opiss")
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES)
+    vrsta = models.CharField(max_length=35, choices=VRSTA_CHOICES, default='stan')
+>>>>>>> origin/master
     grad = models.CharField(max_length=15, choices=GRAD_CHOICES, default='banjaluka')
     mjesto = models.CharField(max_length=15, choices=MJESTO_CHOICES, default='centar')
     dvoriste = models.BooleanField(default=False)
@@ -247,7 +272,10 @@ class BookingPage(Page):
     parking = models.BooleanField(default=False)
     klima = models.BooleanField(default=False)
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
+<<<<<<< HEAD
     slike = models.ManyToManyField(Image)
+=======
+>>>>>>> origin/master
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),
@@ -266,7 +294,10 @@ class BookingPage(Page):
         index.SearchField('parking'),
         index.SearchField('klima'),
         index.SearchField('agent'),
+<<<<<<< HEAD
         index.SearchField('slike'),
+=======
+>>>>>>> origin/master
     ]
 
     content_panels = Page.content_panels + [
@@ -286,7 +317,10 @@ class BookingPage(Page):
         FieldPanel('lift'),
         FieldPanel('parking'),
         FieldPanel('klima'),
+<<<<<<< HEAD
         FieldPanel('slike'),
+=======
+>>>>>>> origin/master
         InlinePanel('gallery_images', label="Gallery images"),
 
     ]
@@ -326,7 +360,11 @@ class BookingPage(Page):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
+<<<<<<< HEAD
         return reverse('booking:nekretnina_detail', args=[str(self.id)])
+=======
+        return reverse('nekretnina_page', args=[str(self.id)])
+>>>>>>> origin/master
 
     def __str__(self):
         return self.naziv

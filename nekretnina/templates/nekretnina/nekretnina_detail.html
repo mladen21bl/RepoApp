@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+
+{% block content %}
+<div class="container">
+
+    <p>Naziv: {{ detail.naziv }}</p>
+    <p>Površina: {{ detail.povrsina }}</p>
+    <p>Cijena: {{ detail.cena }}</p>
+    <p>Opis: {{ detail.opis }}</p>
+    <p>Status: {{ detail.status }}</p>
+    <p>Vrsta nekretnine: {{ detail.vrsta }}</p>
+    <p>Mjesto: {{ detail.mjesto }}</p>
+
+    {% for slika in detail.slike.all %}
+      <img src="{{ slika.url }}" alt="{{ slika.image.title }}" style="width: 300px; height: 200px;"/>
+      <p>{{ slika.image.url|slice:'7:' }}</p>
+  {% endfor %}
+
+    {% if detail.vrsta == 'kuca' or detail.vrsta == 'vikendica' %}
+        <p>Dvoriste: {{ detail.get_dvoriste_display }}</p>
+        <p>Bazen: {{ detail.get_bazen_display }}</p>
+        <p>Garaza: {{ detail.get_garaza_display }}</p>
+    {% endif %}
+
+    {% if detail.vrsta == 'stan' or detail.vrsta == 'garsonjera' %}
+        <p>Centralno grijanje: {{ detail.get_centralno_grijanje_display }}</p>
+        <p>Lift: {{ detail.get_lift_display }}</p>
+    {% endif %}
+
+    {% if detail.vrsta == 'poslovni_prostor' %}
+        <p>Parking: {{ detail.get_parking_display }}</p>
+        <p>Klima: {{ detail.get_klima_display }}</p>
+    {% endif %}
+
+    {% if request.user.is_superuser %}
+    <a href="{% url 'nekretnina:nekretnina_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
+    <a href="{% url 'nekretnina:nekretnina_delete' pk=detail.pk %}" class="btn btn-warrning">Obrisi</a>
+    {% endif %}
+    {% if user.is_authenticated and not request.user.is_superuser %}
+    <form method="post" action="{% url 'nekretnina:kontakt_forma' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_ime">Ime:</label>
+            <input type="text" id="id_ime" name="ime" value="{{ user.username }}" class="form-control" readonly>
+        </div>
+
+        <div class="form-group" style="display: none;">
+            <label for="id_naziv_nekretnine">Naziv nekretnine:</label>
+            <input type="text" id="id_naziv_nekretnine" name="naziv_nekretnine" value="{{ detail.naziv }}" class="form-control" readonly>
+        </div>
+
+        <div class="form-group" style="display: none;">
+            <label for="id_ime_agenta">Ime agenta:</label>
+            <input type="text" id="id_ime_agenta" name="ime_agenta" class="form-control" readonly>
+            <input type="hidden" name="ime_agenta" value="{{ detail.agent }}">
+        </div>
+        <div class="form-group">
+            <label for="id_upit">Upit:</label>
+            <textarea id="id_upit" name="upit" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endif %}
+
+  </div>
+{% endblock %}

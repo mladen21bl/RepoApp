@@ -2,17 +2,28 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
+<<<<<<< HEAD
 from django.contrib.auth import get_user_model, authenticate, login, logout , authenticate
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, View, DetailView, DeleteView, CreateView, UpdateView
 from django.urls import reverse_lazy, reverse
+=======
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LoginView
+from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, ListView, DetailView, DeleteView, CreateView, UpdateView
+from django.urls import reverse_lazy
+>>>>>>> origin/master
 from django.contrib.auth.models import User
 from django.forms import Textarea
 from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib import messages
 from django.conf import settings
+<<<<<<< HEAD
 from django.core.mail import EmailMessage, send_mail
 import smtplib
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
@@ -56,6 +67,17 @@ class KontaktFormaCreate(CreateView):
         form.instance.ime_agenta = nekretnina.agent
         return super().form_valid(form)
 
+=======
+from django.core.mail import EmailMessage
+import smtplib
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.views.generic.edit import FormView
+from .forms import BookingPageForm
+>>>>>>> origin/master
 
 class BookingCreateView(CreateView):
     model = BookingPage
@@ -64,6 +86,7 @@ class BookingCreateView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
+<<<<<<< HEAD
         parent_page = BookingIndexPage.objects.first()
 
         booking_page = form.save(commit=False)
@@ -92,18 +115,24 @@ class BookingEditView(UpdateView):
     template_name = 'booking/booking_edit.html'
     success_url = '/'
 
+=======
+        return super().form_valid(form)
+>>>>>>> origin/master
 
 class BookingDetail(DetailView):
     context_object_name = 'detail'
     model = BookingPage
     template_name = 'booking/booking_detail.html'
 
+<<<<<<< HEAD
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         detail = self.object
         slike = detail.slike.all()
         context['slike'] = slike
         return context
+=======
+>>>>>>> origin/master
 
 class BookingDeleteView(DeleteView):
     model = BookingPage
@@ -150,6 +179,7 @@ class OdgovorView(LoginRequiredMixin, CreateView):
 User = get_user_model()
 
 
+<<<<<<< HEAD
 class AgentCreateView(CreateView):
     model = Agent
     fields = ('username', 'sifra', 'email', 'telefon')
@@ -169,6 +199,8 @@ class AgentCreateView(CreateView):
         return super().form_valid(form)
 
 
+=======
+>>>>>>> origin/master
 class KorisnikCreateView(CreateView):
     model = Korisnik
     fields = ('username', 'sifra', 'email')
@@ -181,6 +213,10 @@ class KorisnikCreateView(CreateView):
         email = form.cleaned_data['email']
         user = User.objects.create_user(username=username, password=password, email=email)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         korisnik = form.save(commit=False)
         korisnik.user = user
         korisnik.save()
@@ -188,30 +224,60 @@ class KorisnikCreateView(CreateView):
         return super().form_valid(form)
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> origin/master
 class CustomLoginView(LoginView):
     template_name = 'booking/login.html'
 
     def get_success_url(self):
+<<<<<<< HEAD
         user = self.request.user
         if hasattr(user, 'agent') and user.agent.is_agent:
             return reverse_lazy('booking:indexview')
         else:
             return reverse_lazy('booking:indexview')
+=======
+        return reverse_lazy('booking:indexview')
+>>>>>>> origin/master
 
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
 
+<<<<<<< HEAD
         user = authenticate(username=username, password=password)
 
         if user is not None:
             login(self.request, user)
+=======
+        try:
+            korisnik = Korisnik.objects.get(username=username)
+        except Korisnik.DoesNotExist:
+            korisnik = None
+
+        try:
+            agent = Agent.objects.get(username=username)
+        except Agent.DoesNotExist:
+            agent = None
+
+        if korisnik is not None and korisnik.odobreno:
+            return super().form_valid(form)
+        elif agent is not None:
+            if agent.sifra == password:
+                return super().form_valid(form)
+        elif username == 'superuser' and password == 'password':
+>>>>>>> origin/master
             return super().form_valid(form)
         else:
             messages.error(self.request, 'Pristup odbijen.')
             return redirect('booking:prijava')
 
 
+<<<<<<< HEAD
 def forgot_password(request):
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
@@ -294,11 +360,70 @@ class ResetPasswordView(View):
 
 reset_password = method_decorator(csrf_exempt)(ResetPasswordView.as_view())
 
+=======
+>>>>>>> origin/master
 def CustomLogoutView(request):
     logout(request)
     return redirect('booking:indexview')
 
 
+<<<<<<< HEAD
+=======
+class CustomLoginView(LoginView):
+    template_name = 'booking/login.html'
+
+    def get_success_url(self):
+        return reverse_lazy('booking:indexview')
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+
+        try:
+            korisnik = Korisnik.objects.get(username=username)
+        except Korisnik.DoesNotExist:
+            korisnik = None
+
+        try:
+            agent = Agent.objects.get(username=username)
+        except Agent.DoesNotExist:
+            agent = None
+
+        if korisnik is not None and korisnik.odobreno:
+            return super().form_valid(form)
+        elif agent is not None:
+            if agent.sifra == password:
+                return super().form_valid(form)
+        elif username == 'superuser' and password == 'password':
+            return super().form_valid(form)
+        else:
+            messages.error(self.request, 'Pristup odbijen.')
+            return redirect('booking:prijava')
+
+
+
+class ForgotView(TemplateView):
+    template_name = 'booking/forgot_password.html'
+
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email')
+
+        email_subject = "Verifikacija emaila"
+        email_from = settings.DEFAULT_FROM_EMAIL
+        email_to = [email]
+
+        html_message = render_to_string('booking/email.html', {'message': 'Pozdrav'})
+        plain_message = strip_tags(html_message)
+
+        try:
+            email = EmailMultiAlternatives(email_subject, plain_message, email_from, email_to)
+            email.attach_alternative(html_message, "text/html")
+            email.send()
+        except Exception as e:
+            print(f"Error sending email: {str(e)}")
+
+        return redirect('booking:verification')
+>>>>>>> origin/master
 
 class VerificationSuccessView(TemplateView):
     template_name = 'booking/verification_success.html'
@@ -332,6 +457,27 @@ class AgentiDetailView(DetailView):
     template_name = 'booking/agenti_detail.html'
 
 
+<<<<<<< HEAD
+=======
+class AgentCreateView(CreateView):
+    model = Agent
+    fields = ('username', 'sifra', 'email', 'telefon')
+    template_name = 'booking/agent_registracija.html'
+    success_url = reverse_lazy('booking:indexview')
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['sifra']
+        email = form.cleaned_data['email']
+        user = User.objects.create_user(username=username, password=password, email=email)
+
+
+        agent = form.save(commit=False)
+        agent.user = user
+        agent.save()
+
+        return super().form_valid(form)
+>>>>>>> origin/master
 
 
 
@@ -368,7 +514,10 @@ class NekretninaList(ListView):
             queryset = queryset.filter(povrsina__lte=povrsina_do)
 
         vrsta = self.request.GET.get('vrsta')
+<<<<<<< HEAD
         orjentacija = self.request.GET.get('orjentacija')
+=======
+>>>>>>> origin/master
         status = self.request.GET.get('status')
         grad = self.request.GET.get('grad')
         mjesto = self.request.GET.get('mjesto')
@@ -420,7 +569,10 @@ class NekretninaList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['vrsta_choices'] = BookingPage.VRSTA_CHOICES
+<<<<<<< HEAD
         context['orjentacija_choices'] = BookingPage.ORJENTACIJA_CHOICES
+=======
+>>>>>>> origin/master
         context['status_choices'] = BookingPage.STATUS_CHOICES
         context['grad_choices'] = BookingPage.GRAD_CHOICES
         context['mjesto_choices'] = BookingPage.MJESTO_CHOICES
