@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load wagtailcore_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
@@ -31,16 +32,13 @@
 
     {% if request.user.is_superuser %}
     <a href="{% url 'booking:booking_delete' pk=detail.pk %}" class="btn btn-primary">Obrisi</a>
+    <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
     {% endif %}
-
+    <p>Slike:</p>
     <div class="image-grid">
-      <p>Slika:</p>
-      {% for item in detail.gallery_images.all %}
-        <div style="float: left; margin: 10px">
-            {% image item.image fill-320x240 %}
-            <p>{{ item.caption }}</p>
-        </div>
-    {% endfor %}
+      {% for slika in detail.slike.all %}
+      {% image slika width-400 %}
+      {% endfor %}
 
     </div>
     {% if user.is_authenticated and not request.user.is_superuser %}

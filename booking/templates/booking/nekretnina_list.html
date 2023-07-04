@@ -67,6 +67,17 @@
       </select>
     </div>
 
+
+    <div class="filter">
+      <label for="id_orjentacija">Orjentacija:</label>
+      <select name="orjentacija" id="id_orjentacija">
+          <option value="">-- Sva --</option>
+          {% for choice in orjentacija_choices %}
+              <option value="{{ choice.0 }}" {% if choice.0 == selected_orjentacija %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+      </select>
+    </div>
+
     <div class="filter">
       <label for="id_vrsta">Vrsta:</label>
       <select name="vrsta" id="id_vrsta">
@@ -163,14 +174,16 @@
 
 
 
-    <button type="submit">Filtrirajjj</button>
+    <button type="submit">Filtriraj</button>
 
 <div class="image-grid">
       {% for nekretnina in lista %}
         <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" style="text-decoration: none;">
-          {% with nekretnina.main_image as main_image %}
-              {% if main_image %}{% image main_image fill-160x100 %}{% endif %}
-          {% endwith %}
+              {% with nekretnina.slike.first as first_image %}
+              {% if first_image %}
+                {% image first_image width-400 %}
+              {% endif %}
+            {% endwith %}
             <h2 class="post-title">{{ nekretnina.naziv }}</h2>
         </a>
       {% endfor %}

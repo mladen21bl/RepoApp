@@ -5,8 +5,11 @@ from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.search import index
 from django.contrib.auth.models import User
+from wagtail.images.models import Image
 
 # Create your models here.
+
+
 
 
 class KontaktForma(models.Model):
@@ -31,10 +34,10 @@ class Poruke(models.Model):
 
 class Korisnik(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default="")
-    username = models.CharField(max_length=255, unique=True, default="kevin")
+    username = models.CharField(max_length=255, unique=True)
     sifra = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    odobreno = models.BooleanField(default=True)
+    odobreno = models.BooleanField(default=False)
     inbox = models.ManyToManyField(KontaktForma, blank=True)
 
     def __str__(self):
@@ -47,6 +50,9 @@ class Agent(models.Model):
     sifra = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     telefon = models.CharField(max_length=20)
+    inbox = models.ManyToManyField(KontaktForma, blank=True)
+    is_agent = models.BooleanField(default=True)
+
 
     def __str__(self):
         return self.username
@@ -211,12 +217,26 @@ class BookingPage(Page):
         ('poslovni_prostor', 'Poslovni prostor'),
     ]
 
+    ORJENTACIJA_CHOICES = [
+        ('Lijeva obala Vrbasa', 'lijeva_obala_vrbasa'),
+        ('Desna obala Vrbasa', 'desna_obala_vrbasa'),
+        ('5 min od centra', '10_min_od_centra'),
+        ('10 min od Kastela', '10_min_od_kastela'),
+        ('5 min od K4', '5_min_od_k4'),
+        ('10 min od kampusa', '10_min_od_kampusa'),
+        ('5 min od UKC-a', '5_min_od_ukc'),
+        ('Blizu parka', 'blizu_parka'),
+        ('Blizu zelenog Mosta', 'blizu_zelenog_mosta'),
+
+    ]
+
     naziv = models.CharField(max_length=255, unique=True)
     povrsina = models.DecimalField(max_digits=10, decimal_places=2)
     cena = models.DecimalField(max_digits=10, decimal_places=2)
-    opis = RichTextField(default="Opiss")
+    opis = RichTextField()
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
     vrsta = models.CharField(max_length=35, choices=VRSTA_CHOICES, default='stan')
+    orjentacija = models.CharField(max_length=35, choices=ORJENTACIJA_CHOICES, default='desna_obala_vrbasa')
     grad = models.CharField(max_length=15, choices=GRAD_CHOICES, default='banjaluka')
     mjesto = models.CharField(max_length=15, choices=MJESTO_CHOICES, default='centar')
     dvoriste = models.BooleanField(default=False)
@@ -227,6 +247,7 @@ class BookingPage(Page):
     parking = models.BooleanField(default=False)
     klima = models.BooleanField(default=False)
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
+    slike = models.ManyToManyField(Image)
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),
@@ -245,6 +266,7 @@ class BookingPage(Page):
         index.SearchField('parking'),
         index.SearchField('klima'),
         index.SearchField('agent'),
+        index.SearchField('slike'),
     ]
 
     content_panels = Page.content_panels + [
@@ -264,6 +286,7 @@ class BookingPage(Page):
         FieldPanel('lift'),
         FieldPanel('parking'),
         FieldPanel('klima'),
+        FieldPanel('slike'),
         InlinePanel('gallery_images', label="Gallery images"),
 
     ]
@@ -303,7 +326,7 @@ class BookingPage(Page):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('nekretnina_page', args=[str(self.id)])
+        return reverse('booking:nekretnina_detail', args=[str(self.id)])
 
     def __str__(self):
         return self.naziv
