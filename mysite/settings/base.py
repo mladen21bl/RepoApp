@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "wagtail",
     "modelcluster",
     "taggit",
+    "ckeditor",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,14 +54,18 @@ INSTALLED_APPS = [
 ]
 
 
+smtp_host = 'smtp.gmail.com'
+smtp_port = 587
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'radepopovicvet@gmail.com'
-EMAIL_HOST_PASSWORD = 'asiemailili'
+EMAIL_HOST_USER = 'radepopovic83@gmail.com'  # Replace with your Gmail email address
+EMAIL_HOST_PASSWORD = 'tbicgoyqflhupopg'  # Replace with your Gmail password or app-specific password
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'radepopovicvet@gmail.com'
+EMAIL_USE_SSL = False  # Use either TLS or SSL, not both
+DEFAULT_FROM_EMAIL = 'radepopovic83@gmail.com'  # Replace with your Gmail email address
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
