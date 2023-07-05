@@ -2,47 +2,39 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect, render
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, View, DetailView, DeleteView, CreateView, UpdateView
-from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.models import User
-from django.forms import Textarea
+from django.contrib.auth.views import LoginView
+from django.views.generic import TemplateView, ListView, View, DetailView, DeleteView, CreateView, UpdateView
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMessage
 import smtplib
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.generic.edit import FormView
 from .forms import BookingPageForm, ForgotPasswordForm
+from django.forms import Textarea
 from wagtail.models import Page, Orderable
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
-import smtplib
-from django.http import HttpResponseRedirect
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib import messages
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.urls import reverse
-from django.shortcuts import get_object_or_404
 from wagtail.images.models import Image
+
 
 class SentView(TemplateView):
     template_name = 'booking/sent.html'
@@ -67,32 +59,27 @@ class BookingCreateView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
-        parent_page = BookingIndexPage.objects.first()  # Get the parent page (BookingIndexPage)
+        parent_page = BookingIndexPage.objects.first()
 
-        booking_page = form.save(commit=False)  # Create a new BookingPage instance without saving it yet
+        booking_page = form.save(commit=False)
         booking_page.title = form.cleaned_data['naziv']
         booking_page.slug = booking_page.title.lower().replace(' ', '-')
 
         if parent_page.specific_class == BookingIndexPage:
-            # Construct the path value by appending the child slug to the parent page's path
             booking_page.path = parent_page.path + booking_page.slug + '/'
             booking_page.depth = parent_page.depth + 1
         else:
-            # Handle the case where the parent page is not an instance of BookingIndexPage
-            # Adjust this logic based on your specific page hierarchy
             booking_page.path = parent_page.path + booking_page.slug + '/'
             booking_page.depth = parent_page.depth + 1
 
-        parent_page.add_child(instance=booking_page)  # Add the booking page as a child of the parent page
-
-        # Associate the selected images with the booking page
+        parent_page.add_child(instance=booking_page)
         selected_images = form.cleaned_data['slike']
         booking_page.slike.set(selected_images)
 
-        # Save the page and publish it
+
         booking_page.save_revision().publish()
 
-        return HttpResponseRedirect(reverse('booking:filteri'))  # Redirect to the success URL
+        return HttpResponseRedirect(reverse('booking:filteri'))
 
 
 class BookingEditView(UpdateView):
@@ -111,7 +98,6 @@ class BookingDetail(DetailView):
         context = super().get_context_data(**kwargs)
         detail = self.object
         slike = detail.slike.all()
-        print(slike)  # Check the output in the console
         context['slike'] = slike
         return context
 
@@ -167,13 +153,11 @@ class AgentCreateView(CreateView):
     success_url = reverse_lazy('booking:indexview')
 
     def form_valid(self, form):
-        # Stvaranje Django korisnika (User)
         username = form.cleaned_data['username']
         password = form.cleaned_data['sifra']
         email = form.cleaned_data['email']
         user = User.objects.create_user(username=username, password=password, email=email)
 
-        # Povezivanje Django korisnika s instancom Korisnik
         agent = form.save(commit=False)
         agent.user = user
         agent.save()
@@ -188,21 +172,17 @@ class KorisnikCreateView(CreateView):
     success_url = reverse_lazy('booking:indexview')
 
     def form_valid(self, form):
-        # Stvaranje Django korisnika (User)
         username = form.cleaned_data['username']
         password = form.cleaned_data['sifra']
         email = form.cleaned_data['email']
         user = User.objects.create_user(username=username, password=password, email=email)
 
-        # Povezivanje Django korisnika s instancom Korisnik
         korisnik = form.save(commit=False)
         korisnik.user = user
         korisnik.save()
 
         return super().form_valid(form)
 
-
-from django.contrib.auth import authenticate
 
 
 
@@ -250,14 +230,12 @@ def forgot_password(request):
                     'token': default_token_generator.make_token(user),
                 })
 
-                # Priprema email poruke
                 msg = MIMEMultipart()
                 msg['From'] = settings.DEFAULT_FROM_EMAIL
                 msg['To'] = email
                 msg['Subject'] = mail_subject
                 msg.attach(MIMEText(message, 'html'))
 
-                # Slanje emaila
                 try:
                     smtp_server = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
                     smtp_server.ehlo()
@@ -266,7 +244,7 @@ def forgot_password(request):
                     smtp_server.send_message(msg)
                     smtp_server.quit()
                     messages.success(request, 'Link za resetovanje šifre je poslat na vašu email adresu.')
-                    return redirect('booking:sent')  # Preusmjeravanje na 'sent.html'
+                    return redirect('booking:sent')
                 except Exception as e:
                     messages.error(request, f'Greška prilikom slanja emaila: {e}')
             else:

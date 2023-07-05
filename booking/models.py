@@ -7,7 +7,6 @@ from wagtail.search import index
 from django.contrib.auth.models import User
 from wagtail.images.models import Image
 
-# Create your models here.
 
 
 
@@ -94,7 +93,6 @@ class BookingIndexPage(Page):
         context = super().get_context(request)
         queryset = self.get_queryset(request)
 
-        # Dodajte ostale kontekstualne podatke koji su potrebni na templateu
         context['vrsta_choices'] = BookingPage.VRSTA_CHOICES
         context['status_choices'] = BookingPage.STATUS_CHOICES
         context['grad_choices'] = BookingPage.GRAD_CHOICES
@@ -111,7 +109,6 @@ class BookingIndexPage(Page):
         context['selected_parking'] = request.GET.get('parking', '')
         context['selected_klima'] = request.GET.get('klima', '')
 
-        # Primijenite filtriranje na queryset
         context['lista'] = queryset
 
         return context
