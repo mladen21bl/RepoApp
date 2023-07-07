@@ -33,11 +33,12 @@ class Poruke(models.Model):
 
 class Korisnik(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default="")
-    username = models.CharField(max_length=255, unique=True)
+    username = models.CharField(max_length=255)
     sifra = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    email = models.EmailField()
     odobreno = models.BooleanField(default=False)
     inbox = models.ManyToManyField(KontaktForma, blank=True)
+    is_agent = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -45,11 +46,12 @@ class Korisnik(models.Model):
 
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default="")
-    username = models.CharField(max_length=255, unique=True, default="kevin")
+    username = models.CharField(max_length=255, unique=True)
     sifra = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     telefon = models.CharField(max_length=20)
     inbox = models.ManyToManyField(KontaktForma, blank=True)
+    odobreno = models.BooleanField(default=True)
     is_agent = models.BooleanField(default=True)
 
 
@@ -58,6 +60,7 @@ class Agent(models.Model):
 
     def get_admin_display_title(self):
         return f'{self.username}'
+
 
 
 

@@ -27,6 +27,8 @@ from .views import (
     BookingCreateView,
     BookingDeleteView,
     BookingEditView,
+    AgentDeleteView,
+    KorisnikDeleteView,
 )
 
 
@@ -37,6 +39,7 @@ urlpatterns = [
     path('registracija_agent/', AgentCreateView.as_view(), name='agent_registracija'),
     path('agenti/', AgentiList.as_view(), name='agenti_list'),
     path('agenti/<int:pk>/', AgentiDetailView.as_view(), name='agenti_detail'),
+    path('agenti/<int:pk>/delete', AgentDeleteView.as_view(), name='agent_delete'),
 
     path('kontakt/', KontaktFormaCreate.as_view(), name='kontakt_forma'),
     path('upiti', KontaktFormaList.as_view(), name='upit'),
@@ -46,6 +49,7 @@ urlpatterns = [
 
     path('registracija/', KorisnikCreateView.as_view(), name='korisnik_registracija'),
     path('korisnici/<int:pk>/', KorisnikDetailView.as_view(), name='korisnik_detail'),
+    path('korisnici/<int:pk>/delete', KorisnikDeleteView.as_view(), name='korisnik_delete'),
     path('korisnici/', KorisnikList.as_view(), name='korisnik_list'),
 
 

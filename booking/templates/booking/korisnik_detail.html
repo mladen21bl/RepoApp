@@ -9,7 +9,7 @@
     <p>Email: {{ korisnik.email }}</p>
     <p>Status: {{ korisnik.odobreno }}</p>
 
-
+    <a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">Obrisi korisnika</a>
 
 
 {% endblock %}

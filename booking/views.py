@@ -34,7 +34,8 @@ from email.mime.multipart import MIMEMultipart
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from wagtail.images.models import Image
-
+from django.db import IntegrityError
+from django.contrib import messages
 
 class SentView(TemplateView):
     template_name = 'booking/sent.html'
@@ -164,6 +165,30 @@ class AgentCreateView(CreateView):
 
         return super().form_valid(form)
 
+class AgentDeleteView(DeleteView):
+    model = Agent
+    template_name = 'booking/agent_delete.html'
+    success_url = reverse_lazy('booking:agenti_list')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        # Delete the related User object and release the email
+        user = self.object.user
+        email = user.email
+        self.object.delete()
+        user.delete()
+
+        # Release the email by updating the email field of other users with the same email
+        users_with_same_email = User.objects.filter(email=email)
+        if users_with_same_email.count() == 1:
+            # Only one user with the email remains, so update the email field to an empty string
+            users_with_same_email.update(email='')
+
+        # Log out the user
+        logout(request)
+
+        return HttpResponseRedirect(self.get_success_url())
 
 class KorisnikCreateView(CreateView):
     model = Korisnik
@@ -175,26 +200,58 @@ class KorisnikCreateView(CreateView):
         username = form.cleaned_data['username']
         password = form.cleaned_data['sifra']
         email = form.cleaned_data['email']
-        user = User.objects.create_user(username=username, password=password, email=email)
 
-        korisnik = form.save(commit=False)
-        korisnik.user = user
-        korisnik.save()
+        try:
+            user = User.objects.create_user(username=username, password=password, email=email)
 
-        return super().form_valid(form)
+            korisnik = form.save(commit=False)
+            korisnik.user = user
+            korisnik.save()
+
+            return super().form_valid(form)
+        except IntegrityError as e:
+            error_message = str(e)
+            if 'username' in error_message:
+                messages.error(self.request, 'Korisnik sa tim korisničkim imenom već postoji.')
+            elif 'email' in error_message:
+                messages.error(self.request, 'Korisnik sa tim emailom već postoji.')
+            else:
+                messages.error(self.request, 'Greška prilikom registracije.')
+            return self.form_invalid(form)
 
 
+class KorisnikDeleteView(DeleteView):
+    model = Korisnik
+    template_name = 'booking/korisnik_delete.html'
+    success_url = reverse_lazy('booking:korisnik_list')
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        # Delete the related User object and release the email
+        user = self.object.user
+        email = user.email
+        self.object.delete()
+        user.delete()
+
+        # Release the email by updating the email field of other users with the same email
+        users_with_same_email = User.objects.filter(email=email)
+        if users_with_same_email.count() == 1:
+            # Only one user with the email remains, so update the email field to an empty string
+            users_with_same_email.update(email='')
+
+        # Log out the user
+        logout(request)
+
+        return HttpResponseRedirect(self.get_success_url())
 
 class CustomLoginView(LoginView):
     template_name = 'booking/login.html'
+    success_url = reverse_lazy('booking:indexview')
 
     def get_success_url(self):
         user = self.request.user
-        if hasattr(user, 'agent') and user.agent.is_agent:
-            return reverse_lazy('booking:indexview')
-        else:
-            return reverse_lazy('booking:indexview')
+        return reverse_lazy('booking:indexview')
 
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
@@ -203,10 +260,29 @@ class CustomLoginView(LoginView):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            login(self.request, user)
-            return super().form_valid(form)
+            if user.is_superuser:
+                login(self.request, user)
+                return super().form_valid(form)
+
+            try:
+                korisnik = Korisnik.objects.get(user=user)
+
+                if korisnik.odobreno:
+                    login(self.request, user)
+                    return super().form_valid(form)
+                else:
+                    messages.error(self.request, 'Access denied. Your account is not approved.')
+                    return redirect('booking:prijava')
+            except Korisnik.DoesNotExist:
+                try:
+                    agent = Agent.objects.get(user=user)
+                    login(self.request, user)
+                    return super().form_valid(form)
+                except Agent.DoesNotExist:
+                    messages.error(self.request, 'Access denied. Invalid login credentials.')
+                    return redirect('booking:prijava')
         else:
-            messages.error(self.request, 'Pristup odbijen.')
+            messages.error(self.request, 'Invalid login credentials.')
             return redirect('booking:prijava')
 
 
@@ -252,6 +328,7 @@ def forgot_password(request):
     else:
         form = ForgotPasswordForm()
     return render(request, 'booking/forgot_password.html', {'form': form})
+
 
 class ResetPasswordView(View):
     def get(self, request, uidb64, token):

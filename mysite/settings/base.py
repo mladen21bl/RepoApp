@@ -30,6 +30,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 INSTALLED_APPS = [
     "home",
     "search",
+    "wagtail.contrib.modeladmin",
     "booking",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -52,7 +53,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-
 
 smtp_host = 'smtp.gmail.com'
 smtp_port = 587
