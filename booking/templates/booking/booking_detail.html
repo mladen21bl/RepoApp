@@ -34,6 +34,11 @@
     <a href="{% url 'booking:booking_delete' pk=detail.pk %}" class="btn btn-primary">Obrisi</a>
     <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
     {% endif %}
+
+    {% if request.user.username|lower == detail.agent|lower %}
+        <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
+    {% endif %}
+
     <p>Slike:</p>
     <div class="image-grid">
       {% for slika in detail.slike.all %}
