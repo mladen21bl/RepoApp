@@ -4,10 +4,10 @@
 <<div class="login-container" style="margin-top: 130px;">
   <h2>Login</h2>
   {% if form.errors %}
-    <p class="error">Access denied. Invalid login credentials or your account is not approved.</p>
+    <p class="error">Pristup odbijen.</p>
   {% endif %}
   {% if account_not_approved %}
-    <p class="error">Access denied. Your account is not approved.</p>
+    <p class="error">Pristup odbijen. Vas nalog jos nije odobren</p>
   {% endif %}
   <form method="post">
     {% csrf_token %}

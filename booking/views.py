@@ -263,7 +263,7 @@ class CustomLoginView(LoginView):
                     login(self.request, user)
                     return super().form_valid(form)
                 else:
-                    messages.error(self.request, 'Access denied. Your account is not approved.')
+                    messages.error(self.request, 'Pristup odbijen. Vas nalog jos nije odobren.')
                     return redirect('booking:prijava')
             except Korisnik.DoesNotExist:
                 try:
@@ -271,10 +271,10 @@ class CustomLoginView(LoginView):
                     login(self.request, user)
                     return super().form_valid(form)
                 except Agent.DoesNotExist:
-                    messages.error(self.request, 'Access denied. Invalid login credentials.')
+                    messages.error(self.request, 'Pristup odbijen. Pogresni podaci.')
                     return redirect('booking:prijava')
         else:
-            messages.error(self.request, 'Invalid login credentials.')
+            messages.error(self.request, 'Pogresni podaci.')
             return redirect('booking:prijava')
 
 
