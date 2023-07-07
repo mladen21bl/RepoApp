@@ -173,19 +173,15 @@ class AgentDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        # Delete the related User object and release the email
         user = self.object.user
         email = user.email
         self.object.delete()
         user.delete()
 
-        # Release the email by updating the email field of other users with the same email
         users_with_same_email = User.objects.filter(email=email)
         if users_with_same_email.count() == 1:
-            # Only one user with the email remains, so update the email field to an empty string
             users_with_same_email.update(email='')
 
-        # Log out the user
         logout(request)
 
         return HttpResponseRedirect(self.get_success_url())
@@ -228,19 +224,15 @@ class KorisnikDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        # Delete the related User object and release the email
         user = self.object.user
         email = user.email
         self.object.delete()
         user.delete()
 
-        # Release the email by updating the email field of other users with the same email
         users_with_same_email = User.objects.filter(email=email)
         if users_with_same_email.count() == 1:
-            # Only one user with the email remains, so update the email field to an empty string
             users_with_same_email.update(email='')
 
-        # Log out the user
         logout(request)
 
         return HttpResponseRedirect(self.get_success_url())
