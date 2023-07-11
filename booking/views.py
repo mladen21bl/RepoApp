@@ -46,7 +46,7 @@ class BookingMapList(ListView):
 
     def get_queryset(self):
         return BookingPage.objects.all()
-        
+
 class SentView(TemplateView):
     template_name = 'booking/sent.html'
 
@@ -90,7 +90,7 @@ class BookingCreateView(CreateView):
 
         booking_page.save_revision().publish()
 
-        return HttpResponseRedirect(reverse('booking:filteri'))
+        return HttpResponseRedirect(reverse('booking:map_list'))
 
 
 class BookingEditView(UpdateView):

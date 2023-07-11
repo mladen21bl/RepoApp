@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="gornji-container">
-<p style="color:black; text-align: center;"><a href="{% url 'booking:filteri' %}" class="btn btn-danger">Filteri</a></p>
+<p style="color:black; text-align: center;"><a href="{% url 'booking:filteri' %}" class="btn btn-danger" id="dugme">Filteri</a></p>
 
 </div>
 <div id="flex-container">
@@ -95,6 +95,12 @@
 </div>
 
 <style>
+  #dugme {
+    width:150px;
+    height:50px;
+    border-radius:25px;
+    margin-top:15px;
+  }
   #gornji-container {
   }
   #flex-container {
