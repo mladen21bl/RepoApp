@@ -29,6 +29,7 @@ from .views import (
     BookingEditView,
     AgentDeleteView,
     KorisnikDeleteView,
+    BookingMapList,
 )
 
 
@@ -58,6 +59,7 @@ urlpatterns = [
     path('nekretnine/create/', BookingCreateView.as_view(), name='booking_create'),
     path('nekretnine/<int:pk>/delete', BookingDeleteView.as_view(), name='booking_delete'),
     path('nekretnine/<int:pk>/edit', BookingEditView.as_view(), name='booking_edit'),
+    path('map-list/', BookingMapList.as_view(), name='map_list'),
 
     path('prijava/', CustomLoginView.as_view(), name='prijava'),
     path('logout/', CustomLogoutView, name='logout'),

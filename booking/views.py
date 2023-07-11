@@ -37,6 +37,16 @@ from wagtail.images.models import Image
 from django.db import IntegrityError
 from django.contrib import messages
 
+
+
+class BookingMapList(ListView):
+    model = BookingPage
+    context_object_name = 'nekretnine'
+    template_name = 'booking/mapa.html'
+
+    def get_queryset(self):
+        return BookingPage.objects.all()
+        
 class SentView(TemplateView):
     template_name = 'booking/sent.html'
 

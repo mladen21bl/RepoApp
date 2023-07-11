@@ -15,7 +15,7 @@ class KontaktForma(models.Model):
     ime = models.CharField(max_length=255)
     upit = models.CharField(max_length=700)
     naziv_nekretnine = models.CharField(max_length=255)
-    ime_agenta = models.CharField(max_length=255, default="007")
+    ime_agenta = models.CharField(max_length=255)
 
 
     def __str__(self):
@@ -64,12 +64,11 @@ class Agent(models.Model):
 
 
 
-
 class AgentPage(Page):
-    username = models.CharField(max_length=255, unique=True, default="kevin")
-    sifra = models.CharField(max_length=255, default="123")
-    email = models.EmailField(unique=True, default="nesto@gmail.com")
-    telefon = models.CharField(max_length=20, default="065/123-456")
+    username = models.CharField(max_length=255, unique=True)
+    sifra = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    telefon = models.CharField(max_length=20)
 
     def __str__(self):
         return self.username
@@ -248,6 +247,8 @@ class BookingPage(Page):
     klima = models.BooleanField(default=False)
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
     slike = models.ManyToManyField(Image)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),

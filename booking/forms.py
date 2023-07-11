@@ -23,4 +23,4 @@ class BookingPageForm(forms.ModelForm):
         model = BookingPage
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-                  'klima', 'agent', 'slike']
+                  'klima', 'agent', 'slike', 'latitude', 'longitude']
