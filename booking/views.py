@@ -97,7 +97,7 @@ class BookingEditView(UpdateView):
     model = BookingPage
     form_class = BookingPageForm
     template_name = 'booking/booking_edit.html'
-    success_url = '/'
+    success_url = reverse_lazy('booking:map_list')
 
 
 class BookingDetail(DetailView):
