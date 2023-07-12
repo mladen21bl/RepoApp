@@ -19,14 +19,15 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
 
-      var markers = [];
+      var markers = L.markerClusterGroup();
+
       var nekretnineElements = document.getElementsByClassName('nekretnina');
 
       {% for nekretnina in nekretnine %}
       {% if nekretnina.latitude and nekretnina.longitude %}
-      var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]).addTo(map);
+      var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
       marker.nekretninaId = '{{ nekretnina.id }}';
-      markers.push(marker);
+      markers.addLayer(marker);
 
       marker.on('click', function () {
         window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
@@ -34,9 +35,12 @@
       {% endif %}
       {% endfor %}
 
+      map.addLayer(markers);
+
       map.on('zoomend moveend', function () {
         var currentBounds = map.getBounds();
         var visibleNekretnineIds = markers
+          .getLayers()
           .filter(function (marker) {
             return currentBounds.contains(marker.getLatLng());
           })
@@ -44,7 +48,6 @@
             return marker.nekretninaId;
           });
 
-        
         var southWest = L.latLng(44.706389, 17.035946);
         var northEast = L.latLng(44.844916, 17.347521);
         var bounds = L.latLngBounds(southWest, northEast);
@@ -58,7 +61,7 @@
           var nekretninaId = nekretninaElement.dataset.nekretninaId;
           var nekretninaCoords = L.latLng(parseFloat(nekretninaElement.dataset.latitude), parseFloat(nekretninaElement.dataset.longitude));
 
-          if (currentBounds.contains(nekretninaCoords)) {
+          if (visibleNekretnineIds.includes(nekretninaId)) {
             nekretninaElement.style.display = 'block';
           } else {
             nekretninaElement.style.display = 'none';
@@ -74,6 +77,7 @@
           }
         });
       }, 100);
+
     </script>
   </div>
 
