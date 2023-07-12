@@ -6,9 +6,9 @@
 {% block content %}
 
 <div class="gornji-container">
-<p style="color:black; text-align: center;"><a href="{% url 'booking:filteri' %}" class="btn btn-danger" id="dugme">Filteri</a></p>
-
+  <p style="color:black; text-align: center;"><a href="{% url 'booking:filteri' %}" class="btn btn-danger" id="dugme">Filteri</a></p>
 </div>
+
 <div id="flex-container">
   <div id="empty-space">
     <div id="map"></div>
@@ -24,18 +24,17 @@
 
       {% for nekretnina in nekretnine %}
       {% if nekretnina.latitude and nekretnina.longitude %}
-        var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]).addTo(map);
-        marker.nekretninaId = '{{ nekretnina.id }}';
-        markers.push(marker);
+      var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]).addTo(map);
+      marker.nekretninaId = '{{ nekretnina.id }}';
+      markers.push(marker);
 
-        marker.on('click', function () {
-          window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
-        });
-
+      marker.on('click', function () {
+        window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+      });
       {% endif %}
-    {% endfor %}
+      {% endfor %}
 
-      map.on('zoomend', function () {
+      map.on('zoomend moveend', function () {
         var currentBounds = map.getBounds();
         var visibleNekretnineIds = markers
           .filter(function (marker) {
@@ -45,19 +44,21 @@
             return marker.nekretninaId;
           });
 
-          // Set bounds to restrict viewable area
-          var southWest = L.latLng(44.706389, 17.035946);
-          var northEast = L.latLng(44.844916,17.347521);
-          var bounds = L.latLngBounds(southWest, northEast);
-          map.setMaxBounds(bounds);
-          map.on('drag', function () {
-            map.panInsideBounds(bounds, { animate: false });
-          });
+        
+        var southWest = L.latLng(44.706389, 17.035946);
+        var northEast = L.latLng(44.844916, 17.347521);
+        var bounds = L.latLngBounds(southWest, northEast);
+        map.setMaxBounds(bounds);
+        map.on('drag', function () {
+          map.panInsideBounds(bounds, { animate: false });
+        });
 
         for (var i = 0; i < nekretnineElements.length; i++) {
           var nekretninaElement = nekretnineElements[i];
           var nekretninaId = nekretninaElement.dataset.nekretninaId;
-          if (visibleNekretnineIds.includes(nekretninaId)) {
+          var nekretninaCoords = L.latLng(parseFloat(nekretninaElement.dataset.latitude), parseFloat(nekretninaElement.dataset.longitude));
+
+          if (currentBounds.contains(nekretninaCoords)) {
             nekretninaElement.style.display = 'block';
           } else {
             nekretninaElement.style.display = 'none';
@@ -66,13 +67,13 @@
       });
 
       setTimeout(function () {
-      map.invalidateSize();
-      map.on('zoomend', function () {
-        if (map.getZoom() < 12) {
-          map.setZoom(12);
-        }
-      });
-    }, 100);
+        map.invalidateSize();
+        map.on('zoomend', function () {
+          if (map.getZoom() < 12) {
+            map.setZoom(12);
+          }
+        });
+      }, 100);
     </script>
   </div>
 
@@ -80,7 +81,7 @@
     <div class="image-grid">
       {% for nekretnina in nekretnine %}
       {% if nekretnina.latitude and nekretnina.longitude %}
-      <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" style="text-decoration: none;">
+      <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none;">
         {% with nekretnina.slike.first as first_image %}
         {% if first_image %}
         {% image first_image width-400 %}
