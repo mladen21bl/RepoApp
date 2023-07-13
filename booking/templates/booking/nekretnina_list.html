@@ -236,85 +236,141 @@
       <div id="empty-space">
         <div id="map"></div>
         <script>
-          var map = L.map('map').setView([44.784846, 17.186230], 21);
-          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(map);
+        var map = L.map('map').setView([44.784846, 17.186230], 10); // Adjust the initial zoom level as per your requirement
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
-          var markers = L.markerClusterGroup();
+        var markers = L.markerClusterGroup();
 
-          var nekretnineElements = document.getElementsByClassName('nekretnina');
-
-          {% for nekretnina in lista %}
+        {% for nekretnina in lista %}
           {% if nekretnina.latitude and nekretnina.longitude %}
-          var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
-          marker.nekretninaId = '{{ nekretnina.id }}';
-          markers.addLayer(marker);
+            var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
+            marker.nekretninaId = '{{ nekretnina.id }}';
+            markers.addLayer(marker);
 
-          marker.on('click', function () {
-            window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
-          });
+            marker.on('click', function () {
+              window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+            });
           {% endif %}
-          {% endfor %}
+        {% endfor %}
 
-          map.addLayer(markers);
+        map.addLayer(markers);
 
-          map.on('zoomend moveend', function () {
-            var currentBounds = map.getBounds();
-            var visibleNekretnineIds = markers
-              .getLayers()
-              .filter(function (marker) {
-                return currentBounds.contains(marker.getLatLng());
-              })
-              .map(function (marker) {
-                return marker.nekretninaId;
-              });
-
-            var southWest = L.latLng(44.706389, 17.035946);
-            var northEast = L.latLng(44.844916, 17.347521);
-            var bounds = L.latLngBounds(southWest, northEast);
-            map.setMaxBounds(bounds);
-            map.on('drag', function () {
-              map.panInsideBounds(bounds, { animate: false });
+        map.on('zoomend moveend', function () {
+          var currentBounds = map.getBounds();
+          var visibleNekretnineIds = markers
+            .getLayers()
+            .filter(function (marker) {
+              return currentBounds.contains(marker.getLatLng());
+            })
+            .map(function (marker) {
+              return marker.nekretninaId;
             });
 
-            for (var i = 0; i < nekretnineElements.length; i++) {
-              var nekretninaElement = nekretnineElements[i];
-              var nekretninaId = nekretninaElement.dataset.nekretninaId;
-              var nekretninaCoords = L.latLng(parseFloat(nekretninaElement.dataset.latitude), parseFloat(nekretninaElement.dataset.longitude));
+          var nekretnineElements = document.getElementsByClassName('nekretnina');
+          var itemsPerPage = 4; // Number of real estate properties to display per page
+          var currentPage = 1; // Current page number
+          var startIndex = (currentPage - 1) * itemsPerPage;
+          var endIndex = startIndex + itemsPerPage;
 
-              if (visibleNekretnineIds.includes(nekretninaId)) {
+          for (var i = 0; i < nekretnineElements.length; i++) {
+            var nekretninaElement = nekretnineElements[i];
+            var nekretninaId = nekretninaElement.dataset.nekretninaId;
+            var nekretninaCoords = L.latLng(
+              parseFloat(nekretninaElement.dataset.latitude),
+              parseFloat(nekretninaElement.dataset.longitude)
+            );
+
+            if (visibleNekretnineIds.includes(nekretninaId)) {
+              nekretninaElement.style.display = 'block';
+              nekretninaElement.style.order = visibleNekretnineIds.indexOf(nekretninaId) + 1;
+            } else {
+              nekretninaElement.style.display = 'none';
+            }
+          }
+
+          // Pagination
+          var paginationContainer = document.getElementById('pagination-container');
+          var totalPages = Math.ceil(visibleNekretnineIds.length / itemsPerPage);
+          var paginationHTML = '';
+
+          if (totalPages > 1) {
+            if (currentPage > 1) {
+              paginationHTML += '<a href="#" onclick="changePage(' + (currentPage - 1) + ')">Previous</a> ';
+            }
+
+            for (var page = 1; page <= totalPages; page++) {
+              if (page === currentPage) {
+                paginationHTML += '<span class="current-page">' + page + '</span> ';
+              } else {
+                paginationHTML += '<a href="#" onclick="changePage(' + page + ')">' + page + '</a> ';
+              }
+            }
+
+            if (currentPage < totalPages) {
+              paginationHTML += '<a href="#" onclick="changePage(' + (currentPage + 1) + ')">Next</a>';
+            }
+          }
+
+          paginationContainer.innerHTML = paginationHTML;
+        });
+
+        // Function to change the current page and update the displayed properties
+        function changePage(page) {
+          currentPage = page;
+          startIndex = (currentPage - 1) * itemsPerPage;
+          endIndex = startIndex + itemsPerPage;
+
+          for (var i = 0; i < nekretnineElements.length; i++) {
+            var nekretninaElement = nekretnineElements[i];
+            var nekretninaId = nekretninaElement.dataset.nekretninaId;
+
+            if (visibleNekretnineIds.includes(nekretninaId)) {
+              var displayIndex = visibleNekretnineIds.indexOf(nekretninaId);
+              if (displayIndex >= startIndex && displayIndex < endIndex) {
                 nekretninaElement.style.display = 'block';
               } else {
                 nekretninaElement.style.display = 'none';
               }
+            } else {
+              nekretninaElement.style.display = 'none';
             }
+          }
+
+          var paginationLinks = document.querySelectorAll('#pagination-container a');
+          paginationLinks.forEach(function (link) {
+            link.classList.remove('current-page');
           });
 
-          setTimeout(function () {
-            map.invalidateSize();
-            map.on('zoomend', function () {
-              if (map.getZoom() < 10) {
-                map.setZoom(10);
-              }
-            });
-          }, 100);
-</script>
+          var currentLink = document.querySelector('#pagination-container a:nth-child(' + (currentPage + 1) + ')');
+          currentLink.classList.add('current-page');
+        }
+
+        setTimeout(function () {
+          map.invalidateSize();
+          map.on('zoomend', function () {
+            if (map.getZoom() < 10) {
+              map.setZoom(10);
+            }
+          });
+        }, 100);
+      </script>
       </div>
 
-<div class="image-grid">
-      {% for nekretnina in lista %}
-        <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" style="text-decoration: none;">
-              {% with nekretnina.slike.first as first_image %}
+      <div class="image-grid">
+        {% for nekretnina in lista %}
+          <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}">
+            {% with nekretnina.slike.first as first_image %}
               {% if first_image %}
                 {% image first_image width-400 %}
               {% endif %}
             {% endwith %}
             <h2 class="post-title">{{ nekretnina.naziv }}</h2>
-        </a>
-      {% endfor %}
-</div>
+          </a>
+        {% endfor %}
+      </div>
     </div>
     {% if page_obj.has_other_pages %}
     <div>
