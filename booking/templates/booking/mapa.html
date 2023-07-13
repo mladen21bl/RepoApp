@@ -72,8 +72,8 @@
       setTimeout(function () {
         map.invalidateSize();
         map.on('zoomend', function () {
-          if (map.getZoom() < 12) {
-            map.setZoom(12);
+          if (map.getZoom() < 10) {
+            map.setZoom(10);
           }
         });
       }, 100);
