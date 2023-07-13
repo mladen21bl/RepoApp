@@ -246,7 +246,7 @@
 
           var nekretnineElements = document.getElementsByClassName('nekretnina');
 
-          {% for nekretnina in nekretnine %}
+          {% for nekretnina in lista %}
           {% if nekretnina.latitude and nekretnina.longitude %}
           var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
           marker.nekretninaId = '{{ nekretnina.id }}';
@@ -300,8 +300,7 @@
               }
             });
           }, 100);
-
-        </script>
+</script>
       </div>
 
 <div class="image-grid">
