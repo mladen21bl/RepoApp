@@ -56,6 +56,9 @@
           map.panInsideBounds(bounds, { animate: false });
         });
 
+        var visibleNekretnineCount = 0;
+        var visibleNekretnineElements = [];
+
         for (var i = 0; i < nekretnineElements.length; i++) {
           var nekretninaElement = nekretnineElements[i];
           var nekretninaId = nekretninaElement.dataset.nekretninaId;
@@ -63,10 +66,33 @@
 
           if (visibleNekretnineIds.includes(nekretninaId)) {
             nekretninaElement.style.display = 'block';
+            visibleNekretnineCount++;
+
+            if (visibleNekretnineCount <= 4) {
+              visibleNekretnineElements.push(nekretninaElement);
+            } else {
+              nekretninaElement.style.display = 'none';
+            }
           } else {
             nekretninaElement.style.display = 'none';
           }
         }
+
+        var moreLinkButton = document.getElementById('more-link');
+        var moreLinkNextPage = document.getElementById('more-link-next-page');
+
+        if (visibleNekretnineCount > 4) {
+          moreLinkButton.style.display = 'block';
+          moreLinkNextPage.style.display = 'block';
+        } else {
+          moreLinkButton.style.display = 'none';
+          moreLinkNextPage.style.display = 'none';
+        }
+
+        moreLinkNextPage.addEventListener('click', function(e) {
+          e.preventDefault();
+          showNextPage(visibleNekretnineElements);
+        });
       });
 
       setTimeout(function () {
@@ -78,11 +104,36 @@
         });
       }, 100);
 
+      function showNextPage(visibleNekretnineElements) {
+        var currentPage = document.querySelector('.current-page');
+        var nextPage = currentPage.nextElementSibling;
+
+        currentPage.style.display = 'none';
+        currentPage.classList.remove('current-page');
+
+        nextPage.style.display = 'grid';
+        nextPage.classList.add('current-page');
+
+        var remainingElements = visibleNekretnineElements.slice(4);
+
+        for (var i = 0; i < remainingElements.length; i++) {
+          remainingElements[i].style.display = 'block';
+        }
+
+        var moreLinkButton = document.getElementById('more-link');
+        var moreLinkNextPage = document.getElementById('more-link-next-page');
+
+        if (nextPage.nextElementSibling === null) {
+          moreLinkButton.style.display = 'none';
+          moreLinkNextPage.style.display = 'none';
+        }
+      }
+
     </script>
   </div>
 
-  <div id="container">
-    <div class="image-grid">
+  <div id="stranica">
+    <div class="image-grid current-page">
       {% for nekretnina in nekretnine %}
       {% if nekretnina.latitude and nekretnina.longitude %}
       <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none;">
@@ -95,6 +146,23 @@
       </a>
       {% endif %}
       {% endfor %}
+    </div>
+    <div class="image-grid" style="display: none;">
+      {% for nekretnina in nekretnine %}
+      {% if nekretnina.latitude and nekretnina.longitude %}
+      <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none;">
+        {% with nekretnina.slike.first as first_image %}
+        {% if first_image %}
+        {% image first_image width-400 %}
+        {% endif %}
+        {% endwith %}
+        <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div id="more-link" style="text-align: center; display: none;">
+      <a href="#" id="more-link-next-page" class="more-link-button">Show more</a>
     </div>
   </div>
 </div>
@@ -122,9 +190,10 @@
     height: 100%;
   }
 
-  #container {
+  #stranica {
     padding: 5px;
     width: 50%;
+    border: solid purple 7px;
   }
 
   .image-grid {
@@ -153,17 +222,10 @@
     margin-bottom: 5px;
   }
 
-  .image-box {
-    background-color: green;
-    padding: 2px;
-    text-align: center;
-  }
-
-  .image-box img {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-    object-position: center;
+  .more-link-button {
+    color: purple;
+    font-weight: bold;
+    text-decoration: none;
   }
 </style>
 
