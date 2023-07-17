@@ -27,7 +27,8 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="{% url 'booking:map_list' %}">Nekretnine</a>
-
+        <a class="nav-link" href="{% url 'booking:filteri' %}">Filteri</a>
+        <a class="nav-link" href="#">Add image</a>
 
         {% if not user.is_authenticated %}
         <a class="nav-link" href="{% url 'booking:korisnik_registracija' %}">Registruj se</a>

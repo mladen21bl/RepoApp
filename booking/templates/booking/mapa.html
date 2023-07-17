@@ -6,7 +6,128 @@
 {% block content %}
 
 <div class="gornji-container">
-  <p style="color:black; text-align: center;"><a href="{% url 'booking:filteri' %}" class="btn btn-danger" id="dugme">Filteri</a></p>
+  <div class="filters">
+    <form method="GET" action="">
+
+      <div class="filter">
+        <label for="id_grad">Grad:</label>
+        <select name="grad" id="id_grad">
+          <option value="">-- Sve --</option>
+          {% for choice in grad_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_grad %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter">
+        <label for="id_mjesto">Mjesto:</label>
+        <select name="mjesto" id="id_mjesto">
+          <option value="">-- Sva --</option>
+          {% for choice in mjesto_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_mjesto %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter">
+        <label for="id_orjentacija">Orjentacija:</label>
+        <select name="orjentacija" id="id_orjentacija">
+          <option value="">-- Sva --</option>
+          {% for choice in orjentacija_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_orjentacija %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter">
+        <label for="id_vrsta">Vrsta:</label>
+        <select name="vrsta" id="id_vrsta">
+          <option value="">-- Sve --</option>
+          {% for choice in vrsta_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_vrsta %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {% if selected_vrsta in "kuca vikendica" %}
+      <div class="filter">
+        <label for="dvoriste">Dvoriste:</label>
+        <input type="checkbox" id="dvoriste" name="dvoriste" {% if request.GET.dvoriste %}checked{% endif %}>
+      </div>
+
+      <div class="filter">
+        <label for="bazen">Bazen:</label>
+        <input type="checkbox" id="bazen" name="bazen" {% if request.GET.bazen %}checked{% endif %}>
+      </div>
+
+      <div class="filter">
+        <label for="garaza">Garaza:</label>
+        <input type="checkbox" id="garaza" name="garaza" {% if request.GET.garaza %}checked{% endif %}>
+      </div>
+    {% endif %}
+
+    {% if selected_vrsta in "stan garsonjera" %}
+    <div class="filter">
+      <label for="centralno_grijanje">Centralno grijanje:</label>
+      <input type="checkbox" id="centralno_grijanje" name="centralno_grijanje" {% if request.GET.centralno_grijanje %}checked{% endif %}>
+    </div>
+
+    <div class="filter">
+      <label for="lift">Lift:</label>
+      <input type="checkbox" id="lift" name="lift" {% if request.GET.lift %}checked{% endif %}>
+    </div>
+    {% endif %}
+
+      {% if selected_vrsta == 'poslovni_prostor' %}
+      <div class="filter">
+        <label for="parking">Parking:</label>
+        <input type="checkbox" id="parking" name="parking" {% if request.GET.parking %}checked{% endif %}>
+      </div>
+
+      <div class="filter">
+        <label for="klima">Klima:</label>
+        <input type="checkbox" id="klima" name="klima" {% if request.GET.klima %}checked{% endif %}>
+      </div>
+      {% endif %}
+
+      <div class="filter">
+        <label for="id_status">Status:</label>
+        <select name="status" id="id_status">
+          <option value="">-- Svi --</option>
+          {% for choice in status_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_status %}selected{% endif %}>{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter">
+        <label for="naziv">Naziv:</label>
+        <input type="text" id="naziv" name="naziv" value="{{ request.GET.naziv }}">
+      </div>
+
+      <div class="filter">
+        <label for="cena_od">Cena (od):</label>
+        <input type="number" id="cena_od" name="cena_od" value="{{ request.GET.cena_od }}">
+      </div>
+
+      <div class="filter">
+        <label for="cena_do">Cena (do):</label>
+        <input type="number" id="cena_do" name="cena_do" value="{{ request.GET.cena_do }}">
+      </div>
+
+      <div class="filter">
+        <label for="povrsina_od">Kvadratura (od):</label>
+        <input type="number" id="povrsina_od" name="povrsina_od" value="{{ request.GET.povrsina_od }}">
+      </div>
+
+      <div class="filter">
+        <label for="povrsina_do">Kvadratura (do):</label>
+        <input type="number" id="povrsina_do" name="povrsina_do" value="{{ request.GET.povrsina_do }}">
+      </div>
+
+      <button type="submit">Filtriraj</button>
+    </form>
+  </div>
 </div>
 
 <div id="flex-container">
@@ -21,8 +142,7 @@
 
       var markers = L.markerClusterGroup();
 
-      var nekretnineElements = document.getElementsByClassName('nekretnina');
-
+      var nekretnineElements = document.getElementsByClassName('nekretnina')
       {% for nekretnina in nekretnine %}
       {% if nekretnina.latitude and nekretnina.longitude %}
       var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
@@ -128,23 +248,22 @@
           moreLinkNextPage.style.display = 'none';
         }
       }
-
     </script>
   </div>
 
   <div id="stranica">
     <div class="image-grid current-page">
       {% for nekretnina in nekretnine %}
-      {% if nekretnina.latitude and nekretnina.longitude %}
-      <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none;">
-        {% with nekretnina.slike.first as first_image %}
-        {% if first_image %}
-        {% image first_image width-400 %}
+        {% if nekretnina.latitude and nekretnina.longitude %}
+          <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none;">
+            {% with nekretnina.slike.first as first_image %}
+              {% if first_image %}
+                {% image first_image width-400 %}
+              {% endif %}
+            {% endwith %}
+            <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
+          </a>
         {% endif %}
-        {% endwith %}
-        <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
-      </a>
-      {% endif %}
       {% endfor %}
     </div>
     <div class="image-grid" style="display: none;">
@@ -169,10 +288,10 @@
 
 <style>
   #dugme {
-    width:150px;
-    height:50px;
-    border-radius:25px;
-    margin-top:15px;
+    width: 150px;
+    height: 50px;
+    border-radius: 25px;
+    margin-top: 15px;
   }
   #gornji-container {
   }
@@ -205,28 +324,57 @@
   }
 
   .nekretnina {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    width: 100%;
-    height: 200px; /* Adjust the desired height for the images */
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+  height: 200px; /* Adjust the desired height for the images */
+}
 
-  .nekretnina img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    margin-bottom: 5px;
-  }
+.nekretnina img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  margin-bottom: 5px;
+}
 
-  .more-link-button {
-    color: purple;
-    font-weight: bold;
-    text-decoration: none;
-  }
+.more-link-button {
+  color: purple;
+  font-weight: bold;
+  text-decoration: none;
+}
 </style>
+<script>
+  var moreLinkNextPage = document.getElementById('more-link-next-page');
+  var currentPage = document.querySelector('.current-page');
+  var nextPage = currentPage.nextElementSibling;
+
+  moreLinkNextPage.addEventListener('click', function(e) {
+    e.preventDefault();
+    showNextPage();
+  });
+
+  function showNextPage() {
+    currentPage.classList.remove('current-page');
+    currentPage.style.display = 'none';
+
+    nextPage.style.display = 'grid';
+    nextPage.classList.add('current-page');
+
+    currentPage = nextPage;
+    nextPage = currentPage.nextElementSibling;
+
+    var moreLinkButton = document.getElementById('more-link');
+    var moreLinkNextPage = document.getElementById('more-link-next-page');
+
+    if (nextPage === null) {
+      moreLinkButton.style.display = 'none';
+      moreLinkNextPage.style.display = 'none';
+    }
+  }
+</script>
 
 {% endblock %}

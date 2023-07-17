@@ -269,11 +269,15 @@
               return marker.nekretninaId;
             });
 
+          var southWest = L.latLng(44.706389, 17.035946);
+          var northEast = L.latLng(44.844916, 17.347521);
+          var bounds = L.latLngBounds(southWest, northEast);
+          map.setMaxBounds(bounds);
+          map.on('drag', function () {
+            map.panInsideBounds(bounds, { animate: false });
+          });
+
           var nekretnineElements = document.getElementsByClassName('nekretnina');
-          var itemsPerPage = 4; // Number of real estate properties to display per page
-          var currentPage = 1; // Current page number
-          var startIndex = (currentPage - 1) * itemsPerPage;
-          var endIndex = startIndex + itemsPerPage;
 
           for (var i = 0; i < nekretnineElements.length; i++) {
             var nekretninaElement = nekretnineElements[i];
@@ -290,63 +294,7 @@
               nekretninaElement.style.display = 'none';
             }
           }
-
-          // Pagination
-          var paginationContainer = document.getElementById('pagination-container');
-          var totalPages = Math.ceil(visibleNekretnineIds.length / itemsPerPage);
-          var paginationHTML = '';
-
-          if (totalPages > 1) {
-            if (currentPage > 1) {
-              paginationHTML += '<a href="#" onclick="changePage(' + (currentPage - 1) + ')">Previous</a> ';
-            }
-
-            for (var page = 1; page <= totalPages; page++) {
-              if (page === currentPage) {
-                paginationHTML += '<span class="current-page">' + page + '</span> ';
-              } else {
-                paginationHTML += '<a href="#" onclick="changePage(' + page + ')">' + page + '</a> ';
-              }
-            }
-
-            if (currentPage < totalPages) {
-              paginationHTML += '<a href="#" onclick="changePage(' + (currentPage + 1) + ')">Next</a>';
-            }
-          }
-
-          paginationContainer.innerHTML = paginationHTML;
         });
-
-        // Function to change the current page and update the displayed properties
-        function changePage(page) {
-          currentPage = page;
-          startIndex = (currentPage - 1) * itemsPerPage;
-          endIndex = startIndex + itemsPerPage;
-
-          for (var i = 0; i < nekretnineElements.length; i++) {
-            var nekretninaElement = nekretnineElements[i];
-            var nekretninaId = nekretninaElement.dataset.nekretninaId;
-
-            if (visibleNekretnineIds.includes(nekretninaId)) {
-              var displayIndex = visibleNekretnineIds.indexOf(nekretninaId);
-              if (displayIndex >= startIndex && displayIndex < endIndex) {
-                nekretninaElement.style.display = 'block';
-              } else {
-                nekretninaElement.style.display = 'none';
-              }
-            } else {
-              nekretninaElement.style.display = 'none';
-            }
-          }
-
-          var paginationLinks = document.querySelectorAll('#pagination-container a');
-          paginationLinks.forEach(function (link) {
-            link.classList.remove('current-page');
-          });
-
-          var currentLink = document.querySelector('#pagination-container a:nth-child(' + (currentPage + 1) + ')');
-          currentLink.classList.add('current-page');
-        }
 
         setTimeout(function () {
           map.invalidateSize();
@@ -372,35 +320,4 @@
         {% endfor %}
       </div>
     </div>
-    {% if page_obj.has_other_pages %}
-    <div>
-    {% if page_obj.number > 1 %}
-      <a href="?category={{ request.GET.category|urlencode }}&page=1">1</a>
-      {% if page_obj.number > 4 %}
-        ...
-      {% endif %}
-    {% endif %}
-
-    {% if page_obj.number > 3 %}
-      <span>...</span>
-    {% endif %}
-
-    {% if page_obj.number > 2 %}
-      <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.number|add:"-1" }}">{{ page_obj.number|add:"-1" }}</a>
-    {% endif %}
-
-    <span class="current-page">{{ page_obj.number }}</span>
-
-    {% if page_obj.number < page_obj.paginator.num_pages %}
-      <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.number|add:"1" }}">{{ page_obj.number|add:"1" }}</a>
-    {% endif %}
-
-    {% if page_obj.number < page_obj.paginator.num_pages %}
-      {% if page_obj.number < page_obj.paginator.num_pages|add:"-3" %}
-        ...
-      {% endif %}
-      <a href="?category={{ request.GET.category|urlencode }}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-    {% endif %}
-    </div>
-    {% endif %}
 {% endblock %}
