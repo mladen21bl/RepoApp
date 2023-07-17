@@ -416,8 +416,8 @@ class NekretninaList(ListView):
     model = BookingPage
     context_object_name = 'lista'
     template_name = 'booking/nekretnina_list.html'
-    paginated_by = 4
-    
+
+
     def get_queryset(self):
         queryset = super().get_queryset()
 

@@ -43,7 +43,7 @@
   .image-grid {
     margin-top: 50px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Set maximum 4 columns per slide */
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 50px;
   }
@@ -60,7 +60,7 @@
 
   .nekretnina img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     margin-bottom: 5px;
@@ -248,6 +248,10 @@
           var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
           marker.nekretninaId = '{{ nekretnina.id }}';
           markers.addLayer(marker);
+
+          marker.on('click', function () {
+            window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+          });
         {% endif %}
       {% endfor %}
 
@@ -264,20 +268,24 @@
             return marker.nekretninaId;
           });
 
+        var southWest = L.latLng(44.706389, 17.035946);
+        var northEast = L.latLng(44.844916, 17.347521);
+        var bounds = L.latLngBounds(southWest, northEast);
+        map.setMaxBounds(bounds);
+        map.on('drag', function () {
+          map.panInsideBounds(bounds, { animate: false });
+        });
+
         var nekretnineElements = document.getElementsByClassName('nekretnina');
+        var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
+        var trenutniSlajd = 0;
         var ukupnoNekretnina = nekretnineElements.length;
 
-        for (var i = 0; i < ukupnoNekretnina; i++) {
+        for (var i = 0; i < nekretnineElements.length; i++) {
           var nekretninaElement = nekretnineElements[i];
-          var nekretninaId = nekretninaElement.dataset.nekretninaId;
-          var nekretninaCoords = L.latLng(
-            parseFloat(nekretninaElement.dataset.latitude),
-            parseFloat(nekretninaElement.dataset.longitude)
-          );
 
-          if (visibleNekretnineIds.includes(nekretninaId)) {
+          if (i >= trenutniSlajd * brojNekretninaPoSlajdu && i < (trenutniSlajd + 1) * brojNekretninaPoSlajdu) {
             nekretninaElement.style.display = 'block';
-            nekretninaElement.style.order = visibleNekretnineIds.indexOf(nekretninaId) + 1;
           } else {
             nekretninaElement.style.display = 'none';
           }
@@ -292,89 +300,82 @@
           }
         });
       }, 100);
-
-      var nekretnineElements = document.getElementsByClassName('nekretnina');
-      var trenutniSlajd = 0;
-      var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
-      var ukupnoNekretnina = nekretnineElements.length;
-
-      function prikaziSljedeciSlajd() {
-        trenutniSlajd++;
-        if (trenutniSlajd * brojNekretninaPoSlajdu >= ukupnoNekretnina) {
-          trenutniSlajd = Math.floor(ukupnoNekretnina / brojNekretninaPoSlajdu);
-        }
-        prikaziNekretnine();
-        return false; // Prevent default anchor tag behavior
-      }
-
-      function prikaziPrethodniSlajd() {
-        trenutniSlajd--;
-        if (trenutniSlajd < 0) {
-          trenutniSlajd = 0;
-        }
-        prikaziNekretnine();
-        return false; // Prevent default anchor tag behavior
-      }
-
-      function prikaziNekretnine() {
-        var start = trenutniSlajd * brojNekretninaPoSlajdu;
-        var end = start + brojNekretninaPoSlajdu;
-        if (end > ukupnoNekretnina) {
-          end = ukupnoNekretnina;
-        }
-
-        for (var i = 0; i < ukupnoNekretnina; i++) {
-          var nekretninaElement = nekretnineElements[i];
-
-          if (i >= start && i < end) {
-            nekretninaElement.style.display = 'block';
-          } else {
-            nekretninaElement.style.display = 'none';
-          }
-        }
-
-        // Display navigation buttons for slides
-        var prethodniDugme = document.getElementById('prethodni-dugme');
-        var sljedeciDugme = document.getElementById('sljedeci-dugme');
-
-        if (trenutniSlajd === 0) {
-          prethodniDugme.style.display = 'none';
-        } else {
-          prethodniDugme.style.display = 'block';
-        }
-
-        if (end >= ukupnoNekretnina) {
-          sljedeciDugme.style.display = 'none';
-        } else {
-          sljedeciDugme.style.display = 'block';
-        }
-      }
-
-      var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
-      var ukupnoNekretnina = nekretnineElements.length;
-      prikaziNekretnine();
     </script>
   </div>
 
-  <div class="lista">
-    <div class="image-grid">
+  <div class="image-grid">
+    <div id="slides">
       {% for nekretnina in lista %}
-        {% if forloop.counter <= 4 %}  <!-- Limit the loop to the first 4 elements -->
-          <a href="#" onclick="window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}'; return false;" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}">
-            {% with nekretnina.slike.first as first_image %}
-              {% if first_image %}
-                {% image first_image width-400 %}
-              {% endif %}
-            {% endwith %}
-            <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
-          </a>
-        {% endif %}
+        <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
+          {% with nekretnina.slike.first as first_image %}
+            {% if first_image %}
+              {% image first_image width-400 %}
+            {% endif %}
+          {% endwith %}
+          <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
+        </a>
       {% endfor %}
-      <button id="prethodni-dugme" onclick="prikaziPrethodniSlajd()" style="display: none;">Prethodni</button>
-      <button id="sljedeci-dugme" onclick="prikaziSljedeciSlajd()">Sljedeći</button>
     </div>
+    <a href="#" id="prethodni-dugme" onclick="prikaziPrethodniSlajd(event)" style="display: none;">Prethodni</a>
+    <a href="#" id="sljedeci-dugme" onclick="prikaziSljedeciSlajd(event)">Sljedeći</a>
   </div>
 </div>
 
+<script>
+  var slides = document.getElementById('slides');
+  var prethodniDugme = document.getElementById('prethodni-dugme');
+  var sljedeciDugme = document.getElementById('sljedeci-dugme');
+  var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
+  var trenutniSlajd = 0;
+  var ukupnoNekretnina = slides.children.length;
+
+  function prikaziPrethodniSlajd(event) {
+    event.preventDefault(); // Prevent default anchor tag behavior (refresh)
+    trenutniSlajd--;
+
+    if (trenutniSlajd < 0) {
+      trenutniSlajd = 0;
+    }
+
+    prikaziNekretnine();
+  }
+
+  function prikaziSljedeciSlajd(event) {
+    event.preventDefault(); // Prevent default anchor tag behavior (refresh)
+    trenutniSlajd++;
+
+    if (trenutniSlajd * brojNekretninaPoSlajdu >= ukupnoNekretnina) {
+      trenutniSlajd = Math.floor(ukupnoNekretnina / brojNekretninaPoSlajdu);
+    }
+
+    prikaziNekretnine();
+  }
+
+  function prikaziNekretnine() {
+    for (var i = 0; i < slides.children.length; i++) {
+      var nekretninaElement = slides.children[i];
+
+      if (i >= trenutniSlajd * brojNekretninaPoSlajdu && i < (trenutniSlajd + 1) * brojNekretninaPoSlajdu) {
+        nekretninaElement.style.display = 'block';
+      } else {
+        nekretninaElement.style.display = 'none';
+      }
+    }
+
+    if (trenutniSlajd === 0) {
+      prethodniDugme.style.display = 'none';
+    } else {
+      prethodniDugme.style.display = 'block';
+    }
+
+    if ((trenutniSlajd + 1) * brojNekretninaPoSlajdu >= ukupnoNekretnina) {
+      sljedeciDugme.style.display = 'none';
+    } else {
+      sljedeciDugme.style.display = 'block';
+    }
+  }
+
+  prikaziNekretnine();
+</script>
 
 {% endblock %}
