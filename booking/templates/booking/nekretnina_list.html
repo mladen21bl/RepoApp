@@ -43,7 +43,7 @@
   .image-grid {
     margin-top: 50px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* Set maximum 4 columns per slide */
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 50px;
   }
@@ -60,7 +60,7 @@
 
   .nekretnina img {
     width: 100%;
-    height: 100%;
+    height: 200px;
     object-fit: cover;
     object-position: center;
     margin-bottom: 5px;
@@ -234,121 +234,132 @@
     <div id="flex-container">
   <div id="empty-space">
     <div id="map"></div>
-  </div>
+    <script>
+      var map = L.map('map').setView([44.784846, 17.186230], 10); // Adjust the initial zoom level as per your requirement
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
 
-  <div class="image-grid">
-    <button id="prethodni-dugme" onclick="prikaziPrethodniSlajd()" style="display: none;">Prethodni</button>
-    <button id="sljedeci-dugme" onclick="prikaziSljedeciSlajd()">Sljedeći</button>
+      var markers = L.markerClusterGroup();
 
-    {% for nekretnina in lista %}
-    <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
-      {% with nekretnina.slike.first as first_image %}
-      {% if first_image %}
-      {% image first_image width-400 %}
-      {% endif %}
-      {% endwith %}
-      <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
-    </a>
-    {% endfor %}
-  </div>
-</div>
+      {% for nekretnina in lista %}
+        {% if nekretnina.latitude and nekretnina.longitude %}
+          var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
+          marker.nekretninaId = '{{ nekretnina.id }}';
+          markers.addLayer(marker);
 
-<script>
-  var map = L.map('map').setView([44.784846, 17.186230], 10);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org">OpenStreetMap</a> contributors'
-  }).addTo(map);
+          marker.on('click', function () {
+            window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+          });
+        {% endif %}
+      {% endfor %}
 
-  var markers = L.markerClusterGroup();
+      map.addLayer(markers);
 
-  {% for nekretnina in lista %}
-  {% if nekretnina.latitude and nekretnina.longitude %}
-  var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
-  marker.nekretninaId = '{{ nekretnina.id }}';
-  markers.addLayer(marker);
+      map.on('zoomend moveend', function () {
+        var currentBounds = map.getBounds();
+        var visibleNekretnineIds = markers
+          .getLayers()
+          .filter(function (marker) {
+            return currentBounds.contains(marker.getLatLng());
+          })
+          .map(function (marker) {
+            return marker.nekretninaId;
+          });
 
-  marker.on('click', function () {
-    window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
-  });
-  {% endif %}
-  {% endfor %}
+        var nekretnineElements = document.getElementsByClassName('nekretnina');
 
-  map.addLayer(markers);
+        for (var i = 0; i < nekretnineElements.length; i++) {
+          var nekretninaElement = nekretnineElements[i];
+          var nekretninaId = nekretninaElement.dataset.nekretninaId;
+          var nekretninaCoords = L.latLng(
+            parseFloat(nekretninaElement.dataset.latitude),
+            parseFloat(nekretninaElement.dataset.longitude)
+          );
 
-  var nekretnineElements = document.getElementsByClassName('nekretnina');
-  var trenutniSlajd = 0;
-  var brojNekretninaPoSlajdu = 4;
-
-  function prikaziSljedeciSlajd() {
-    trenutniSlajd++;
-    prikaziNekretnine();
-  }
-
-  function prikaziPrethodniSlajd() {
-    trenutniSlajd--;
-    prikaziNekretnine();
-  }
-
-  function prikaziNekretnine() {
-    var start = trenutniSlajd * brojNekretninaPoSlajdu;
-    var end = start + brojNekretninaPoSlajdu;
-
-    for (var i = 0; i < nekretnineElements.length; i++) {
-      var nekretninaElement = nekretnineElements[i];
-
-      if (i >= start && i < end) {
-        nekretninaElement.style.display = 'block';
-      } else {
-        nekretninaElement.style.display = 'none';
-      }
-    }
-
-    // Prikazivanje navigacijskih dugmadi za slajdove
-    var prethodniDugme = document.getElementById('prethodni-dugme');
-    var sljedeciDugme = document.getElementById('sljedeci-dugme');
-
-    if (trenutniSlajd === 0) {
-      prethodniDugme.style.display = 'none';
-    } else {
-      prethodniDugme.style.display = 'block';
-    }
-
-    if (end >= nekretnineElements.length) {
-      sljedeciDugme.style.display = 'none';
-    } else {
-      sljedeciDugme.style.display = 'block';
-    }
-  }
-
-  prikaziNekretnine();
-
-    map.on('zoomend moveend', function () {
-    var currentBounds = map.getBounds();
-    var visibleNekretnineIds = markers
-      .getLayers()
-      .filter(function (marker) {
-        return currentBounds.contains(marker.getLatLng());
-      })
-      .map(function (marker) {
-        return marker.nekretninaId;
+          if (visibleNekretnineIds.includes(nekretninaId)) {
+            nekretninaElement.style.display = 'block';
+            nekretninaElement.style.order = visibleNekretnineIds.indexOf(nekretninaId) + 1;
+          } else {
+            nekretninaElement.style.display = 'none';
+          }
+        }
       });
 
-    var southWest = L.latLng(44.706389, 17.035946);
-    var northEast = L.latLng(44.844916, 17.347521);
-    var bounds = L.latLngBounds(southWest, northEast);
-    map.setMaxBounds(bounds);
-    map.on('drag', function () {
-      map.panInsideBounds(bounds, { animate: false });
-    });
-  });
-  setTimeout(function () {
-    map.invalidateSize();
-    map.on('zoomend', function () {
-      if (map.getZoom() < 10) {
-        map.setZoom(10);
+      setTimeout(function () {
+        map.invalidateSize();
+        map.on('zoomend', function () {
+          if (map.getZoom() < 10) {
+            map.setZoom(10);
+          }
+        });
+      }, 100);
+
+      var nekretnineElements = document.getElementsByClassName('nekretnina');
+      var trenutniSlajd = 0;
+      var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
+
+      function prikaziSljedeciSlajd() {
+        trenutniSlajd++;
+        prikaziNekretnine();
       }
-    });
-  }, 100);
-</script>
+
+      function prikaziPrethodniSlajd() {
+        trenutniSlajd--;
+        prikaziNekretnine();
+      }
+
+      function prikaziNekretnine() {
+        var start = trenutniSlajd * brojNekretninaPoSlajdu;
+        var end = start + brojNekretninaPoSlajdu;
+
+        for (var i = 0; i < nekretnineElements.length; i++) {
+          var nekretninaElement = nekretnineElements[i];
+
+          if (i >= start && i < end) {
+            nekretninaElement.style.display = 'block';
+          } else {
+            nekretninaElement.style.display = 'none';
+          }
+        }
+
+        // Display navigation buttons for slides
+        var prethodniDugme = document.getElementById('prethodni-dugme');
+        var sljedeciDugme = document.getElementById('sljedeci-dugme');
+
+        if (trenutniSlajd === 0) {
+          prethodniDugme.style.display = 'none';
+        } else {
+          prethodniDugme.style.display = 'block';
+        }
+
+        if (end >= nekretnineElements.length) {
+          sljedeciDugme.style.display = 'none';
+        } else {
+          sljedeciDugme.style.display = 'block';
+        }
+      }
+
+      prikaziNekretnine();
+    </script>
+  </div>
+
+  <div class="lista">
+    <div class="image-grid">
+      {% for nekretnina in lista %}
+      <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}">
+        {% with nekretnina.slike.first as first_image %}
+        {% if first_image %}
+        {% image first_image width-400 %}
+        {% endif %}
+        {% endwith %}
+        <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
+      </a>
+      {% endfor %}
+    </div>
+    <button id="prethodni-dugme" onclick="prikaziPrethodniSlajd()" style="display: none;">Prethodni</button>
+    <button id="sljedeci-dugme" onclick="prikaziSljedeciSlajd()">Sljedeći</button>
+  </div>
+</div>
 {% endblock %}
