@@ -357,9 +357,10 @@
         <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
       </a>
       {% endfor %}
+      <button id="prethodni-dugme" onclick="prikaziPrethodniSlajd()" style="display: none;">Prethodni</button>
+      <button id="sljedeci-dugme" onclick="prikaziSljedeciSlajd()">Sljedeći</button>
     </div>
-    <button id="prethodni-dugme" onclick="prikaziPrethodniSlajd()" style="display: none;">Prethodni</button>
-    <button id="sljedeci-dugme" onclick="prikaziSljedeciSlajd()">Sljedeći</button>
+
   </div>
 </div>
 {% endblock %}
