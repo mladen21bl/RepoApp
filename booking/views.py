@@ -84,9 +84,10 @@ class BookingCreateView(CreateView):
             booking_page.depth = parent_page.depth + 1
 
         parent_page.add_child(instance=booking_page)
-        selected_images = form.cleaned_data['slike']
-        booking_page.slike.set(selected_images)
 
+        selected_images = form.cleaned_data['slike']
+        for image in selected_images:
+            booking_page.slike.add(image)
 
         booking_page.save_revision().publish()
 

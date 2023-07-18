@@ -6,7 +6,9 @@ from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.search import index
 from django.contrib.auth.models import User
 from wagtail.images.models import Image
-
+from django.db import models
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 
 
@@ -249,6 +251,16 @@ class BookingPage(Page):
     slike = models.ManyToManyField(Image)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    image = models.ImageField(upload_to='original_images/')
+    image_thumbnail = ImageSpecField(source='image',
+                                     processors=[ResizeToFill(300, 300)],
+                                     format='JPEG',
+                                     options={'quality': 90})
+    def save(self, *args, **kwargs):
+        # Process the image_thumbnail if required
+        self.image_thumbnail = self.image
+        super().save(*args, **kwargs)
+
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),

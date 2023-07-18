@@ -108,18 +108,24 @@
        {{ form.longitude }}
      </div>
 
+     <div class="form-group">
+       <label for="{{ form.image.id_for_label }}">image:</label>
+       {{ form.image }}
+     </div>
 
-    <div class="form-group">
-      <label for="{{ form.slike.id_for_label }}">Select Images:</label>
-      <div class="image-checkboxes">
-        {% for image in form.slike.field.queryset.all %}
-          <label>
-            <input type="checkbox" name="{{ form.slike.html_name }}" value="{{ image.pk }}">
-            <img src="{{ image.file.url }}" alt="{{ image.title }}" width="200">
-          </label>
-        {% endfor %}
-      </div>
-    </div>
+
+     <div class="form-group">
+       <label for="{{ form.slike.id_for_label }}">Select Images:</label>
+       <div class="image-checkboxes">
+         {% for image in form.slike.field.queryset.all %}
+           <label>
+             <input type="checkbox" name="{{ form.slike.html_name }}" value="{{ image.pk }}">
+             <img src="{{ image.image.url }}" alt="{{ image.title }}" width="200">
+           </label>
+         {% endfor %}
+       </div>
+     </div>
+
 
     <button type="submit">Submit</button>
   </form>
