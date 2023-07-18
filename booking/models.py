@@ -251,7 +251,7 @@ class BookingPage(Page):
     slike = models.ManyToManyField(Image)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    image = models.ImageField(upload_to='original_images/')
+    image = models.ImageField(upload_to='original_images/', default='stan.jpg')
     image_thumbnail = ImageSpecField(source='image',
                                      processors=[ResizeToFill(300, 300)],
                                      format='JPEG',
