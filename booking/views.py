@@ -85,6 +85,10 @@ class BookingCreateView(CreateView):
 
         parent_page.add_child(instance=booking_page)
 
+        selected_images = form.cleaned_data['slike']
+        for image in selected_images:
+            booking_page.slike.add(image)
+
         booking_page.save_revision().publish()
 
         return HttpResponseRedirect(reverse('booking:map_list'))
@@ -105,6 +109,8 @@ class BookingDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         detail = self.object
+        slike = detail.slike.all()
+        context['slike'] = slike
         return context
 
 class BookingDeleteView(DeleteView):

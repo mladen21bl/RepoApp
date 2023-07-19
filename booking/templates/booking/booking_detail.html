@@ -4,9 +4,27 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
+{% for item in detail.gallery_images.all %}
+        <div style="float: left; margin: 10px">
+            {% image item.image fill-320x240 %}
+            <p>{{ item.caption }}</p>
+        </div>
+    {% endfor %}
+{% if detail.main_image %}
+    <!-- Display content if the instance has an image -->
+    {% image slika width-400 %}
+{% else %}
+    <!-- Display content if the instance doesn't have an image -->
+    <p>No image available</p>
+{% endif %}
 <div class="container">
-
     <p>Naziv: {{ detail.naziv }}</p>
+    {% for image_item in detail.gallery_images.all %}
+      <div class="gallery-item">
+        <img src="{{ image_item.image.url }}" alt="{{ image_item.caption }}">
+        <p>{{ image_item.caption }}</p>
+      </div>
+    {% endfor %}
     <p>Agent: {{ detail.agent }}</p>
     <p>Površina: {{ detail.povrsina }}</p>
     <p>Cijena: {{ detail.cena }}</p>
@@ -40,6 +58,12 @@
     {% endif %}
 
     <p>Slike:</p>
+    <div class="image-grid">
+      {% for slika in detail.images.all %}
+      {% image slika width-400 %}
+      {% endfor %}
+
+    </div>
     {% if user.is_authenticated and not request.user.is_superuser %}
     <form method="post" action="{% url 'booking:kontakt_forma' %}">
         {% csrf_token %}
