@@ -250,9 +250,7 @@ class BookingPage(Page):
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    image = models.ImageField(upload_to='original_images/', default='stan.jpg')
-
-
+    
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),
