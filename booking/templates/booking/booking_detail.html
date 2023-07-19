@@ -7,7 +7,6 @@
 <div class="container">
 
     <p>Naziv: {{ detail.naziv }}</p>
-    <p>Image: <img src="{{ detail.image.url }}" alt="Image"></p>
     <p>Agent: {{ detail.agent }}</p>
     <p>Površina: {{ detail.povrsina }}</p>
     <p>Cijena: {{ detail.cena }}</p>
@@ -41,12 +40,6 @@
     {% endif %}
 
     <p>Slike:</p>
-    <div class="image-grid">
-      {% for slika in detail.slike.all %}
-      {% image slika width-400 %}
-      {% endfor %}
-
-    </div>
     {% if user.is_authenticated and not request.user.is_superuser %}
     <form method="post" action="{% url 'booking:kontakt_forma' %}">
         {% csrf_token %}

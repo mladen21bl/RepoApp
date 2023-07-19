@@ -256,11 +256,6 @@
       {% for nekretnina in nekretnine %}
         {% if nekretnina.latitude and nekretnina.longitude %}
           <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none;">
-            {% with nekretnina.slike.first as first_image %}
-              {% if first_image %}
-                {% image first_image width-400 %}
-              {% endif %}
-            {% endwith %}
             <h2 class="post-title" style="color:black; text-align: center;">{{ nekretnina.naziv }}</h2>
           </a>
         {% endif %}

@@ -248,18 +248,8 @@ class BookingPage(Page):
     parking = models.BooleanField(default=False)
     klima = models.BooleanField(default=False)
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
-    slike = models.ManyToManyField(Image)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    image = models.ImageField(upload_to='original_images/', default='stan.jpg')
-    image_thumbnail = ImageSpecField(source='image',
-                                     processors=[ResizeToFill(300, 300)],
-                                     format='JPEG',
-                                     options={'quality': 90})
-    def save(self, *args, **kwargs):
-        # Process the image_thumbnail if required
-        self.image_thumbnail = self.image
-        super().save(*args, **kwargs)
 
 
     search_fields = Page.search_fields + [
@@ -279,7 +269,6 @@ class BookingPage(Page):
         index.SearchField('parking'),
         index.SearchField('klima'),
         index.SearchField('agent'),
-        index.SearchField('slike'),
     ]
 
     content_panels = Page.content_panels + [
@@ -299,17 +288,9 @@ class BookingPage(Page):
         FieldPanel('lift'),
         FieldPanel('parking'),
         FieldPanel('klima'),
-        FieldPanel('slike'),
-        InlinePanel('gallery_images', label="Gallery images"),
 
     ]
 
-    def main_image(self):
-        gallery_item = self.gallery_images.first()
-        if gallery_item:
-            return gallery_item.image
-        else:
-            return None
 
     def get_dvoriste_display(self):
         return "Ima" if self.dvoriste else "Nema"
@@ -345,18 +326,6 @@ class BookingPage(Page):
         return self.naziv
 
 
-
-class BookingPageGalleryImage(Orderable):
-    page = ParentalKey(BookingPage, on_delete=models.CASCADE, related_name='gallery_images')
-    image = models.ForeignKey(
-    'wagtailimages.Image', on_delete=models.CASCADE, related_name='+'
-    )
-    caption = models.CharField(blank=True, max_length=250)
-
-    panels = [
-        FieldPanel('image'),
-        FieldPanel('caption'),
-    ]
 
 
 

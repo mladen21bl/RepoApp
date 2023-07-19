@@ -6,8 +6,6 @@ from ckeditor.widgets import CKEditorWidget
 from wagtail.images.models import Image
 from multiupload.fields import MultiFileField
 
-class ImageUploadForm(forms.Form):
-    slike = MultiFileField(min_num=1, max_num=10, max_file_size=1024*1024*5, required=True)
 
 
 class ForgotPasswordForm(forms.Form):
@@ -16,13 +14,10 @@ class ForgotPasswordForm(forms.Form):
 
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
-    slike = forms.ModelMultipleChoiceField(
-        queryset=Image.objects.all(),
-        widget=forms.CheckboxSelectMultiple
-    )
+
 
     class Meta:
         model = BookingPage
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-                  'klima', 'agent', 'slike', 'latitude', 'longitude', 'image']
+                  'klima', 'agent', 'latitude', 'longitude']
