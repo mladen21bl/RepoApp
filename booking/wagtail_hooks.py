@@ -31,10 +31,10 @@ class BookingPageAdmin(ModelAdmin):
     exclude_from_explorer = False
     list_display = ('naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
               'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-              'klima', 'agent', 'slike', 'latitude', 'longitude', 'image')
+              'klima', 'agent', 'latitude', 'longitude', 'image')
     search_fields = ('naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
               'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-              'klima', 'agent', 'slike', 'latitude', 'longitude', 'image')
+              'klima', 'agent', 'latitude', 'longitude', 'image')
 
 modeladmin_register(PorukeAdmin)
 modeladmin_register(KorisnikAdmin)

@@ -248,7 +248,6 @@ class BookingPage(Page):
     parking = models.BooleanField(default=False)
     klima = models.BooleanField(default=False)
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
-    slike = models.ManyToManyField(Image)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     image = models.ImageField(upload_to='original_images/', default='stan.jpg')
@@ -272,7 +271,6 @@ class BookingPage(Page):
         index.SearchField('parking'),
         index.SearchField('klima'),
         index.SearchField('agent'),
-        index.SearchField('slike'),
     ]
 
     content_panels = Page.content_panels + [
@@ -293,7 +291,6 @@ class BookingPage(Page):
         FieldPanel('lift'),
         FieldPanel('parking'),
         FieldPanel('klima'),
-        FieldPanel('slike'),
         FieldPanel('latitude'),
         FieldPanel('longitude'),
         InlinePanel('gallery_images', label="Gallery images"),

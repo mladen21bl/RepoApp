@@ -20,15 +20,10 @@ class ForgotPasswordForm(forms.Form):
 
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
-    slike = forms.ModelMultipleChoiceField(
-        queryset=Image.objects.all(),
-        widget=forms.CheckboxSelectMultiple
-    )
-    
 
     class Meta:
         model = BookingPage
         image = ImageChooserFormField(widget=ImageChooserBlock(), required=True)
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-                  'klima', 'agent', 'slike', 'latitude', 'longitude', 'image']
+                  'klima', 'agent', 'latitude', 'longitude', 'image']
