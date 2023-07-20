@@ -7,15 +7,7 @@
 
 <div class="container">
     <p>Naziv: {{ detail.naziv }}</p>
-    {% if detail.gallery_images.all %}
-    <div class="image-gallery">
-      {% for image in detail.gallery_images.all %}
-        <img src="{{ image.image.url }}" alt="{{ image.caption }}" width="300" height="200">
-      {% endfor %}
-    </div>
-    {% else %}
     <p>Nema</p>
-    {% endif %}
     <p>Agent: {{ detail.agent }}</p>
     <p>Površina: {{ detail.povrsina }}</p>
     <p>Cijena: {{ detail.cena }}</p>

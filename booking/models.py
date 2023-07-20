@@ -250,7 +250,7 @@ class BookingPage(Page):
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    
+    images = models.ManyToManyField(Image, through='BookingPageGalleryImage', blank=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),
@@ -299,8 +299,6 @@ class BookingPage(Page):
         gallery_item = self.gallery_images.first()
         if gallery_item:
             return gallery_item.image
-        else:
-            return None
 
     def get_dvoriste_display(self):
         return "Ima" if self.dvoriste else "Nema"
