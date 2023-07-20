@@ -242,7 +242,7 @@
   <div id="empty-space">
     <div id="map"></div>
     <script>
-      var map = L.map('map').setView([44.784846, 17.186230], 10); // Adjust the initial zoom level as per your requirement
+      var map = L.map('map').setView([44.784846, 17.186230], 10); 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -284,7 +284,7 @@
           });
 
         var nekretnineElements = document.getElementsByClassName('nekretnina');
-        var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
+        var brojNekretninaPoSlajdu = 4;
         var trenutniSlajd = 0;
         var ukupnoNekretnina = nekretnineElements.length;
 
@@ -341,7 +341,7 @@
   var slides = document.getElementById('slides');
   var prethodniDugme = document.getElementById('prethodni-dugme');
   var sljedeciDugme = document.getElementById('sljedeci-dugme');
-  var brojNekretninaPoSlajdu = 4; // Maximum number of elements per slide
+  var brojNekretninaPoSlajdu = 4;
   var trenutniSlajd = 0;
   var ukupnoNekretnina = slides.children.length;
   document.getElementById('prethodni-dugme').addEventListener('click', prikaziPrethodniSlajd);
@@ -388,7 +388,7 @@
     var startIndex = trenutniSlajd * brojNekretninaPoSlajdu;
     var endIndex = (trenutniSlajd + 1) * brojNekretninaPoSlajdu;
 
-    // Show/hide slides based on visible markers and restrict to 4 elements per slide
+
     for (var j = 0; j < slides.children.length; j++) {
       var nekretninaElement = slides.children[j];
       var nekretninaId = nekretninaElement.getAttribute('data-nekretnina-id');
@@ -401,12 +401,12 @@
       }
     }
 
-    // Show/hide previous and next buttons
+
     prethodniDugme.style.display = trenutniSlajd === 0 ? 'none' : 'block';
     sljedeciDugme.style.display = endIndex >= ukupnoNekretnina ? 'none' : 'block';
   }
 
-  // Update visible markers and call prikaziNekretnine() when map is moved or zoomed
+
   map.on('zoomend moveend', function () {
     visibleMarkers = markers.getLayers().filter(function (marker) {
       return map.getBounds().contains(marker.getLatLng());
@@ -416,11 +416,11 @@
       return marker.nekretninaId;
     });
 
-    // Call the function to show/hide slides and update buttons
+
     prikaziNekretnine();
   });
 
-  // Initial call to show the first set of slides
+
   prikaziNekretnine();
 </script>
 
