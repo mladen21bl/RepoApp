@@ -14,6 +14,7 @@ class ForgotPasswordForm(forms.Form):
 
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
+    images = MultiFileField(min_num=1, max_num=10, max_file_size=1024*1024*5, required=False)
 
     class Meta:
         model = BookingPage
