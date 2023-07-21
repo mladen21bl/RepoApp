@@ -87,14 +87,14 @@ class BookingCreateView(CreateView):
 
         booking_page.save_revision().publish()
 
-        return HttpResponseRedirect(reverse('booking:map_list'))
+        return HttpResponseRedirect(reverse('booking:filteri'))
 
 
 class BookingEditView(UpdateView):
     model = BookingPage
     form_class = BookingPageForm
     template_name = 'booking/booking_edit.html'
-    success_url = reverse_lazy('booking:map_list')
+    success_url = reverse_lazy('booking:filteri')
 
 
 class BookingDetail(DetailView):
