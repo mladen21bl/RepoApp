@@ -18,7 +18,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.generic.edit import FormView
-from .forms import BookingPageForm, ForgotPasswordForm, BookingPageFormSet
+from .forms import BookingPageForm, ForgotPasswordForm
 from django.forms import Textarea
 from wagtail.models import Page, Orderable
 from django.template.loader import render_to_string
@@ -68,28 +68,37 @@ class BookingCreateView(CreateView):
     model = BookingPage
     template_name = 'booking/booking_create.html'
     form_class = BookingPageForm
-    success_url = reverse_lazy('booking:filteri')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = BookingPageFormSet(self.request.POST, self.request.FILES)
-        else:
-            context['formset'] = BookingPageFormSet()
-        return context
+    success_url = '/'
 
     def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['formset']
-        if formset.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            return self.render_to_response(self.get_context_data(form=form, formset=formset))
+        parent_page = BookingIndexPage.objects.first()
 
-            
+        booking_page = form.save(commit=False)
+        booking_page.title = form.cleaned_data['naziv']
+        booking_page.slug = booking_page.title.lower().replace(' ', '-')
+
+        if parent_page.specific_class == BookingIndexPage:
+            booking_page.path = parent_page.path + booking_page.slug + '/'
+            booking_page.depth = parent_page.depth + 1
+        else:
+            booking_page.path = parent_page.path + booking_page.slug + '/'
+            booking_page.depth = parent_page.depth + 1
+
+        parent_page.add_child(instance=booking_page)
+
+        image = form.cleaned_data['slike']
+        if image:
+            wagtail_image = WagtailImage(title=image.name)
+            wagtail_image.file.save(image.name, image)
+            wagtail_image.save()
+
+            gallery_image = BookingPageGalleryImage(image=wagtail_image)
+            booking_page.gallery_images.add(gallery_image)
+
+        booking_page.save_revision().publish()
+
+        return HttpResponseRedirect(reverse('booking:filteri'))
+
 class BookingEditView(UpdateView):
     model = BookingPage
     form_class = BookingPageForm

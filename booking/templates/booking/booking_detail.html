@@ -39,7 +39,7 @@
     {% if request.user.username|lower == detail.agent|lower %}
         <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
     {% endif %}
-    
+
     <p>Slike:</p>
     <div class="image-grid">
       {% for item in detail.gallery_images.all %}
@@ -49,6 +49,7 @@
               </div>
           {% endfor %}
     </div>
+    
     {% if user.is_authenticated and not request.user.is_superuser %}
     <form method="post" action="{% url 'booking:kontakt_forma' %}">
         {% csrf_token %}
