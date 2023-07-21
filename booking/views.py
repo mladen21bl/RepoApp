@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage
+from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage, BookingPageGalleryImage
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -36,6 +36,8 @@ from django.views.decorators.csrf import csrf_exempt
 from wagtail.images.models import Image
 from django.db import IntegrityError
 from django.contrib import messages
+from django.core.files.images import ImageFile
+from wagtail.images.models import Image
 
 
 
@@ -83,12 +85,23 @@ class BookingCreateView(CreateView):
             booking_page.path = parent_page.path + booking_page.slug + '/'
             booking_page.depth = parent_page.depth + 1
 
-        parent_page.add_child(instance=booking_page)
+        # Save the main instance
+        booking_page.save()
 
+        # Handle uploaded image for image_gallery
+        if 'slike' in self.request.FILES:
+            image_file = self.request.FILES['slike']
+            # Create an Image instance from the uploaded image file
+            uploaded_image = Image.objects.create(title=booking_page.title, file=image_file)
+
+            # Create a new BookingPageGalleryImage instance and associate it with the booking_page
+            image_gallery = BookingPageGalleryImage(image=uploaded_image, page=booking_page)
+            image_gallery.save()
+
+        # Continue with publishing
         booking_page.save_revision().publish()
 
         return HttpResponseRedirect(reverse('booking:filteri'))
-
 
 class BookingEditView(UpdateView):
     model = BookingPage

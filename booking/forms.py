@@ -16,9 +16,12 @@ class ForgotPasswordForm(forms.Form):
 
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
-    images = forms.ImageField(required=False)
     class Meta:
         model = BookingPage
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-                  'klima', 'agent', 'latitude', 'longitude', 'images']
+                  'klima', 'agent', 'latitude', 'longitude', 'slike']
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['slike'].widget = forms.ClearableFileInput(attrs={'multiple': True})

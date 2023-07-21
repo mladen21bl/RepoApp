@@ -39,7 +39,9 @@
     {% if request.user.username|lower == detail.agent|lower %}
         <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
     {% endif %}
-
+    {% for slika in detail.slike.all %}
+        {% image slika width-400 %}
+        {% endfor %}
     <p>Slike:</p>
     <div class="image-grid">
       {% for item in detail.gallery_images.all %}
