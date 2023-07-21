@@ -36,8 +36,7 @@ from django.views.decorators.csrf import csrf_exempt
 from wagtail.images.models import Image
 from django.db import IntegrityError
 from django.contrib import messages
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
+from wagtail.images.models import Image as WagtailImage
 
 
 
@@ -85,23 +84,21 @@ class BookingCreateView(CreateView):
             booking_page.path = parent_page.path + booking_page.slug + '/'
             booking_page.depth = parent_page.depth + 1
 
-        # Save the main instance
-        booking_page.save()
+        parent_page.add_child(instance=booking_page)
 
-        # Handle uploaded image for image_gallery
-        if 'slike' in self.request.FILES:
-            image_file = self.request.FILES['slike']
-            # Create an Image instance from the uploaded image file
-            uploaded_image = Image.objects.create(title=booking_page.title, file=image_file)
+        image = form.cleaned_data['slike']
+        if image:
+            wagtail_image = WagtailImage(title=image.name)
+            wagtail_image.file.save(image.name, image)
+            wagtail_image.save()
 
-            # Create a new BookingPageGalleryImage instance and associate it with the booking_page
-            image_gallery = BookingPageGalleryImage(image=uploaded_image, page=booking_page)
-            image_gallery.save()
+            gallery_image = BookingPageGalleryImage(image=wagtail_image)
+            booking_page.gallery_images.add(gallery_image)
 
-        # Continue with publishing
         booking_page.save_revision().publish()
 
         return HttpResponseRedirect(reverse('booking:filteri'))
+
 
 class BookingEditView(UpdateView):
     model = BookingPage
@@ -109,34 +106,6 @@ class BookingEditView(UpdateView):
     template_name = 'booking/booking_edit.html'
     success_url = reverse_lazy('booking:filteri')
 
-    def form_valid(self, form):
-        booking_page = form.save(commit=False)
-        booking_page.slug = booking_page.title.lower().replace(' ', '-')
-
-        # Save the main instance
-        booking_page.save()
-
-        # Handle uploaded image for image_gallery
-        if 'slike' in self.request.FILES:
-            image_file = self.request.FILES['slike']
-            # Create an Image instance from the uploaded image file
-            uploaded_image = Image.objects.create(title=booking_page.title, file=image_file)
-
-            # Check if a BookingPageGalleryImage instance exists for the current booking_page
-            try:
-                image_gallery = booking_page.gallery_images.first()
-                # Update the existing BookingPageGalleryImage instance with the new uploaded image
-                image_gallery.image = uploaded_image
-                image_gallery.save()
-            except BookingPageGalleryImage.DoesNotExist:
-                # If no BookingPageGalleryImage instance exists, create a new one and associate it with the booking_page
-                image_gallery = BookingPageGalleryImage(image=uploaded_image, page=booking_page)
-                image_gallery.save()
-
-        # Continue with publishing
-        booking_page.save_revision().publish()
-
-        return super().form_valid(form)
 
 class BookingDetail(DetailView):
     context_object_name = 'detail'

@@ -68,4 +68,6 @@ urlpatterns = [
     path('forgot-password/sent', SentView.as_view(), name='sent'),
     path('reset-password/<str:uidb64>/<str:token>/', ResetPasswordView.as_view(), name='reset_password'),
 
+
+
 ]

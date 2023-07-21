@@ -9,6 +9,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from django.forms import inlineformset_factory
 from wagtail.images.models import Image as WagtailImage
 from wagtail.images.widgets import AdminImageChooser
+from wagtail.images.forms import WagtailImageField
 
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField(label='Email adresa')
@@ -16,12 +17,10 @@ class ForgotPasswordForm(forms.Form):
 
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
+    slike = WagtailImageField(required=False)  # Use WagtailImageField for the image
+
     class Meta:
         model = BookingPage
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
                   'klima', 'agent', 'latitude', 'longitude', 'slike']
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.fields['slike'].widget = forms.ClearableFileInput(attrs={'multiple': True})
