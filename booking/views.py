@@ -99,12 +99,31 @@ class BookingCreateView(CreateView):
 
         return HttpResponseRedirect(reverse('booking:filteri'))
 
-
 class BookingEditView(UpdateView):
     model = BookingPage
     form_class = BookingPageForm
     template_name = 'booking/booking_edit.html'
     success_url = reverse_lazy('booking:filteri')
+
+    def form_valid(self, form):
+        booking_page = form.save(commit=False)
+        booking_page.slug = booking_page.title.lower().replace(' ', '-')
+        booking_page.save()
+        
+        existing_images = booking_page.gallery_images.all()
+
+        image = form.cleaned_data['slike']
+        if image:
+            wagtail_image = WagtailImage(title=image.name)
+            wagtail_image.file.save(image.name, image)
+            wagtail_image.save()
+
+            gallery_image = BookingPageGalleryImage(image=wagtail_image)
+            booking_page.gallery_images.add(gallery_image)
+
+        booking_page.save_revision().publish()
+
+        return super().form_valid(form)
 
 
 class BookingDetail(DetailView):
