@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load custom_tags %}  <!-- Load the custom template tags -->
+
 {% load wagtailcore_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
@@ -109,16 +111,32 @@
      </div>
 
 
-     <div class="form-group">
-       <label for="{{ form.slike.id_for_label }}">slike:</label>
-       {{ form.slike }}
-     </div>
+     {{ formset.management_form }}
+    {% for form in formset %}
+      <div class="form-group">
+        <label for="{{ form.image.id_for_label }}">Slika:</label>
+        <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" multiple accept="image/*" onchange="handleFileSelect(this)">
+        <label id="{{ form.image.id_for_label }}_label">No file chosen</label>
+      </div>
+    {% endfor %}
 
     <button type="submit">Submit</button>
   </form>
 </div>
 <script>
+  // Custom JavaScript to handle multiple file selection and display file names
+  function handleFileSelect(input) {
+    const labelId = `${input.id}_label`;
+    const label = document.getElementById(labelId);
 
+    if (input.files.length > 1) {
+      label.innerHTML = `${input.files.length} files selected`;
+    } else if (input.files.length === 1) {
+      label.innerHTML = input.files[0].name;
+    } else {
+      label.innerHTML = 'No file chosen';
+    }
+  }
 </script>
 <style>
   .login-container {
