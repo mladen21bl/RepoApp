@@ -109,6 +109,34 @@ class BookingEditView(UpdateView):
     template_name = 'booking/booking_edit.html'
     success_url = reverse_lazy('booking:filteri')
 
+    def form_valid(self, form):
+        booking_page = form.save(commit=False)
+        booking_page.slug = booking_page.title.lower().replace(' ', '-')
+
+        # Save the main instance
+        booking_page.save()
+
+        # Handle uploaded image for image_gallery
+        if 'slike' in self.request.FILES:
+            image_file = self.request.FILES['slike']
+            # Create an Image instance from the uploaded image file
+            uploaded_image = Image.objects.create(title=booking_page.title, file=image_file)
+
+            # Check if a BookingPageGalleryImage instance exists for the current booking_page
+            try:
+                image_gallery = booking_page.gallery_images.first()
+                # Update the existing BookingPageGalleryImage instance with the new uploaded image
+                image_gallery.image = uploaded_image
+                image_gallery.save()
+            except BookingPageGalleryImage.DoesNotExist:
+                # If no BookingPageGalleryImage instance exists, create a new one and associate it with the booking_page
+                image_gallery = BookingPageGalleryImage(image=uploaded_image, page=booking_page)
+                image_gallery.save()
+
+        # Continue with publishing
+        booking_page.save_revision().publish()
+
+        return super().form_valid(form)
 
 class BookingDetail(DetailView):
     context_object_name = 'detail'
