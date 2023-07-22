@@ -96,28 +96,30 @@ class BookingCreateView(CreateView):
                 gallery_image = BookingPageGalleryImage(image=wagtail_image)
                 booking_page.gallery_images.add(gallery_image)
 
-        # Handle Tip and Karakteristika fields
-        tip_id = self.request.POST.get('tip')
-        if tip_id:
-            try:
-                tip = Tip.objects.get(pk=tip_id)
-                booking_page.tip = tip
-            except Tip.DoesNotExist:
-                form.add_error('tip', 'Selected Tip does not exist.')
 
-        karakteristika_ids = self.request.POST.getlist('karakteristika')
-        if karakteristika_ids:
-            try:
-                karakteristike = Karakteristika.objects.filter(pk__in=karakteristika_ids)
-                booking_page.karakteristika.set(karakteristike)
-            except Karakteristika.DoesNotExist:
-                form.add_error('karakteristika', 'One or more selected Karakteristika do not exist.')
+        if form.is_valid():
+            booking_page.save()
+            tip_id = self.request.POST.get('tip')
+            if tip_id:
+                try:
+                    tip = Tip.objects.get(pk=tip_id)
+                    booking_page.tip = tip
+                except Tip.DoesNotExist:
+                    form.add_error('tip', 'Selected Tip does not exist.')
 
-        if form.is_valid():  # Check if the form is valid after handling tip and karakteristika
-            booking_page.save_revision().publish()
+            karakteristika_ids = self.request.POST.getlist('karakteristika')
+            if karakteristika_ids:
+                try:
+                    karakteristike = Karakteristika.objects.filter(pk__in=karakteristika_ids)
+                    booking_page.karakteristika.set(karakteristike)
+                except Karakteristika.DoesNotExist:
+                    form.add_error('karakteristika', 'One or more selected Karakteristika do not exist.')
+
+            booking_page.save()
+
             return HttpResponseRedirect(reverse('booking:filteri'))
         else:
-            return self.form_invalid(form) 
+            return self.form_invalid(form)
 
 
 class BookingEditView(UpdateView):

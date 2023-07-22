@@ -22,7 +22,7 @@ class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
     slike = WagtailImageField(required=False)
 
-    # Add fields for Tip and Karakteristika
+    
     tip = forms.ModelChoiceField(
         queryset=Tip.objects.all(),
         widget=RadioSelect,
