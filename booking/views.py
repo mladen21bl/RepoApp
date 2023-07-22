@@ -86,18 +86,20 @@ class BookingCreateView(CreateView):
 
         parent_page.add_child(instance=booking_page)
 
-        image = form.cleaned_data['slike']
-        if image:
-            wagtail_image = WagtailImage(title=image.name)
-            wagtail_image.file.save(image.name, image)
-            wagtail_image.save()
+        images = self.request.FILES.getlist('slike')  
+        if images:
+            for image in images:
+                wagtail_image = WagtailImage(title=image.name)
+                wagtail_image.file.save(image.name, image)
+                wagtail_image.save()
 
-            gallery_image = BookingPageGalleryImage(image=wagtail_image)
-            booking_page.gallery_images.add(gallery_image)
+                gallery_image = BookingPageGalleryImage(image=wagtail_image)
+                booking_page.gallery_images.add(gallery_image)
 
         booking_page.save_revision().publish()
 
         return HttpResponseRedirect(reverse('booking:filteri'))
+
 
 class BookingEditView(UpdateView):
     model = BookingPage
