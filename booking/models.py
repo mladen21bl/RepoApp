@@ -14,24 +14,19 @@ from wagtail.snippets.models import register_snippet
 from django import forms
 
 
-@register_snippet
-class BookingKategorija(models.Model):
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='+'
-    )
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('icon'),
-    ]
+class Tip(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
 
-    class Meta:
-        verbose_name_plural = 'blog categories'
+class Karakteristika(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
 
 class KontaktForma(models.Model):
     ime = models.CharField(max_length=255)
@@ -271,7 +266,7 @@ class BookingPage(Page):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     slike = models.ImageField(upload_to='original_images/', default='stan.jog')
-    kategorije = ParentalManyToManyField('booking.BookingKategorija', blank=True)
+
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),
@@ -293,8 +288,6 @@ class BookingPage(Page):
     ]
 
     content_panels = Page.content_panels + [
-    MultiFieldPanel([
-        FieldPanel('kategorije', widget=forms.CheckboxSelectMultiple)]),
         FieldPanel('naziv'),
         FieldPanel('povrsina'),
         FieldPanel('agent'),
