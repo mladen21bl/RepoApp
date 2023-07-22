@@ -266,7 +266,8 @@ class BookingPage(Page):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     slike = models.ImageField(upload_to='original_images/', default='stan.jog')
-
+    tip = models.ForeignKey(Tip, on_delete=models.SET_NULL, null=True, blank=True, related_name='booking_pages')
+    karakteristika = models.ManyToManyField(Karakteristika, blank=True, related_name='booking_pages')
 
     search_fields = Page.search_fields + [
         index.SearchField('naziv'),
@@ -307,6 +308,8 @@ class BookingPage(Page):
         FieldPanel('klima'),
         FieldPanel('latitude'),
         FieldPanel('longitude'),
+        FieldPanel('tip'),
+        FieldPanel('karakteristika', widget=forms.CheckboxSelectMultiple),
         InlinePanel('gallery_images', label="Gallery images"),
 
     ]
