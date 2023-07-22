@@ -6,6 +6,17 @@
 {% block content %}
 
 <div class="container">
+  {% if detail.kategorije.exists %}
+        <h3>Karakteristike:</h3>
+        <ul>
+            {% for category in detail.kategorije.all %}
+                <li style="display: inline">
+                    {% image category.icon fill-32x32 style="vertical-align: middle" %}
+                    {{ category.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <p>Naziv: {{ detail.naziv }}</p>
     <p>Nema</p>
     <p>Agent: {{ detail.agent }}</p>
@@ -49,7 +60,7 @@
               </div>
           {% endfor %}
     </div>
-    
+
     {% if user.is_authenticated and not request.user.is_superuser %}
     <form method="post" action="{% url 'booking:kontakt_forma' %}">
         {% csrf_token %}
