@@ -17,7 +17,7 @@ class ForgotPasswordForm(forms.Form):
 
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
-    slike = WagtailImageField(required=False)  
+    slike = WagtailImageField(required=False)
 
     class Meta:
         model = BookingPage
