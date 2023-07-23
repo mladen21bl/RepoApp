@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage, BookingPageGalleryImage, Tip, Karakteristika
+from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage, BookingPageGalleryImage
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -96,30 +96,9 @@ class BookingCreateView(CreateView):
                 gallery_image = BookingPageGalleryImage(image=wagtail_image)
                 booking_page.gallery_images.add(gallery_image)
 
+        booking_page.save_revision().publish()
 
-        if form.is_valid():
-            booking_page.save()
-            tip_id = self.request.POST.get('tip')
-            if tip_id:
-                try:
-                    tip = Tip.objects.get(pk=tip_id)
-                    booking_page.tip = tip
-                except Tip.DoesNotExist:
-                    form.add_error('tip', 'Selected Tip does not exist.')
-
-            karakteristika_ids = self.request.POST.getlist('karakteristika')
-            if karakteristika_ids:
-                try:
-                    karakteristike = Karakteristika.objects.filter(pk__in=karakteristika_ids)
-                    booking_page.karakteristika.set(karakteristike)
-                except Karakteristika.DoesNotExist:
-                    form.add_error('karakteristika', 'One or more selected Karakteristika do not exist.')
-
-            booking_page.save()
-
-            return HttpResponseRedirect(reverse('booking:filteri'))
-        else:
-            return self.form_invalid(form)
+        return HttpResponseRedirect(reverse('booking:filteri'))
 
 
 class BookingEditView(UpdateView):

@@ -99,22 +99,6 @@
      </div>
 
      <div class="form-group">
-      <label for="{{ form.tip.id_for_label }}">Tip:</label>
-      {{ form.tip }}
-    </div>
-
-    <div class="form-group">
-      <label>Karakteristika:</label>
-      {% for karakteristika in form.karakteristika %}
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="{{ karakteristika.id_for_label }}" name="{{ form.karakteristika.name }}" value="{{ karakteristika.value_for_form }}"
-          {% if karakteristika.checked %} checked {% endif %}>
-          <label class="form-check-label" for="{{ karakteristika.id_for_label }}">{{ karakteristika.choice_label }}</label>
-        </div>
-      {% endfor %}
-    </div>
-    
-     <div class="form-group">
        <label for="{{ form.latitude.id_for_label }}">latitude:</label>
        {{ form.latitude }}
      </div>
@@ -127,7 +111,7 @@
 
      <div class="form-group">
        <label for="{{ form.slike.id_for_label }}">slike:</label>
-       <input required name="slike" type="file" multiple class="form-control-file">
+       <input required name="slike" type="file" multiple class="form-control-file" style="margin-left:350px;">
      </div>
 
     <button type="submit">Submit</button>

@@ -24,6 +24,7 @@ class Tip(models.Model):
 class Karakteristika(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True)
+    tip = models.ForeignKey(Tip, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.name
@@ -308,7 +309,7 @@ class BookingPage(Page):
         FieldPanel('klima'),
         FieldPanel('latitude'),
         FieldPanel('longitude'),
-        FieldPanel('tip'),
+        InlinePanel('gallery_images', label="Gallery images"),
         FieldPanel('karakteristika', widget=forms.CheckboxSelectMultiple),
         InlinePanel('gallery_images', label="Gallery images"),
 
