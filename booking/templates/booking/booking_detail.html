@@ -60,6 +60,28 @@
               </div>
           {% endfor %}
     </div>
+    <div id="map" style="height:400px; width:700px; margin-bottom:30px;"></div>
+    <div id="map" style="height:400px; width:700px; margin-bottom:30px;"></div>
+<script>
+  var map = L.map('map').setView([{{ detail.latitude }}, {{ detail.longitude }}], 15);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  var marker = L.marker([{{ detail.latitude }}, {{ detail.longitude }}]).addTo(map);
+  marker.detailId = '{{ detail.id }}';
+
+  var southWest = L.latLng(44.706389, 17.035946);
+  var northEast = L.latLng(44.844916, 17.347521);
+  var bounds = L.latLngBounds(southWest, northEast);
+  map.setMaxBounds(bounds);
+  map.on('drag', function () {
+    map.panInsideBounds(bounds, { animate: false });
+  });
+</script>
+
+
 
     {% if user.is_authenticated and not request.user.is_superuser %}
     <form method="post" action="{% url 'booking:kontakt_forma' %}">
