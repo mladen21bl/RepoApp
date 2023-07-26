@@ -266,7 +266,7 @@ class BookingPage(Page):
     agent = models.ForeignKey('Agent', on_delete=models.CASCADE, related_name='nekretnine')
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    slike = models.ImageField(upload_to='original_images/', default='stan.jog')
+    slike = models.ImageField(upload_to='original_images/', default='original_images/berza.jog')
     tip = models.ForeignKey(Tip, on_delete=models.SET_NULL, null=True, blank=True, related_name='booking_pages')
     karakteristika = models.ManyToManyField(Karakteristika, blank=True, related_name='booking_pages')
 

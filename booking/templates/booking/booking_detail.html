@@ -6,17 +6,7 @@
 {% block content %}
 
 <div class="container">
-  {% if detail.kategorije.exists %}
-        <h3>Karakteristike:</h3>
-        <ul>
-            {% for category in detail.kategorije.all %}
-                <li style="display: inline">
-                    {% image category.icon fill-32x32 style="vertical-align: middle" %}
-                    {{ category.name }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+      <h3>Tip: {{ detail.tip }}</h3>
     <p>Naziv: {{ detail.naziv }}</p>
     <p>Nema</p>
     <p>Agent: {{ detail.agent }}</p>
