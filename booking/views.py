@@ -420,7 +420,7 @@ class KorisnikDetailView(DetailView):
 
 
 class IndexView(TemplateView):
-    template_name = 'booking/home_page.html'
+    template_name = 'home/home_page.html'
 
 
 class AgentiList(ListView):
