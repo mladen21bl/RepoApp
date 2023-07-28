@@ -3,8 +3,10 @@ import random
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from faker import Faker
-from booking.models import BookingPage, Agent, BookingPage, BookingIndexPage
+from booking.models import BookingPage, Agent, BookingPage, BookingIndexPage, Karakteristika, Tip
 import re
+from django.core.files import File
+
 
 class Command(BaseCommand):
     help = 'Generates dummy data for BookingPage model.'
@@ -42,27 +44,50 @@ class Command(BaseCommand):
 
         parent_page = BookingIndexPage.objects.filter(title='listing').first()
         if not parent_page:
-
             return
+
+        try:
+            tip_ostale_prostorije = Tip.objects.get(name='ostale prostorije')
+            tip_basta = Tip.objects.get(name='basta')
+        except Tip.DoesNotExist:
+            return
+
+        karakteristika_1_spavaca_soba = Karakteristika.objects.get(name='1 spavaca soba')
+        karakteristika_2_spavace_sobe = Karakteristika.objects.get(name='2 spavace sobe')
+        karakteristika_mala_basta = Karakteristika.objects.get(name='mala basta')
+        karakteristika_vrt = Karakteristika.objects.get(name='vrt')
+
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        image_folder = os.path.join(base_dir, 'media', 'original_images')
+
+        
+        if not os.path.exists(image_folder):
+            raise FileNotFoundError(f"The '{image_folder}' directory does not exist. Please create it and add images.")
+
+        image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))]
 
         for _ in range(total):
             latitude, longitude = self.generate_random_coords()
             title = fake.company()
+            naziv=title,
             slug = title.lower().replace(' ', '-')
             path = f'/{slug}/'
             depth = 1
 
             povrsina = Decimal(random.uniform(30, 200)).quantize(Decimal('0.01'))
             cena = Decimal(random.uniform(50000, 1000000)).quantize(Decimal('0.01'))
-            image_path = r'C:\Users\Lenovo Legion\Desktop\GitHub\RepoApp\media\original_images\1400935880311_1iXkqvV.jpeg'
+
+
+            image_file = random.choice(image_files)
+            image_path = f'original_images/{image_file}'
 
             booking_page = BookingPage(
-                title = fake.company(),
-                slug = re.sub(r'[^\w\s-]', '', title).strip().lower().replace(' ', '-'),
-                agent_id=agent.pk,
-                naziv=title,
+                title=fake.company(),
+                slug=re.sub(r'[^\w\s-]', '', title).strip().lower().replace(' ', '-'),
+                agent=agent,
                 povrsina=povrsina,
                 cena=cena,
+                naziv=title,
                 opis=fake.paragraph(nb_sentences=3, variable_nb_sentences=True),
                 status=random.choice(self.STATUS_CHOICES),
                 vrsta=random.choice(self.VRSTA_CHOICES),
@@ -76,12 +101,19 @@ class Command(BaseCommand):
                 lift=random.choice([True, False]),
                 parking=random.choice([True, False]),
                 klima=random.choice([True, False]),
-                latitude = Decimal(random.uniform(self.MIN_LATITUDE, self.MAX_LATITUDE)).quantize(Decimal('0.000001')),
-                longitude = Decimal(random.uniform(self.MIN_LONGITUDE, self.MAX_LONGITUDE)).quantize(Decimal('0.000001')),
+                latitude=Decimal(random.uniform(self.MIN_LATITUDE, self.MAX_LATITUDE)).quantize(Decimal('0.000001')),
+                longitude=Decimal(random.uniform(self.MIN_LONGITUDE, self.MAX_LONGITUDE)).quantize(Decimal('0.000001')),
                 slike=image_path,
             )
 
+
             booking_page = parent_page.add_child(instance=booking_page)
+            booking_page.save()
+
+            booking_page.tip = tip_ostale_prostorije if random.choice([True, False]) else tip_basta
+            booking_page.karakteristika.add(karakteristika_1_spavaca_soba)
+            booking_page.karakteristika.add(karakteristika_2_spavace_sobe)
+
             booking_page.save()
 
         self.stdout.write(self.style.SUCCESS(f'Successfully created {total} BookingPage objects.'))

@@ -127,27 +127,7 @@
     <button type="submit">Submit</button>
   </form>
 </div>
-<script>
-    $(document).ready(function () {
-        $('#id_tip').on('change', function () {
-            var tipId = $(this).val();
-            if (tipId) {
-                // Send a request to fetch the karakteristika choices for the selected tip
-                $.ajax({
-                    type: 'GET',
-                    url: '/get_karakteristika_choices/',  // Replace with the URL to fetch the choices
-                    data: {'tip_id': tipId},
-                    success: function (data) {
-                        $('#id_karakteristika').html(data);
-                    }
-                });
-            } else {
-                $('#id_karakteristika').empty();
-            }
-        });
-    });
 
-</script>
 <style>
   .login-container {
     text-align: center;
