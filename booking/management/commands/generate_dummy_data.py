@@ -3,10 +3,11 @@ import random
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from faker import Faker
-from booking.models import BookingPage, Agent, BookingPage, BookingIndexPage, Karakteristika, Tip
+from booking.models import BookingPage, Agent, BookingIndexPage, Karakteristika, Tip, BookingPageGalleryImage
 import re
 from django.core.files import File
-
+from wagtail.images.models import Image
+from booking.forms import BookingPageForm  
 
 class Command(BaseCommand):
     help = 'Generates dummy data for BookingPage model.'
@@ -31,6 +32,35 @@ class Command(BaseCommand):
         latitude = Decimal(random.uniform(self.MIN_LATITUDE, self.MAX_LATITUDE))
         longitude = Decimal(random.uniform(self.MIN_LONGITUDE, self.MAX_LONGITUDE))
         return latitude, longitude
+
+    def save_image_to_media_folder(self, image_path):
+        new_file_name = f"dummy_{random.randint(1000, 9999)}_{os.path.basename(image_path)}"
+        new_image_path = os.path.join("media", "original_images", new_file_name)
+
+        with open(image_path, 'rb') as src_file, open(new_image_path, 'wb') as dst_file:
+            dst_file.write(src_file.read())
+
+        return new_image_path
+
+    def create_wagtail_image(self, image_path):
+        with open(image_path, 'rb') as f:
+            wagtail_image = Image(title=os.path.basename(image_path), file=File(f))
+            wagtail_image.save()
+
+        booking_page_gallery_image = BookingPageGalleryImage(image=wagtail_image)
+        booking_page_gallery_image.save()
+
+        return booking_page_gallery_image
+
+    def create_wagtail_image(self, image_path, booking_page):
+        with open(image_path, 'rb') as f:
+            wagtail_image = Image(title=os.path.basename(image_path), file=File(f))
+            wagtail_image.save()
+
+        gallery_image = BookingPageGalleryImage(image=wagtail_image, page=booking_page)
+        gallery_image.save()
+
+        return gallery_image
 
     def handle(self, *args, **kwargs):
         fake = Faker()
@@ -60,7 +90,6 @@ class Command(BaseCommand):
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         image_folder = os.path.join(base_dir, 'media', 'original_images')
 
-        
         if not os.path.exists(image_folder):
             raise FileNotFoundError(f"The '{image_folder}' directory does not exist. Please create it and add images.")
 
@@ -69,7 +98,7 @@ class Command(BaseCommand):
         for _ in range(total):
             latitude, longitude = self.generate_random_coords()
             title = fake.company()
-            naziv=title,
+            naziv = title,
             slug = title.lower().replace(' ', '-')
             path = f'/{slug}/'
             depth = 1
@@ -77,9 +106,9 @@ class Command(BaseCommand):
             povrsina = Decimal(random.uniform(30, 200)).quantize(Decimal('0.01'))
             cena = Decimal(random.uniform(50000, 1000000)).quantize(Decimal('0.01'))
 
-
             image_file = random.choice(image_files)
-            image_path = f'original_images/{image_file}'
+            image_path = os.path.join(image_folder, image_file)
+            new_image_path = self.save_image_to_media_folder(image_path)
 
             booking_page = BookingPage(
                 title=fake.company(),
@@ -103,9 +132,7 @@ class Command(BaseCommand):
                 klima=random.choice([True, False]),
                 latitude=Decimal(random.uniform(self.MIN_LATITUDE, self.MAX_LATITUDE)).quantize(Decimal('0.000001')),
                 longitude=Decimal(random.uniform(self.MIN_LONGITUDE, self.MAX_LONGITUDE)).quantize(Decimal('0.000001')),
-                slike=image_path,
             )
-
 
             booking_page = parent_page.add_child(instance=booking_page)
             booking_page.save()
@@ -113,6 +140,9 @@ class Command(BaseCommand):
             booking_page.tip = tip_ostale_prostorije if random.choice([True, False]) else tip_basta
             booking_page.karakteristika.add(karakteristika_1_spavaca_soba)
             booking_page.karakteristika.add(karakteristika_2_spavace_sobe)
+
+            gallery_image = self.create_wagtail_image(new_image_path, booking_page)
+            booking_page.gallery_images.add(gallery_image)
 
             booking_page.save()
 
