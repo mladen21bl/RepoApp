@@ -6,9 +6,14 @@
 {% block content %}
 
 <div class="container">
-      <h3>Tip: {{ detail.tip }}</h3>
+  <h3>Tip: {{ detail.tip }}</h3>
+  <h2>Karakteristike:</h2>
+  <ul>
+    {% for karakteristika in povezane_karakteristike %}
+      <li>{{ karakteristika.name }}</li>
+    {% endfor %}
+  </ul>
     <p>Naziv: {{ detail.naziv }}</p>
-    <p>Nema</p>
     <p>Agent: {{ detail.agent }}</p>
     <p>Površina: {{ detail.povrsina }}</p>
     <p>Cijena: {{ detail.cena }}</p>

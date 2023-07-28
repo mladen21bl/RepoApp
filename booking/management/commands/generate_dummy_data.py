@@ -54,7 +54,7 @@ class Command(BaseCommand):
 
             povrsina = Decimal(random.uniform(30, 200)).quantize(Decimal('0.01'))
             cena = Decimal(random.uniform(50000, 1000000)).quantize(Decimal('0.01'))
-            image_path = os.path.join('media', 'original_images', 'berza.jpg')
+            image_path = r'C:\Users\Lenovo Legion\Desktop\GitHub\RepoApp\media\original_images\1400935880311_1iXkqvV.jpeg'
 
             booking_page = BookingPage(
                 title = fake.company(),

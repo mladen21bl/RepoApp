@@ -137,6 +137,11 @@ class BookingDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         detail = self.object
+
+        if detail.tip:
+            povezane_karakteristike = detail.tip.karakteristike.all()
+            context['povezane_karakteristike'] = povezane_karakteristike
+
         return context
 
 class BookingDeleteView(DeleteView):
