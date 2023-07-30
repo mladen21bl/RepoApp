@@ -6,8 +6,8 @@
 {% block content %}
 
 <div class="container">
-  <h3>Tip: {{ detail.tip }}</h3>
-  <h2>Karakteristike:</h2>
+  <p>Tip: {{ detail.tip }}</p>
+  <p>Karakteristike:</p>
   <ul>
     {% for karakteristika in povezane_karakteristike %}
       <li>{{ karakteristika.name }}</li>

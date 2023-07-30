@@ -7,7 +7,7 @@ from booking.models import BookingPage, Agent, BookingIndexPage, Karakteristika,
 import re
 from django.core.files import File
 from wagtail.images.models import Image
-from booking.forms import BookingPageForm  
+from booking.forms import BookingPageForm
 
 class Command(BaseCommand):
     help = 'Generates dummy data for BookingPage model.'
@@ -65,12 +65,13 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         fake = Faker()
         total = kwargs['total']
-        agent_name = 'agent1'
 
-        try:
-            agent = Agent.objects.get(username=agent_name)
-        except Agent.DoesNotExist:
+
+        agents = Agent.objects.all()
+        if not agents.exists():
             return
+        agent = random.choice(agents)
+
 
         parent_page = BookingIndexPage.objects.filter(title='listing').first()
         if not parent_page:

@@ -1,5 +1,5 @@
 from django import forms
-from .models import BookingPage, BookingPageGalleryImage
+from .models import BookingPage, BookingPageGalleryImage, Tip, Karakteristika
 from wagtail.fields import RichTextField
 from django.forms import ModelForm
 from ckeditor.widgets import CKEditorWidget
@@ -18,6 +18,7 @@ class ForgotPasswordForm(forms.Form):
 class BookingPageForm(forms.ModelForm):
     opis = forms.CharField(widget=CKEditorWidget())
     slike = WagtailImageField(required=False)
+
 
     class Meta:
         model = BookingPage
