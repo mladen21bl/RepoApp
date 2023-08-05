@@ -6,11 +6,14 @@
 {% block content %}
 
 <div class="container">
-    <ul>
+  <p>Tipovi i karakteristike:</p>
+  <ul>
     {% for karakteristika in karakteristikas %}
-      <li>{{ karakteristika.name }}</li>
+          <li>{{ karakteristika.tip }}: {{ karakteristika.name }}</li>
     {% endfor %}
-    </ul>
+  </ul>
+
+
     <p>Naziv: {{ detail.naziv }}</p>
     <p>Agent: {{ detail.agent }}</p>
     <p>Površina: {{ detail.povrsina }}</p>
