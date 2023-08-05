@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage, BookingPageGalleryImage, Karakteristika
+from .models import Agent, Korisnik, KontaktForma, Poruke, BookingPage, BookingIndexPage, BookingPageGalleryImage, Karakteristika, Tip
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -73,6 +73,7 @@ class BookingCreateView(CreateView):
     def form_valid(self, form):
         parent_page = BookingIndexPage.objects.first()
         karakteristikas_list = Karakteristika.objects.filter(id__in=form.cleaned_data.get('karakteristika'))
+        tips_list = Tip.objects.filter(id__in=form.cleaned_data.get('tip'))
         booking_page = form.save(commit=False)
         booking_page.title = form.cleaned_data['naziv']
         booking_page.slug = booking_page.title.lower().replace(' ', '-')
@@ -85,6 +86,7 @@ class BookingCreateView(CreateView):
             booking_page.depth = parent_page.depth + 1
 
         parent_page.add_child(instance=booking_page)
+        booking_page.tip.set(tips_list)
         booking_page.karakteristika.set(karakteristikas_list)
 
         images = self.request.FILES.getlist('slike')
@@ -138,7 +140,8 @@ class BookingDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         detail = self.object
-        context['karakteristikas'] = detail.karakteristika.all()  
+        context['karakteristikas'] = detail.karakteristika.all()
+        context['tips'] = detail.tip.all()
         return context
 
 class BookingDeleteView(DeleteView):

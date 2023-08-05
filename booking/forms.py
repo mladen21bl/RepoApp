@@ -1,5 +1,5 @@
 from django import forms
-from .models import BookingPage, BookingPageGalleryImage, Karakteristika
+from .models import BookingPage, BookingPageGalleryImage, Karakteristika, Tip
 from wagtail.fields import RichTextField
 from django.forms import ModelForm
 from ckeditor.widgets import CKEditorWidget
@@ -24,4 +24,4 @@ class BookingPageForm(forms.ModelForm):
         model = BookingPage
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
-                  'klima', 'agent', 'latitude', 'longitude', 'slike', 'karakteristika']
+                  'klima', 'agent', 'latitude', 'longitude', 'slike', 'karakteristika', 'tip']
