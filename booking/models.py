@@ -12,6 +12,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from wagtail.snippets.models import register_snippet
 from django import forms
+from django.utils.text import slugify
 
 
 
@@ -24,11 +25,19 @@ class Tip(models.Model):
 
 class Karakteristika(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     tip = models.ForeignKey(Tip, on_delete=models.CASCADE, default=1, related_name='karakteristike')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Karakteristika, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('booking:karakteristika-detail', kwargs={'slug': self.slug})
 
 class KontaktForma(models.Model):
     ime = models.CharField(max_length=255)

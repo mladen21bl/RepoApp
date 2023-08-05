@@ -10,6 +10,7 @@ from django.forms import inlineformset_factory
 from wagtail.images.models import Image as WagtailImage
 from wagtail.images.widgets import AdminImageChooser
 from wagtail.images.forms import WagtailImageField
+from django.forms.widgets import CheckboxSelectMultiple
 
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField(label='Email adresa')
@@ -25,3 +26,8 @@ class BookingPageForm(forms.ModelForm):
         fields = ['naziv', 'povrsina', 'cena', 'opis', 'status', 'vrsta', 'grad', 'mjesto',
                   'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
                   'klima', 'agent', 'latitude', 'longitude', 'slike', 'karakteristika', 'tip']
+
+        widgets = {
+            'karakteristika': CheckboxSelectMultiple,
+            'tip': CheckboxSelectMultiple,
+        }

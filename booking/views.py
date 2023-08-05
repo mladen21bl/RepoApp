@@ -63,6 +63,17 @@ class KontaktFormaCreate(CreateView):
         form.instance.ime_agenta = nekretnina.agent
         return super().form_valid(form)
 
+class TipCreateView(CreateView):
+    model = Tip
+    template_name = 'booking/tip_create.html'
+    fields = ['name']
+    success_url = reverse_lazy('booking:filteri')
+
+class KarakteristikaCreateView(CreateView):
+    model = Karakteristika
+    template_name = 'booking/karakteristika_create.html'
+    fields = ['name', 'tip']
+    success_url = reverse_lazy('booking:filteri')
 
 class BookingCreateView(CreateView):
     model = BookingPage

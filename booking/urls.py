@@ -30,6 +30,8 @@ from .views import (
     AgentDeleteView,
     KorisnikDeleteView,
     BookingMapList,
+    TipCreateView,
+    KarakteristikaCreateView,
 )
 
 
@@ -68,6 +70,8 @@ urlpatterns = [
     path('forgot-password/sent', SentView.as_view(), name='sent'),
     path('reset-password/<str:uidb64>/<str:token>/', ResetPasswordView.as_view(), name='reset_password'),
 
+    path('tip/create/', TipCreateView.as_view(), name='tip_create'),
+    path('karakteristika/create/', KarakteristikaCreateView.as_view(), name='karakteristika_create'),
 
 
 ]
