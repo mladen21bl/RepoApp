@@ -140,8 +140,16 @@ class BookingDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         detail = self.object
-        context['karakteristikas'] = detail.karakteristika.all()
-        context['tips'] = detail.tip.all()
+        karakteristikas = detail.karakteristika.all()
+
+        grouped_karakteristikas = {}
+        for karakteristika in karakteristikas:
+            if karakteristika.tip in grouped_karakteristikas:
+                grouped_karakteristikas[karakteristika.tip].append(karakteristika.name)
+            else:
+                grouped_karakteristikas[karakteristika.tip] = [karakteristika.name]
+
+        context['grouped_karakteristikas'] = grouped_karakteristikas
         return context
 
 class BookingDeleteView(DeleteView):

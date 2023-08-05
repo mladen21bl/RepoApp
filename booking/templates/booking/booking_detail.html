@@ -7,11 +7,11 @@
 
 <div class="container">
   <p>Tipovi i karakteristike:</p>
-<ul>
-  {% for tip in tips %}
-    <li>{{ tip.name }}: {% for karakteristika in tip.karakteristike.all %}{{ karakteristika.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</li>
-  {% endfor %}
-</ul>
+  <ul>
+    {% for tip, names in grouped_karakteristikas.items %}
+      <li>{{ tip }}: {{ names|join:", " }}</li>
+    {% endfor %}
+  </ul>
 
     <p>Naziv: {{ detail.naziv }}</p>
     <p>Agent: {{ detail.agent }}</p>
