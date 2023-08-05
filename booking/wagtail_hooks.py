@@ -1,6 +1,6 @@
 from django.contrib import admin
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from .models import Korisnik, Poruke, BookingPage, Karakteristika, Tip
+from .models import Korisnik, Poruke, BookingPage, Karakteristika
 
 class KorisnikAdmin(ModelAdmin):
     model = Korisnik
@@ -36,15 +36,6 @@ class BookingPageAdmin(ModelAdmin):
               'orjentacija', 'dvoriste', 'garaza', 'bazen', 'centralno_grijanje', 'lift', 'parking',
               'klima', 'agent', 'latitude', 'longitude', 'image')
 
-class TipAdmin(ModelAdmin):
-    model = Tip
-    menu_label = 'Tipovi'
-    menu_icon = 'tag'
-    menu_order = 200
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('name', 'slug')
-    search_fields = ('name', 'slug')
 
 class KarakteristikaAdmin(ModelAdmin):
     model = Karakteristika
@@ -56,7 +47,6 @@ class KarakteristikaAdmin(ModelAdmin):
     list_display = ('name', 'slug')
     search_fields = ('name', 'slug')
 
-modeladmin_register(TipAdmin)
 modeladmin_register(KarakteristikaAdmin)
 modeladmin_register(PorukeAdmin)
 modeladmin_register(KorisnikAdmin)

@@ -3,7 +3,7 @@ import random
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from faker import Faker
-from booking.models import BookingPage, Agent, BookingIndexPage, Karakteristika, Tip, BookingPageGalleryImage
+from booking.models import BookingPage, Agent, BookingIndexPage, Karakteristika, BookingPageGalleryImage
 import re
 from django.core.files import File
 from wagtail.images.models import Image
@@ -77,17 +77,6 @@ class Command(BaseCommand):
         if not parent_page:
             return
 
-        try:
-            tip_ostale_prostorije = Tip.objects.get(name='ostale prostorije')
-            tip_basta = Tip.objects.get(name='basta')
-        except Tip.DoesNotExist:
-            return
-
-        karakteristika_1_spavaca_soba = Karakteristika.objects.get(name='1 spavaca soba')
-        karakteristika_2_spavace_sobe = Karakteristika.objects.get(name='2 spavace sobe')
-        karakteristika_mala_basta = Karakteristika.objects.get(name='mala basta')
-        karakteristika_vrt = Karakteristika.objects.get(name='vrt')
-
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         image_folder = os.path.join(base_dir, 'media', 'original_images')
 
@@ -137,10 +126,6 @@ class Command(BaseCommand):
 
             booking_page = parent_page.add_child(instance=booking_page)
             booking_page.save()
-
-            booking_page.tip = tip_ostale_prostorije if random.choice([True, False]) else tip_basta
-            booking_page.karakteristika.add(karakteristika_1_spavaca_soba)
-            booking_page.karakteristika.add(karakteristika_2_spavace_sobe)
 
             gallery_image = self.create_wagtail_image(new_image_path, booking_page)
             booking_page.gallery_images.add(gallery_image)
