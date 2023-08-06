@@ -3,7 +3,7 @@ import random
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from faker import Faker
-from booking.models import BookingPage, Agent, BookingIndexPage, Karakteristika, BookingPageGalleryImage
+from booking.models import BookingPage, Agent, BookingIndexPage, Karakteristika, Tip, BookingPageGalleryImage
 import re
 from django.core.files import File
 from wagtail.images.models import Image
@@ -42,15 +42,6 @@ class Command(BaseCommand):
 
         return new_image_path
 
-    def create_wagtail_image(self, image_path):
-        with open(image_path, 'rb') as f:
-            wagtail_image = Image(title=os.path.basename(image_path), file=File(f))
-            wagtail_image.save()
-
-        booking_page_gallery_image = BookingPageGalleryImage(image=wagtail_image)
-        booking_page_gallery_image.save()
-
-        return booking_page_gallery_image
 
     def create_wagtail_image(self, image_path, booking_page):
         with open(image_path, 'rb') as f:
@@ -76,6 +67,7 @@ class Command(BaseCommand):
         parent_page = BookingIndexPage.objects.filter(title='listing').first()
         if not parent_page:
             return
+
 
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         image_folder = os.path.join(base_dir, 'media', 'original_images')

@@ -509,7 +509,6 @@ class NekretninaList(ListView):
         klima = self.request.GET.get('klima')
 
 
-
         if vrsta:
             queryset = queryset.filter(vrsta=vrsta)
         if status:
