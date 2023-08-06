@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for a in karakteristike %}
+
+  <a href="{% url 'booking:karakteristika_detail' pk=a.pk %}" style="text-decoration: none;">{{ a.name }}</a><p></p>
+{% endfor %}
+{% endblock %}

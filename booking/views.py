@@ -75,6 +75,21 @@ class KarakteristikaCreateView(CreateView):
     fields = ['name', 'tip']
     success_url = reverse_lazy('booking:filteri')
 
+class KarakteristikaListView(ListView):
+    model = Karakteristika
+    template_name = 'booking/karakteristika_list.html'
+    context_object_name = 'karakteristike'
+
+class KarakteristikaDetailView(DetailView):
+    context_object_name = 'karakteristika'
+    model = Karakteristika
+    template_name = 'booking/karakteristika_detail.html'
+
+class KarakteristikaDeleteView(DeleteView):
+    model = Karakteristika
+    template_name = 'booking/karakteristika_delete.html'
+    success_url = reverse_lazy('booking:karakteristika_list')
+
 class BookingCreateView(CreateView):
     model = BookingPage
     template_name = 'booking/booking_create.html'

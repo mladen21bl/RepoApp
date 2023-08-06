@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <p>{{ karakteristika }}</p>
+
+    <a href="{% url 'booking:karakteristika_delete' pk=karakteristika.pk %}">Obrisi karakteristika</a>
+
+
+
+{% endblock %}

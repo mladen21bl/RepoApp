@@ -32,6 +32,10 @@ from .views import (
     BookingMapList,
     TipCreateView,
     KarakteristikaCreateView,
+    KarakteristikaListView,
+    KarakteristikaDetailView,
+    KarakteristikaDeleteView,
+
 )
 
 
@@ -72,6 +76,11 @@ urlpatterns = [
 
     path('tip/create/', TipCreateView.as_view(), name='tip_create'),
     path('karakteristika/create/', KarakteristikaCreateView.as_view(), name='karakteristika_create'),
+    path('karakteristika/list/', KarakteristikaListView.as_view(), name='karakteristika_list'),
+    path('karakteristika/list/<int:pk>', KarakteristikaDetailView.as_view(), name='karakteristika_detail'),
+    path('karakteristika/<int:pk>/delete', KarakteristikaDeleteView.as_view(), name='karakteristika_delete'),
+
+
 
 
 ]
