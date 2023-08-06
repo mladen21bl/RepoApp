@@ -20,10 +20,10 @@ class Command(BaseCommand):
     ]
     GRAD_CHOICES = ['banjaluka', 'okolina']
     MJESTO_CHOICES = ['mejdan', 'centar', 'borik', 'laus', 'cokori', 'slatina']
-    MAX_LATITUDE = 44.844916
-    MIN_LATITUDE = 44.706389
-    MAX_LONGITUDE = 17.347521
-    MIN_LONGITUDE = 17.035946
+    MAX_LATITUDE = 44.806040
+    MIN_LATITUDE = 44.758424
+    MAX_LONGITUDE = 17.232666
+    MIN_LONGITUDE = 17.156604
 
 
     def add_arguments(self, parser):

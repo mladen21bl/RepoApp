@@ -36,8 +36,6 @@
         {% if request.user.is_superuser or request.user.agent.is_agent %}
         <a class="nav-link" href="{% url 'booking:tip_create' %}">Napravi novi tip</a>
         <a class="nav-link" href="{% url 'booking:karakteristika_create' %}">Napravi novu karakteristiku</a>
-        <a class="nav-link" href="{% url 'booking:karakteristika_list' %}">Lista</a>
-
         {% endif %}
         {% if request.user.is_superuser %}
         <a class="nav-link" href="{% url 'booking:korisnik_list' %}">Korisnici</a>
