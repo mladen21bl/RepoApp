@@ -61,6 +61,9 @@ class Command(BaseCommand):
         karakteristike = Karakteristika.objects.all()
         karakteristika = random.choice(karakteristike)
 
+        broj_karakteristika = random.randint(1, 5)
+        odabrane_karakteristike = random.sample(list(karakteristike), broj_karakteristika)
+
         agents = Agent.objects.all()
         if not agents.exists():
             return
@@ -126,7 +129,7 @@ class Command(BaseCommand):
             booking_page.gallery_images.add(gallery_image)
 
 
-            booking_page.karakteristika.set([karakteristika])
+            booking_page.karakteristika.set(odabrane_karakteristike)
             booking_page.save()
 
         self.stdout.write(self.style.SUCCESS(f'Successfully created {total} BookingPage objects.'))
