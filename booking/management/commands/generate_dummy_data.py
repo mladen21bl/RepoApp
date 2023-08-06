@@ -25,6 +25,7 @@ class Command(BaseCommand):
     MAX_LONGITUDE = 17.347521
     MIN_LONGITUDE = 17.035946
 
+
     def add_arguments(self, parser):
         parser.add_argument('total', type=int, help='Indicates the number of dummy objects to be created.')
 
@@ -57,6 +58,8 @@ class Command(BaseCommand):
         fake = Faker()
         total = kwargs['total']
 
+        karakteristike = Karakteristika.objects.all()
+        karakteristika = random.choice(karakteristike)
 
         agents = Agent.objects.all()
         if not agents.exists():
@@ -122,6 +125,8 @@ class Command(BaseCommand):
             gallery_image = self.create_wagtail_image(new_image_path, booking_page)
             booking_page.gallery_images.add(gallery_image)
 
+
+            booking_page.karakteristika.set([karakteristika])
             booking_page.save()
 
         self.stdout.write(self.style.SUCCESS(f'Successfully created {total} BookingPage objects.'))
