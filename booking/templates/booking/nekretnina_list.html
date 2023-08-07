@@ -208,7 +208,7 @@
         <label for="naziv">Naziv:</label>
         <input type="text" id="naziv" name="naziv" value="{{ request.GET.naziv }}">
     </div>
-    
+
     <div class="filter">
         <label for="cena_od">Cena (od):</label>
         <input type="number" id="cena_od" name="cena_od" value="{{ request.GET.cena_od }}">
@@ -318,7 +318,7 @@
   </div>
 
   <div id="slides">
-    {% for nekretnina in lista %}
+    {% for nekretnina in paginated_lista %}
     {% if nekretnina.latitude and nekretnina.longitude %}
       <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
         {% for item in nekretnina.gallery_images.all %}
@@ -333,98 +333,20 @@
       </a>
     {% endif %}
   {% endfor %}
+  <div class="pagination-container">
+                <ul class="pagination">
+                    {% for page_num in paginated_lista.paginator.page_range %}
+                        <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
+                            <a href="?page={{ page_num }}">{{ page_num }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
 </div>
-<a href="#" id="prethodni-dugme">Prethodni</a>
-<a href="#" id="sljedeci-dugme">Sljedeći</a>
 
 </div>
 
-<script>
-  var slides = document.getElementById('slides');
-  var prethodniDugme = document.getElementById('prethodni-dugme');
-  var sljedeciDugme = document.getElementById('sljedeci-dugme');
-  var brojNekretninaPoSlajdu = 4;
-  var trenutniSlajd = 0;
-  var ukupnoNekretnina = slides.children.length;
-  document.getElementById('prethodni-dugme').addEventListener('click', prikaziPrethodniSlajd);
-  document.getElementById('sljedeci-dugme').addEventListener('click', prikaziSljedeciSlajd);
 
-  var visibleMarkers = [];
-
-  function prikaziPrethodniSlajd(event) {
-    event.preventDefault();
-    trenutniSlajd--;
-
-    if (trenutniSlajd < 0) {
-      trenutniSlajd = 0;
-    }
-
-    prikaziNekretnine();
-  }
-
-  function prikaziSljedeciSlajd(event) {
-    event.preventDefault();
-    trenutniSlajd++;
-
-    if (trenutniSlajd * brojNekretninaPoSlajdu >= ukupnoNekretnina) {
-      trenutniSlajd = Math.floor(ukupnoNekretnina / brojNekretninaPoSlajdu);
-    }
-
-    prikaziNekretnine();
-  }
-
-  function prikaziNekretnine() {
-    var currentBounds = map.getBounds();
-    var visibleNekretnineIds = [];
-
-    for (var i = 0; i < markers.getLayers().length; i++) {
-      var marker = markers.getLayers()[i];
-      var markerLatLng = marker.getLatLng();
-
-      if (currentBounds.contains(markerLatLng)) {
-        visibleNekretnineIds.push(marker.nekretninaId);
-      }
-    }
-
-    ukupnoNekretnina = visibleNekretnineIds.length;
-    var startIndex = trenutniSlajd * brojNekretninaPoSlajdu;
-    var endIndex = (trenutniSlajd + 1) * brojNekretninaPoSlajdu;
-
-
-    for (var j = 0; j < slides.children.length; j++) {
-      var nekretninaElement = slides.children[j];
-      var nekretninaId = nekretninaElement.getAttribute('data-nekretnina-id');
-      var isVisible = visibleNekretnineIds.includes(nekretninaId);
-
-      if (isVisible && j >= startIndex && j < endIndex) {
-        nekretninaElement.style.display = 'block';
-      } else {
-        nekretninaElement.style.display = 'none';
-      }
-    }
-
-
-    prethodniDugme.style.display = trenutniSlajd === 0 ? 'none' : 'block';
-    sljedeciDugme.style.display = endIndex >= ukupnoNekretnina ? 'none' : 'block';
-  }
-
-
-  map.on('zoomend moveend', function () {
-    visibleMarkers = markers.getLayers().filter(function (marker) {
-      return map.getBounds().contains(marker.getLatLng());
-    });
-
-    var visibleNekretnineIds = visibleMarkers.map(function (marker) {
-      return marker.nekretninaId;
-    });
-
-
-    prikaziNekretnine();
-  });
-
-
-  prikaziNekretnine();
-</script>
 
 
 

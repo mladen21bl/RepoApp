@@ -37,6 +37,7 @@ from wagtail.images.models import Image
 from django.db import IntegrityError
 from django.contrib import messages
 from wagtail.images.models import Image as WagtailImage
+from django.core.paginator import Paginator, Page
 
 
 
@@ -563,5 +564,9 @@ class NekretninaList(ListView):
         context['selected_lift'] = self.request.GET.get('lift', '')
         context['selected_parking'] = self.request.GET.get('parking', '')
         context['selected_klima'] = self.request.GET.get('klima', '')
+        paginator = Paginator(context['lista'], 4)  # Show 4 items per page
+        page_number = self.request.GET.get('page')
+        paginated_lista = paginator.get_page(page_number)
 
+        context['paginated_lista'] = paginated_lista
         return context
