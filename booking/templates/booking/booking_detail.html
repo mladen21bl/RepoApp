@@ -6,15 +6,14 @@
 {% block content %}
 
 <div class="container">
-  <p>Tipovi i karakteristike:</p>
-  <ul>
-    {% for tip, names in grouped_karakteristikas.items %}
-      <li>{{ tip }}: {{ names|join:", " }}</li>
-    {% endfor %}
-  </ul>
-
     <p>Naziv: {{ detail.naziv }}</p>
     <p>Agent: {{ detail.agent }}</p>
+    <p>Tipovi i karakteristike:</p>
+    <ul>
+      {% for tip, names in grouped_karakteristikas.items %}
+        <li>{{ tip }}: {{ names|join:", " }}</li>
+      {% endfor %}
+    </ul>
     <p>Površina: {{ detail.povrsina }}</p>
     <p>Cijena: {{ detail.cena }}</p>
     <p>Opis: {{ detail.opis|richtext }}</p>
