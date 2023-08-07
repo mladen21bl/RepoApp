@@ -264,28 +264,26 @@
     <div id="map"></div>
     <script>
       var map = L.map('map').setView([44.784846, 17.186230], 10);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
 
+      var markers = L.markerClusterGroup();
 
-
-    var markers = L.markerClusterGroup();
-
-    {% for nekretnina in lista %}
+      {% for nekretnina in lista %}
         {% if nekretnina.latitude and nekretnina.longitude %}
           var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
           marker.nekretninaId = '{{ nekretnina.id }}';
           markers.addLayer(marker);
 
           marker.on('click', function () {
-            window.location.href = '/nekretnine/' + nekretninaId + '/';
-          });
+           window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+         });
         {% endif %}
       {% endfor %}
 
-    map.addLayer(markers);
+      map.addLayer(markers);
 
       var southWest = L.latLng(44.706389, 17.035946);
       var northEast = L.latLng(44.844916, 17.347521);
@@ -315,7 +313,7 @@
       map.on('moveend', saveMapState);
       map.on('zoomend', saveMapState);
       document.addEventListener('DOMContentLoaded', loadMapState);
-      
+
       document.addEventListener('DOMContentLoaded', function () {
     initializeMap();
 
@@ -354,7 +352,7 @@
           });
 
         var nekretnineElements = document.getElementsByClassName('nekretnina');
-        var brojNekretninaPoSlajdu = 10;
+        var brojNekretninaPoSlajdu = 115;
         var trenutniSlajd = 0;
         var ukupnoNekretnina = nekretnineElements.length;
 
@@ -397,7 +395,7 @@
   <div id="slides">
     {% for nekretnina in paginated_lista %}
      {% if nekretnina.latitude and nekretnina.longitude %}
-       <a href="#" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
+     <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
          {% for item in nekretnina.gallery_images.all %}
           {% if forloop.first %}  {# Only show the first image #}
             <div style="float: left; margin: 10px">
@@ -416,7 +414,7 @@
 
 </div>
 <div class="pagination-container">
-    <ul class="pagination">
+    <ul class="pagination" id="paginacija">
         {% for page_num in paginated_lista.paginator.page_range %}
             {% if paginated_lista.has_previous and page_num == 1 %}
                 <li><a href="?page=1" id="broj">1</a></li>
