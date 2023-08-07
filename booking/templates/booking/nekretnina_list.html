@@ -12,7 +12,17 @@
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
 }
+.pagination-container {
+    display: flex;
+    margin-bottom: 300px;
+    margin-left: 330px;
+    width: 100%;
+    }
 
+  #broj {
+    color:black;
+    font-size: 2.7em;
+  }
   #dugme {
     width: 150px;
     height: 50px;
@@ -333,20 +343,21 @@
       </a>
     {% endif %}
   {% endfor %}
-  <div class="pagination-container">
-                <ul class="pagination">
-                    {% for page_num in paginated_lista.paginator.page_range %}
-                        <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
-                            <a href="?page={{ page_num }}">{{ page_num }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-</div>
+  <br>
 
 </div>
 
 
+</div>
+<div class="pagination-container">
+    <ul class="pagination">
+      {% for page_num in paginated_lista.paginator.page_range %}
+        <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
+          <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 
 
 
