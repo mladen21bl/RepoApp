@@ -351,13 +351,27 @@
 </div>
 <div class="pagination-container">
     <ul class="pagination">
-      {% for page_num in paginated_lista.paginator.page_range %}
-        <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
-          <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
-        </li>
-      {% endfor %}
+      {% if paginated_lista.has_previous %}
+        <li><a href="?page=1" id="broj">1</a></li>
+        {% if paginated_lista.number > 3 %}
+          <li><span>...</span></li>
+        {% endif %}
+        {% for page_num in paginated_lista.paginator.page_range %}
+          {% if page_num >= paginated_lista.number|add:"-2" and page_num <= paginated_lista.number|add:"2" %}
+            <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
+              <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if paginated_lista.paginator.num_pages > paginated_lista.number|add:"2" %}
+          <li><span>...</span></li>
+        {% endif %}
+        <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj">{{ paginated_lista.paginator.num_pages }}</a></li>
+      {% endif %}
     </ul>
-  </div>
+</div>
+
+
 
 
 
