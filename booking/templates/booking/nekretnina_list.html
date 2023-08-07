@@ -22,6 +22,18 @@
   #broj {
     color:black;
     font-size: 2.7em;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #ddd;
+    border-radius: 4px;
+    text-align: center;line-height: 40px;
+    text-decoration: none;
+    color: #333;
+    margin-right: 5px;
+  }
   }
   #dugme {
     width: 150px;
@@ -351,25 +363,32 @@
 </div>
 <div class="pagination-container">
     <ul class="pagination">
-      {% if paginated_lista.has_previous %}
-        <li><a href="?page=1" id="broj">1</a></li>
-        {% if paginated_lista.number > 3 %}
-          <li><span>...</span></li>
-        {% endif %}
         {% for page_num in paginated_lista.paginator.page_range %}
-          {% if page_num >= paginated_lista.number|add:"-2" and page_num <= paginated_lista.number|add:"2" %}
-            <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
-              <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
-            </li>
-          {% endif %}
+            {% if paginated_lista.has_previous and page_num == 1 %}
+                <li><a href="?page=1" id="broj">1</a></li>
+                {% if paginated_lista.number > 3 %}
+                    <li><span>......</span></li>
+                {% endif %}
+            {% endif %}
+
+            {% if page_num >= paginated_lista.number|add:"-1" and page_num <= paginated_lista.number|add:"1" %}
+                <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
+                    <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
+                </li>
+            {% endif %}
+
+            {% if paginated_lista.paginator.num_pages > paginated_lista.number|add:"2" and page_num == paginated_lista.paginator.num_pages %}
+                <li><span>......</span></li>
+            {% endif %}
+
+            {% if paginated_lista.has_next and page_num == paginated_lista.paginator.num_pages %}
+                <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj">{{ paginated_lista.paginator.num_pages }}</a></li>
+            {% endif %}
         {% endfor %}
-        {% if paginated_lista.paginator.num_pages > paginated_lista.number|add:"2" %}
-          <li><span>...</span></li>
-        {% endif %}
-        <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj">{{ paginated_lista.paginator.num_pages }}</a></li>
-      {% endif %}
     </ul>
 </div>
+
+
 
 
 
