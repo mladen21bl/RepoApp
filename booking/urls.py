@@ -32,7 +32,7 @@ from .views import (
     BookingMapList,
     TipCreateView,
     KarakteristikaCreateView,
-    
+
 )
 
 

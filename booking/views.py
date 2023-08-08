@@ -38,6 +38,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 from wagtail.images.models import Image as WagtailImage
 from django.core.paginator import Paginator, Page
+from django.http import JsonResponse
 
 
 
@@ -544,6 +545,10 @@ class NekretninaList(ListView):
             if klima:
                 queryset = queryset.filter(klima=True)
 
+        visible_ids = self.request.GET.getlist('visible_ids')
+        if visible_ids:
+            queryset = queryset.filter(id__in=visible_ids)
+
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -564,9 +569,8 @@ class NekretninaList(ListView):
         context['selected_lift'] = self.request.GET.get('lift', '')
         context['selected_parking'] = self.request.GET.get('parking', '')
         context['selected_klima'] = self.request.GET.get('klima', '')
-        paginator = Paginator(context['lista'], 4)
+        paginator = Paginator(context['lista'], 8)
         page_number = self.request.GET.get('page')
         paginated_lista = paginator.get_page(page_number)
-
         context['paginated_lista'] = paginated_lista
         return context

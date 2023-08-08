@@ -34,10 +34,7 @@
     color: #333;
     margin-right: 5px;
   }
-  #broj.active {
-    background-color: #297b96;
-    color: white;
-}
+  }
   #dugme {
     width: 150px;
     height: 50px;
@@ -264,33 +261,34 @@
 
     <div id="flex-container">
   <div id="empty-space">
-
     <div id="map"></div>
     <script>
-      //################## POSTAVLJANJE MAPE ################################
+      // ######################## POSTAVLJANJE MAPE ###################
       var map = L.map('map').setView([44.784846, 17.186230], 10);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(map);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
-      var markers = L.markerClusterGroup();
 
-      {% for nekretnina in lista %}
+
+    var markers = L.markerClusterGroup();
+
+    // ######################## MARKERI DODJELJIVANJE ###################
+    {% for nekretnina in lista %}
         {% if nekretnina.latitude and nekretnina.longitude %}
           var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
           marker.nekretninaId = '{{ nekretnina.id }}';
           markers.addLayer(marker);
 
           marker.on('click', function () {
-            window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
-          });
-        {% endif %}
+          window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+      });
+              {% endif %}
       {% endfor %}
 
-      map.addLayer(markers);
-
-  //###################### GRANICE ###########################
+    map.addLayer(markers);
+      // ######################## GRANICE ###################
       var southWest = L.latLng(44.706389, 17.035946);
       var northEast = L.latLng(44.844916, 17.347521);
       var bounds = L.latLngBounds(southWest, northEast);
@@ -298,7 +296,27 @@
       map.on('drag', function () {
         map.panInsideBounds(bounds, { animate: false });
       });
-//################## VIDLJIVE NEKRETNINE ##########################
+
+      // ################# CUVANJE I LAODOVANJE KOORDINATA ###################
+      function saveMapState() {
+        localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
+        localStorage.setItem('mapZoom', map.getZoom());
+      }
+
+
+      function loadMapState() {
+        var savedCenter = localStorage.getItem('mapCenter');
+        var savedZoom = localStorage.getItem('mapZoom');
+
+        if (savedCenter && savedZoom) {
+          map.setView(JSON.parse(savedCenter), savedZoom);
+        }
+      }
+
+
+      map.on('moveend', saveMapState);
+      map.on('zoomend', saveMapState);
+
       function updatePagination() {
         var visibleNekretnineIds = markers.getLayers()
           .filter(function (marker) {
@@ -309,6 +327,9 @@
           });
 
         var nekretnineElements = document.getElementsByClassName('nekretnina');
+        var brojNekretninaPoSlajdu = 10;
+        var trenutniSlajd = 0;
+        var ukupnoNekretnina = nekretnineElements.length;
 
         for (var i = 0; i < nekretnineElements.length; i++) {
           var nekretninaElement = nekretnineElements[i];
@@ -319,28 +340,51 @@
             nekretninaElement.style.display = 'none';
           }
         }
+
+        var numPages = Math.ceil(visibleNekretnineIds.length / brojNekretninaPoSlajdu);
+        var paginationContainer = document.querySelector('.pagination-container ul');
+        paginationContainer.innerHTML = '';
+
+        for (var page_num = 1; page_num <= numPages; page_num++) {
+          var paginationLink = document.createElement('li');
+          paginationLink.innerHTML = '<a href="?page=' + page_num + '" id="broj">' + page_num + '</a>';
+          paginationContainer.appendChild(paginationLink);
+        }
       }
+      
+      document.addEventListener('DOMContentLoaded', loadMapState);
 
-      markers.on('click', function(event) {
-    var nekretninaId = event.layer.nekretninaId;
-    var nekretnineElements = document.getElementsByClassName('nekretnina');
+      document.addEventListener('DOMContentLoaded', function () {
+      initializeMap();
 
-    for (var i = 0; i < nekretnineElements.length; i++) {
-      var nekretninaElement = nekretnineElements[i];
+      var nekretninaLinks = document.getElementsByClassName('nekretnina');
 
-      if (nekretninaElement.getAttribute('data-nekretnina-id') === nekretninaId) {
-        nekretninaElement.style.display = 'block';
-      } else {
-        nekretninaElement.style.display = 'none';
+      for (var i = 0; i < nekretninaLinks.length; i++) {
+        nekretninaLinks[i].addEventListener('click', function (event) {
+          event.preventDefault();
+          var nekretninaId = event.currentTarget.getAttribute('data-nekretnina-id');
+
+          fetch('/nekretnine/' + nekretninaId + '/')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('slides').innerHTML = data;
+              updatePagination();
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+            });
+        });
       }
-    }
-  });
-      map.on('moveend', updatePagination);
-      map.on('zoomend', updatePagination);
+    });
+
+
+      map.on('zoomend moveend', function () {
+        updatePagination();
+      });
 
 
 
-      // sprecavanje zoomouta
+
       setTimeout(function () {
         map.invalidateSize();
         map.on('zoomend', function () {
@@ -350,17 +394,14 @@
         });
       }, 100);
 
-      updatePagination();
-
-
     </script>
   </div>
 
   <div id="slides">
-  {% for nekretnina in lista %}
-    {% if nekretnina.latitude and nekretnina.longitude %}
-    <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; {% if forloop.index != 1 %}display: none;{% endif %}">
-      {% for item in nekretnina.gallery_images.all %}
+    {% for nekretnina in paginated_lista %}
+     {% if nekretnina.latitude and nekretnina.longitude %}
+       <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
+         {% for item in nekretnina.gallery_images.all %}
           {% if forloop.first %}  {# Only show the first image #}
             <div style="float: left; margin: 10px">
               {% image item.image fill-320x240 %}
@@ -375,11 +416,13 @@
   <br>
 
 </div>
-<div class="pagination-container" id="paginacija">
+
+</div>
+<div class="pagination-container">
     <ul class="pagination">
         {% for page_num in paginated_lista.paginator.page_range %}
             {% if paginated_lista.has_previous and page_num == 1 %}
-                <li><a href="?page=1" id="broj" {% if page_num == paginated_lista.number %}class="active"{% endif %}>1</a></li>
+                <li><a href="?page=1" id="broj">1</a></li>
                 {% if paginated_lista.number > 3 %}
                     <li><span>......</span></li>
                 {% endif %}
@@ -387,7 +430,7 @@
 
             {% if page_num >= paginated_lista.number|add:"-1" and page_num <= paginated_lista.number|add:"1" %}
                 <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
-                    <a href="?page={{ page_num }}" id="broj" {% if page_num == paginated_lista.number %}class="active"{% endif %}>{{ page_num }}</a>
+                    <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
                 </li>
             {% endif %}
 
@@ -396,12 +439,14 @@
             {% endif %}
 
             {% if paginated_lista.has_next and page_num == paginated_lista.paginator.num_pages %}
-                <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj" {% if page_num == paginated_lista.number %}class="active"{% endif %}>{{ paginated_lista.paginator.num_pages }}</a></li>
+                <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj">{{ paginated_lista.paginator.num_pages }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>
 </div>
-</div>
+
+
+
 
 
 
