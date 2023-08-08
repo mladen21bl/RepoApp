@@ -321,6 +321,20 @@
         }
       }
 
+      markers.on('click', function(event) {
+    var nekretninaId = event.layer.nekretninaId;
+    var nekretnineElements = document.getElementsByClassName('nekretnina');
+
+    for (var i = 0; i < nekretnineElements.length; i++) {
+      var nekretninaElement = nekretnineElements[i];
+
+      if (nekretninaElement.getAttribute('data-nekretnina-id') === nekretninaId) {
+        nekretninaElement.style.display = 'block';
+      } else {
+        nekretninaElement.style.display = 'none';
+      }
+    }
+  });
       map.on('moveend', updatePagination);
       map.on('zoomend', updatePagination);
 
@@ -337,14 +351,16 @@
       }, 100);
 
       updatePagination();
+
+
     </script>
   </div>
 
   <div id="slides">
-    {% for nekretnina in lista %}
-     {% if nekretnina.latitude and nekretnina.longitude %}
-     <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
-         {% for item in nekretnina.gallery_images.all %}
+  {% for nekretnina in lista %}
+    {% if nekretnina.latitude and nekretnina.longitude %}
+    <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; {% if forloop.index != 1 %}display: none;{% endif %}">
+      {% for item in nekretnina.gallery_images.all %}
           {% if forloop.first %}  {# Only show the first image #}
             <div style="float: left; margin: 10px">
               {% image item.image fill-320x240 %}
@@ -359,73 +375,33 @@
   <br>
 
 </div>
+<div class="pagination-container" id="paginacija">
+    <ul class="pagination">
+        {% for page_num in paginated_lista.paginator.page_range %}
+            {% if paginated_lista.has_previous and page_num == 1 %}
+                <li><a href="?page=1" id="broj" {% if page_num == paginated_lista.number %}class="active"{% endif %}>1</a></li>
+                {% if paginated_lista.number > 3 %}
+                    <li><span>......</span></li>
+                {% endif %}
+            {% endif %}
 
+            {% if page_num >= paginated_lista.number|add:"-1" and page_num <= paginated_lista.number|add:"1" %}
+                <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
+                    <a href="?page={{ page_num }}" id="broj" {% if page_num == paginated_lista.number %}class="active"{% endif %}>{{ page_num }}</a>
+                </li>
+            {% endif %}
+
+            {% if paginated_lista.paginator.num_pages > paginated_lista.number|add:"2" and page_num == paginated_lista.paginator.num_pages %}
+                <li><span>......</span></li>
+            {% endif %}
+
+            {% if paginated_lista.has_next and page_num == paginated_lista.paginator.num_pages %}
+                <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj" {% if page_num == paginated_lista.number %}class="active"{% endif %}>{{ paginated_lista.paginator.num_pages }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </div>
-
-<div id="pagination">
-  <button id="first-page">First</button>
-  <button id="prev-page">Previous</button>
-  <span id="current-page">1</span>
-  <button id="next-page">Next</button>
-  <button id="last-page">Last</button>
 </div>
-
-<script>
-  // Define constants and variables
-  const itemsPerPage = 4;
-  let currentPage = 1;
-
-  const nekretnineElements = document.getElementsByClassName('nekretnina');
-  const totalItems = nekretnineElements.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  document.getElementById('current-page').textContent = currentPage;
-
-  // Update visibility of nekretnina elements
-  function updatePagination() {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-
-    for (let i = 0; i < nekretnineElements.length; i++) {
-      if (i >= startIndex && i < endIndex) {
-        nekretnineElements[i].style.display = 'block';
-      } else {
-        nekretnineElements[i].style.display = 'none';
-      }
-    }
-  }
-
-  // Event listeners for pagination buttons
-  document.getElementById('first-page').addEventListener('click', () => {
-    currentPage = 1;
-    document.getElementById('current-page').textContent = currentPage;
-    updatePagination();
-  });
-
-  document.getElementById('last-page').addEventListener('click', () => {
-    currentPage = totalPages;
-    document.getElementById('current-page').textContent = currentPage;
-    updatePagination();
-  });
-
-  document.getElementById('prev-page').addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      document.getElementById('current-page').textContent = currentPage;
-      updatePagination();
-    }
-  });
-
-  document.getElementById('next-page').addEventListener('click', () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      document.getElementById('current-page').textContent = currentPage;
-      updatePagination();
-    }
-  });
-
-  // Initial update of pagination
-  updatePagination();
-</script>
 
 
 
