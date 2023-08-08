@@ -469,6 +469,7 @@ class NekretninaList(ListView):
     model = BookingPage
     context_object_name = 'lista'
     template_name = 'booking/nekretnina_list.html'
+    
 
 
     def get_queryset(self):
@@ -564,9 +565,5 @@ class NekretninaList(ListView):
         context['selected_lift'] = self.request.GET.get('lift', '')
         context['selected_parking'] = self.request.GET.get('parking', '')
         context['selected_klima'] = self.request.GET.get('klima', '')
-        paginator = Paginator(context['lista'], 4)
-        page_number = self.request.GET.get('page')
-        paginated_lista = paginator.get_page(page_number)
 
-        context['paginated_lista'] = paginated_lista
         return context
