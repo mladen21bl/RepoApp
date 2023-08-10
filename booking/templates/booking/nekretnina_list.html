@@ -261,7 +261,8 @@
 
     <div id="flex-container">
       <div id="empty-space">
-        <div id="map"></div>
+
+        <div id="map" style="border: solid black 5px;"></div>
         <div id="visible-markers-count">Visible Markers Count: <span id="count">0</span></div>
         <script>
           //############# POSTAVLJANJE MAPE ##########################
@@ -276,7 +277,7 @@
           {% for nekretnina in lista %}
             {% if nekretnina.latitude and nekretnina.longitude %}
               var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
-              marker.nekretninaId = '{{ nekretnina.naziv }}';
+              marker.nekretninaId = '{{ nekretnina }}';
               markers.addLayer(marker);
               marker.on('click', function () {
                 window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
@@ -329,16 +330,22 @@
      return parseInt(urlParams.get('page')) || 1;
  }
 
- var currentPage = getPageNumberFromUrl();; 
+ var currentPage = getPageNumberFromUrl();;
  var startIndex = (currentPage - 1) * 10;
  var endIndex = startIndex + 10;
+//
+var slidesHTML = '';
 
- var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
- var slidesHTML = visibleNekretnineOnPage.map(function (nekretninaId) {
-     return '<div>' + nekretninaId + '</div>';
- });
+    {% for nekretnina in lista %}
+        var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
+        var slidesForThisNekretnina = visibleNekretnineOnPage.map(function (nekretninaId) {
+            return '<div>' + '{{ nekretnina.naziv }}' + '</div>';
+        });
 
- document.getElementById('slides').innerHTML = slidesHTML.join('');
+        slidesHTML += slidesForThisNekretnina.join(''); 
+    {% endfor %}
+
+    document.getElementById('slides').innerHTML = slidesHTML;
 }
 
 
@@ -381,20 +388,21 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 map.on('zoomend moveend', function () {
- var visibleNekretnineIds = markers.getLayers()
-     .filter(function (marker) {
-         return map.getBounds().contains(marker.getLatLng());
-     })
-     .map(function (marker) {
-         return marker.nekretninaId;
-     });
 
- updatePaginationAndSlides(visibleNekretnineIds);
+    var visibleNekretnineIds = markers.getLayers()
+        .filter(function (marker) {
+            return map.getBounds().contains(marker.getLatLng());
+        })
+        .map(function (marker) {
+            return marker.nekretninaId;
+        });
 
- var countVisibleMarkers = visibleNekretnineIds.length;
+    updatePaginationAndSlides(visibleNekretnineIds);
 
- var countElement = document.getElementById('count');
- countElement.textContent = countVisibleMarkers;
+    var countVisibleMarkers = visibleNekretnineIds.length;
+
+    var countElement = document.getElementById('count');
+    countElement.textContent = countVisibleMarkers;
 });
 
 document.querySelectorAll('.pagination a').forEach(function (paginationLink) {
@@ -431,22 +439,7 @@ setTimeout(function () {
   </div>
 
   <div id="slides">
-    {% for nekretnina in paginated_lista %}
-      {% if nekretnina.latitude and nekretnina.longitude %}
-        <a href="{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}" class="nekretnina" data-nekretnina-id="{{ nekretnina.id }}" data-latitude="{{ nekretnina.latitude }}" data-longitude="{{ nekretnina.longitude }}" style="text-decoration: none; display: none;">
-          {% for item in nekretnina.gallery_images.all %}
-            {% if forloop.first %}
-              <div style="float: left; margin: 10px">
-                {% image item.image fill-320x240 %}
-                <p>{{ item.caption }}</p>
-              </div>
-            {% endif %}
-          {% endfor %}
-          <h2 class="post-title" style="color: black; text-align: center;">{{ nekretnina.naziv }}</h2>
-        </a>
-      {% endif %}
-    {% endfor %}
-    <br>
+
   </div>
 </div>
 <div class="pagination-container">

@@ -39,7 +39,7 @@ from .views import (
 app_name = 'booking'
 
 urlpatterns = [
-    path('', IndexView.as_view(), name='indexview'),
+    #path('', IndexView.as_view(), name='indexview'),
     path('registracija_agent/', AgentCreateView.as_view(), name='agent_registracija'),
     path('agenti/', AgentiList.as_view(), name='agenti_list'),
     path('agenti/<int:pk>/', AgentiDetailView.as_view(), name='agenti_detail'),
@@ -57,7 +57,7 @@ urlpatterns = [
     path('korisnici/', KorisnikList.as_view(), name='korisnik_list'),
 
 
-    path('nekretnine/', NekretninaList.as_view(), name='filteri'),
+    path('', NekretninaList.as_view(), name='filteri'),
     path('nekretnine/<int:pk>/', BookingDetail.as_view(), name='nekretnina_detail'),
     path('nekretnine/create/', BookingCreateView.as_view(), name='booking_create'),
     path('nekretnine/<int:pk>/delete', BookingDeleteView.as_view(), name='booking_delete'),
