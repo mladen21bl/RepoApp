@@ -386,27 +386,33 @@ map.on('zoomend moveend', function () {
             return marker.nekretninaId;
         });
 
-    updatePagination(visibleNekretnineIds);
+    updatePaginationAndSlides(visibleNekretnineIds);
+});
 
-    var countVisibleMarkers = visibleNekretnineIds.length;
+function updatePaginationAndSlides(visibleNekretnineIds) {
+    var numPages = Math.ceil(visibleNekretnineIds.length / 10); 
 
-    
-    var countElement = document.getElementById('count');
-    countElement.textContent = countVisibleMarkers;
+    var paginationContainer = document.querySelector('.pagination-container ul');
+    paginationContainer.innerHTML = '';
 
-
-    var nekretnineGroups = [];
-    for (var i = 0; i < visibleNekretnineIds.length; i += 10) {
-        nekretnineGroups.push(visibleNekretnineIds.slice(i, i + 10));
+    for (var page_num = 1; page_num <= numPages; page_num++) {
+        var paginationLink = document.createElement('li');
+        paginationLink.innerHTML = '<a href="?page=' + page_num + '" id="broj">' + page_num + '</a>';
+        paginationContainer.appendChild(paginationLink);
     }
 
 
-    var slidesHTML = nekretnineGroups.map(function (group) {
-        return '<div>' + group.join(', ') + '</div>';
+    var currentPage = 1;
+    var startIndex = (currentPage - 1) * 10;
+    var endIndex = startIndex + 10;
+
+    var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
+    var slidesHTML = visibleNekretnineOnPage.map(function (nekretninaId) {
+        return '<div>' + nekretninaId + '</div>';
     });
 
     document.getElementById('slides').innerHTML = slidesHTML.join('');
-});
+}
 
        setTimeout(function () {
         map.invalidateSize();
