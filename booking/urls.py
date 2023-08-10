@@ -73,5 +73,5 @@ urlpatterns = [
 
     path('tip/create/', TipCreateView.as_view(), name='tip_create'),
     path('karakteristika/create/', KarakteristikaCreateView.as_view(), name='karakteristika_create'),
-
+    path('update_nekretnine/', NekretninaList.as_view(), name='update_nekretnine'),
 ]

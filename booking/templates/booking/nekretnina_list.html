@@ -362,7 +362,10 @@
             });
         });
       }
+
+
     });
+
 
 
     map.on('zoomend moveend', function () {
@@ -438,5 +441,29 @@
   </ul>
 </div>
 
+<div id="nekretnineContainer"></div>
+<script>
+        function updateAndDisplayVisibleIds() {
+            var visibleNekretnineIds = markers.getLayers()
+                .filter(function (marker) {
+                    return map.getBounds().contains(marker.getLatLng());
+                })
+                .map(function (marker) {
+                    return marker.nekretninaId;
+                });
+
+            var container = document.getElementById("nekretnineContainer");
+            container.innerHTML = ""; 
+
+            visibleNekretnineIds.forEach(function (nekretninaId) {
+                var paragraph = document.createElement("p");
+                paragraph.textContent = nekretninaId;
+                container.appendChild(paragraph);
+            });
+        }
+
+
+        map.on("moveend", updateAndDisplayVisibleIds);
+    </script>
 
 {% endblock %}
