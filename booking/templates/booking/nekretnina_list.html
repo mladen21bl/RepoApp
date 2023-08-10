@@ -324,7 +324,12 @@
      paginationContainer.appendChild(paginationLink);
  }
 
- var currentPage = 1; // Ovde postavite trenutnu stranicu
+ function getPageNumberFromUrl() {
+     const urlParams = new URLSearchParams(window.location.search);
+     return parseInt(urlParams.get('page')) || 1;
+ }
+
+ var currentPage = getPageNumberFromUrl();; 
  var startIndex = (currentPage - 1) * 10;
  var endIndex = startIndex + 10;
 
@@ -336,7 +341,7 @@
  document.getElementById('slides').innerHTML = slidesHTML.join('');
 }
 
-// ... ostatak vašeg koda ...
+
 
 document.addEventListener('DOMContentLoaded', loadMapState);
 
@@ -355,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function () {
              .then(data => {
                  document.getElementById('slides').innerHTML = data;
 
-                 // Calculate visible nekretnineIds after updating slides
+
                  var visibleNekretnineIds = markers.getLayers()
                      .filter(function (marker) {
                          return map.getBounds().contains(marker.getLatLng());
@@ -364,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
                          return marker.nekretninaId;
                      });
 
-                 // Update both slides and pagination based on the new visibleNekretnineIds
+
                  updatePaginationAndSlides(visibleNekretnineIds);
              })
              .catch(error => {
@@ -393,21 +398,26 @@ map.on('zoomend moveend', function () {
 });
 
 document.querySelectorAll('.pagination a').forEach(function (paginationLink) {
- paginationLink.addEventListener('click', function (event) {
-     event.preventDefault();
-     var pageNum = parseInt(event.target.textContent);
-     var visibleNekretnineIds = markers.getLayers()
-         .filter(function (marker) {
-             return map.getBounds().contains(marker.getLatLng());
-         })
-         .map(function (marker) {
-             return marker.nekretninaId;
-         });
+    paginationLink.addEventListener('click', function (event) {
+        event.preventDefault();
+        var pageNum = parseInt(event.target.textContent);
 
-     updatePaginationAndSlides(visibleNekretnineIds);
-     updateSlidesForPage(pageNum, visibleNekretnineIds);
- });
+
+        currentPage = pageNum;
+
+        var visibleNekretnineIds = markers.getLayers()
+            .filter(function (marker) {
+                return map.getBounds().contains(marker.getLatLng());
+            })
+            .map(function (marker) {
+                return marker.nekretninaId;
+            });
+
+        updatePaginationAndSlides(visibleNekretnineIds);
+        updateSlidesForPage(pageNum, visibleNekretnineIds);
+    });
 });
+
 
 setTimeout(function () {
  map.invalidateSize();
