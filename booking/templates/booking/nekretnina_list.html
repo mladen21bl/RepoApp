@@ -277,6 +277,7 @@
             {% if nekretnina.latitude and nekretnina.longitude %}
               var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
               marker.nekretninaId = '{{ nekretnina.id }}';
+              marker.nekretninaNaziv = '{{ nekretnina.naziv }}';
               markers.addLayer(marker);
               marker.on('click', function () {
                 window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
@@ -449,15 +450,15 @@
                     return map.getBounds().contains(marker.getLatLng());
                 })
                 .map(function (marker) {
-                    return marker.nekretninaId;
+                    return marker.nekretninaNaziv;
                 });
 
             var container = document.getElementById("nekretnineContainer");
-            container.innerHTML = ""; 
+            container.innerHTML = "";
 
-            visibleNekretnineIds.forEach(function (nekretninaId) {
+            visibleNekretnineIds.forEach(function (nekretninaNaziv) {
                 var paragraph = document.createElement("p");
-                paragraph.textContent = nekretninaId;
+                paragraph.textContent = nekretninaNaziv;
                 container.appendChild(paragraph);
             });
         }
