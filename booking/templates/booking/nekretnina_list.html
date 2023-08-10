@@ -387,10 +387,14 @@ map.on('zoomend moveend', function () {
         });
 
     updatePaginationAndSlides(visibleNekretnineIds);
+    var countVisibleMarkers = visibleNekretnineIds.length;
+
+    var countElement = document.getElementById('count');
+    countElement.textContent = countVisibleMarkers;
 });
 
 function updatePaginationAndSlides(visibleNekretnineIds) {
-    var numPages = Math.ceil(visibleNekretnineIds.length / 10); 
+    var numPages = Math.ceil(visibleNekretnineIds.length / 10);
 
     var paginationContainer = document.querySelector('.pagination-container ul');
     paginationContainer.innerHTML = '';
