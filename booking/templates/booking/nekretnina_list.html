@@ -277,7 +277,6 @@
             {% if nekretnina.latitude and nekretnina.longitude %}
               var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
               marker.nekretninaId = '{{ nekretnina.id }}';
-              marker.nekretninaNaziv = '{{ nekretnina.naziv }}';
               markers.addLayer(marker);
               marker.on('click', function () {
                 window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
@@ -343,33 +342,21 @@
       document.addEventListener('DOMContentLoaded', loadMapState);
 
       document.addEventListener('DOMContentLoaded', function () {
-      initializeMap();
+  initializeMap();
 
-      var nekretninaLinks = document.getElementsByClassName('nekretnina');
+  var nekretninaLinks = document.getElementsByClassName('nekretnina');
 
-      for (var i = 0; i < nekretninaLinks.length; i++) {
-        nekretninaLinks[i].addEventListener('click', function (event) {
-          event.preventDefault();
-          var nekretninaId = event.currentTarget.getAttribute('data-nekretnina-id');
+  for (var i = 0; i < nekretninaLinks.length; i++) {
+    nekretninaLinks[i].addEventListener('click', function (event) {
+      event.preventDefault();
+      var nekretninaId = event.currentTarget.getAttribute('data-nekretnina-id');
 
-          fetch('/nekretnine/' + nekretninaId + '/')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('slides').innerHTML = data;
-              updatePagination();
-            })
-            .catch(error => {
-              console.error('Error fetching data:', error);
-            });
-        });
-      }
+      fetch('/nekretnine/' + nekretninaId + '/')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('slides').innerHTML = data;
 
-
-    });
-
-
-
-    map.on('zoomend moveend', function () {
+    // Calculate visible nekretnineIds after updating slides
     var visibleNekretnineIds = markers.getLayers()
       .filter(function (marker) {
         return map.getBounds().contains(marker.getLatLng());
@@ -378,15 +365,48 @@
         return marker.nekretninaId;
       });
 
-  updatePagination(visibleNekretnineIds);
+    // Update both slides and pagination based on the new visibleNekretnineIds
+    updatePagination(visibleNekretnineIds);
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
 
-  var countVisibleMarkers = visibleNekretnineIds.length;
-
-  // Update the count element in the HTML
-  var countElement = document.getElementById('count');
-  countElement.textContent = countVisibleMarkers;
+    });
+  }
 });
 
+
+map.on('zoomend moveend', function () {
+    var visibleNekretnineIds = markers.getLayers()
+        .filter(function (marker) {
+            return map.getBounds().contains(marker.getLatLng());
+        })
+        .map(function (marker) {
+            return marker.nekretninaId;
+        });
+
+    updatePagination(visibleNekretnineIds);
+
+    var countVisibleMarkers = visibleNekretnineIds.length;
+
+    
+    var countElement = document.getElementById('count');
+    countElement.textContent = countVisibleMarkers;
+
+
+    var nekretnineGroups = [];
+    for (var i = 0; i < visibleNekretnineIds.length; i += 10) {
+        nekretnineGroups.push(visibleNekretnineIds.slice(i, i + 10));
+    }
+
+
+    var slidesHTML = nekretnineGroups.map(function (group) {
+        return '<div>' + group.join(', ') + '</div>';
+    });
+
+    document.getElementById('slides').innerHTML = slidesHTML.join('');
+});
 
        setTimeout(function () {
         map.invalidateSize();
@@ -442,29 +462,5 @@
   </ul>
 </div>
 
-<div id="nekretnineContainer"></div>
-<script>
-        function updateAndDisplayVisibleIds() {
-            var visibleNekretnineIds = markers.getLayers()
-                .filter(function (marker) {
-                    return map.getBounds().contains(marker.getLatLng());
-                })
-                .map(function (marker) {
-                    return marker.nekretninaNaziv;
-                });
-
-            var container = document.getElementById("nekretnineContainer");
-            container.innerHTML = "";
-
-            visibleNekretnineIds.forEach(function (nekretninaNaziv) {
-                var paragraph = document.createElement("p");
-                paragraph.textContent = nekretninaNaziv;
-                container.appendChild(paragraph);
-            });
-        }
-
-
-        map.on("moveend", updateAndDisplayVisibleIds);
-    </script>
 
 {% endblock %}
