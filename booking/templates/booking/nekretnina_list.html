@@ -261,8 +261,7 @@
 
     <div id="flex-container">
       <div id="empty-space">
-
-        <div id="map" style="border: solid black 5px;"></div>
+        <div id="map"></div>
         <div id="visible-markers-count">Visible Markers Count: <span id="count">0</span></div>
         <script>
           //############# POSTAVLJANJE MAPE ##########################
@@ -311,7 +310,22 @@
 
           map.on('moveend', saveMapState);
           map.on('zoomend', saveMapState);
+//####################### KREIRANJE JS OBJEKATA ######################
+var js_objekti = []; // Inicijaliziramo prazan array za pohranu objekata
 
+// Dodajemo logiku za iteriranje kroz listu i stvaranje objekata
+{% for nekretnina in lista %}
+  {% if nekretnina.latitude and nekretnina.longitude %}
+    var objekat = {
+      nekretninaId: '{{ nekretnina }}',
+      naziv: '{{ nekretnina.naziv }}',
+      vrsta: '{{ nekretnina.vrsta }}',
+      latitude: {{ nekretnina.latitude }},
+      longitude: {{ nekretnina.longitude }}
+    };
+    js_objekti.push(objekat); // Dodajemo objekat u array
+  {% endif %}
+{% endfor %}
  //################# UPDATE PAGINACIJE ###############################
  function updatePaginationAndSlides(visibleNekretnineIds) {
  var numPages = Math.ceil(visibleNekretnineIds.length / 10);
@@ -333,19 +347,23 @@
  var currentPage = getPageNumberFromUrl();;
  var startIndex = (currentPage - 1) * 10;
  var endIndex = startIndex + 10;
-//
-var slidesHTML = '';
 
-    {% for nekretnina in lista %}
-        var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
-        var slidesForThisNekretnina = visibleNekretnineOnPage.map(function (nekretninaId) {
-            return '<div>' + '{{ nekretnina.naziv }}' + '</div>';
-        });
+ var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
+  var slidesHTML = visibleNekretnineOnPage.map(function (nekretninaId) {
+    // Pronalazimo odgovarajući objekat u js_objekti arrayu
+    var objekat = js_objekti.find(function (obj) {
+      return obj.nekretninaId === nekretninaId;
+    });
 
-        slidesHTML += slidesForThisNekretnina.join(''); 
-    {% endfor %}
+    // Kreiramo HTML prikaz za objekat
+    return '<div>' +
+           '<h3>' + objekat.naziv + '</h3>' +
+           '<p>Vrsta: ' + objekat.vrsta + '</p>' +
+           '<p>Lokacija: ' + objekat.latitude + ', ' + objekat.longitude + '</p>' +
+           '</div>';
+  });
 
-    document.getElementById('slides').innerHTML = slidesHTML;
+  document.getElementById('slides').innerHTML = slidesHTML.join('');
 }
 
 
@@ -388,21 +406,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 map.on('zoomend moveend', function () {
+ var visibleNekretnineIds = markers.getLayers()
+     .filter(function (marker) {
+         return map.getBounds().contains(marker.getLatLng());
+     })
+     .map(function (marker) {
+         return marker.nekretninaId;
+     });
 
-    var visibleNekretnineIds = markers.getLayers()
-        .filter(function (marker) {
-            return map.getBounds().contains(marker.getLatLng());
-        })
-        .map(function (marker) {
-            return marker.nekretninaId;
-        });
+ updatePaginationAndSlides(visibleNekretnineIds);
 
-    updatePaginationAndSlides(visibleNekretnineIds);
+ var countVisibleMarkers = visibleNekretnineIds.length;
 
-    var countVisibleMarkers = visibleNekretnineIds.length;
-
-    var countElement = document.getElementById('count');
-    countElement.textContent = countVisibleMarkers;
+ var countElement = document.getElementById('count');
+ countElement.textContent = countVisibleMarkers;
 });
 
 document.querySelectorAll('.pagination a').forEach(function (paginationLink) {
@@ -440,7 +457,7 @@ setTimeout(function () {
 
   <div id="slides">
 
-  </div>
+</div>
 </div>
 <div class="pagination-container">
   <ul class="pagination">
