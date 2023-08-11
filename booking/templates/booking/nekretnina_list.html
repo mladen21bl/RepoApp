@@ -321,7 +321,8 @@ var js_objekti = []; // Inicijaliziramo prazan array za pohranu objekata
       naziv: '{{ nekretnina.naziv }}',
       vrsta: '{{ nekretnina.vrsta }}',
       latitude: {{ nekretnina.latitude }},
-      longitude: {{ nekretnina.longitude }}
+      longitude: {{ nekretnina.longitude }},
+      url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}'
     };
     js_objekti.push(objekat); // Dodajemo objekat u array
   {% endif %}
@@ -349,19 +350,17 @@ var js_objekti = []; // Inicijaliziramo prazan array za pohranu objekata
  var endIndex = startIndex + 10;
 
  var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
-  var slidesHTML = visibleNekretnineOnPage.map(function (nekretninaId) {
-    // Pronalazimo odgovarajući objekat u js_objekti arrayu
-    var objekat = js_objekti.find(function (obj) {
-      return obj.nekretninaId === nekretninaId;
-    });
+ var slidesHTML = visibleNekretnineOnPage.map(function (nekretninaId) {
+ var objekat = js_objekti.find(function (obj) {
+   return obj.nekretninaId === nekretninaId;
+ });
 
-    // Kreiramo HTML prikaz za objekat
-    return '<div>' +
-           '<h3>' + objekat.naziv + '</h3>' +
-           '<p>Vrsta: ' + objekat.vrsta + '</p>' +
-           '<p>Lokacija: ' + objekat.latitude + ', ' + objekat.longitude + '</p>' +
-           '</div>';
-  });
+ return '<div>' +
+        '<h3><a href="' + objekat.url + '">' + objekat.naziv + '</a></h3>' +
+        '<p>Vrsta: ' + objekat.vrsta + '</p>' +
+        '<p>Lokacija: ' + objekat.latitude + ', ' + objekat.longitude + '</p>' +
+        '</div>';
+});
 
   document.getElementById('slides').innerHTML = slidesHTML.join('');
 }
