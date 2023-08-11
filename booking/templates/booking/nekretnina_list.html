@@ -343,7 +343,13 @@ var js_objekti = []; // Inicijalizacija praznog niza za pohranu objekata
 
  function getPageNumberFromUrl() {
      const urlParams = new URLSearchParams(window.location.search);
-     return parseInt(urlParams.get('page')) || 1;
+     const pageNumFromUrl = parseInt(urlParams.get('page')) || 1;
+
+     if (pageNumFromUrl > numPages) {
+         return 1;
+     }
+
+     return pageNumFromUrl;
  }
 
  var currentPage = getPageNumberFromUrl();;
@@ -358,7 +364,6 @@ var js_objekti = []; // Inicijalizacija praznog niza za pohranu objekata
 
  return '<div>' +
         '<h3><a href="' + objekat.url + '">' + objekat.naziv + '</a></h3>' +
-        '<img src="' + objekat.slikaUrl + '" alt="Slika nekretnine">' +
         '</div>';
 });
 
