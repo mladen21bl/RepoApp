@@ -319,6 +319,7 @@ var js_objekti = [];
       latitude: {{ nekretnina.latitude }},
       longitude: {{ nekretnina.longitude }},
       url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
+      image_url: '{{ nekretnina.gallery_images.first.image_url }}',  // Dodajemo image_url atribut
     };
 
     js_objekti.push(objekat);
@@ -362,7 +363,7 @@ var js_objekti = [];
  return '<div>' +
          '<h3><a href="' + objekat.url + '">' + objekat.naziv + '</a></h3>' +
          '<div style="width: 345px; height: 215px; overflow: hidden;">' +
-         '<img src="/media/original_images/mediaoriginal_imagesdummy_5632_prostor_wfQYYls.jpg" alt="Slika nekretnine" style="max-width: 100%; max-height: 100%;">' +
+         '<img src="' + objekat.image_url + '" style="max-width: 100%; max-height: 100%;">' +
          '</div>' +
          '</div>';
  });
