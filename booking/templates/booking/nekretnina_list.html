@@ -310,10 +310,8 @@
           map.on('moveend', saveMapState);
           map.on('zoomend', saveMapState);
 //####################### KREIRANJE JS OBJEKATA ######################
-var js_objekti = []; // Inicijalizacija praznog niza za pohranu objekata
-
+var js_objekti = [];
 {% for nekretnina in lista %}
-  {% if nekretnina.latitude and nekretnina.longitude %}
     var objekat = {
       nekretninaId: '{{ nekretnina }}',
       naziv: '{{ nekretnina.naziv }}',
@@ -321,11 +319,10 @@ var js_objekti = []; // Inicijalizacija praznog niza za pohranu objekata
       latitude: {{ nekretnina.latitude }},
       longitude: {{ nekretnina.longitude }},
       url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
-      slikaUrl: '{{ nekretnina.main_image.url }}', // Dodajte ovu liniju za sliku
     };
 
-    js_objekti.push(objekat); // Dodavanje objekta u niz
-  {% endif %}
+    js_objekti.push(objekat);
+    console.log(objekat.naziv);
 {% endfor %}
 
  //################# UPDATE PAGINACIJE ###############################
@@ -363,9 +360,12 @@ var js_objekti = []; // Inicijalizacija praznog niza za pohranu objekata
  });
 
  return '<div>' +
-        '<h3><a href="' + objekat.url + '">' + objekat.naziv + '</a></h3>' +
-        '</div>';
-});
+         '<h3><a href="' + objekat.url + '">' + objekat.naziv + '</a></h3>' +
+         '<div style="width: 345px; height: 215px; overflow: hidden;">' +
+         '<img src="https://www.discoverbritainmag.com/wp-content/uploads/2017/05/Eilean-Donan-Castle-Kyle-of-Lochalsh.jpg" alt="Slika nekretnine" style="max-width: 100%; max-height: 100%;">' +
+         '</div>' +
+         '</div>';
+ });
 
   document.getElementById('slides').innerHTML = slidesHTML.join('');
 }
@@ -373,7 +373,7 @@ var js_objekti = []; // Inicijalizacija praznog niza za pohranu objekata
 document.addEventListener('DOMContentLoaded', loadMapState);
 
 document.addEventListener('DOMContentLoaded', function () {
- initializeMap();
+
 
  var nekretninaLinks = document.getElementsByClassName('nekretnina');
 
