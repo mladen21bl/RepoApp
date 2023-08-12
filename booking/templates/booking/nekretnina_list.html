@@ -319,7 +319,7 @@ var js_objekti = [];
       latitude: {{ nekretnina.latitude }},
       longitude: {{ nekretnina.longitude }},
       url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
-      image_url: '{{ nekretnina.gallery_images.first.image_url }}',  // Dodajemo image_url atribut
+      image_url: '{{ nekretnina.gallery_images.first.image_url }}',  
     };
 
     js_objekti.push(objekat);
@@ -488,9 +488,5 @@ setTimeout(function () {
   </ul>
 </div>
 
-<div class="contaier">
-
-
-</div>
 
 {% endblock %}
