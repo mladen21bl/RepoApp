@@ -37,8 +37,13 @@ from wagtail.images.models import Image
 from django.db import IntegrityError
 from django.contrib import messages
 from wagtail.images.models import Image as WagtailImage
+from django.core.paginator import Paginator, Page
+from django.http import JsonResponse
 
-
+class DeleteAllBookingsView(View):
+    def get(self, request, *args, **kwargs):
+        BookingPage.objects.all().delete()
+        return redirect(reverse('booking:filteri'))
 
 class BookingMapList(ListView):
     model = BookingPage
@@ -564,4 +569,8 @@ class NekretninaList(ListView):
         context['selected_parking'] = self.request.GET.get('parking', '')
         context['selected_klima'] = self.request.GET.get('klima', '')
 
+        paginator = Paginator(context['lista'], 10)
+        page_number = self.request.GET.get('page')
+        paginated_lista = paginator.get_page(page_number)
+        context['paginated_lista'] = paginated_lista
         return context
