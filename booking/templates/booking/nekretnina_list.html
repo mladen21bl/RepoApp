@@ -485,7 +485,10 @@ setTimeout(function () {
   </ul>
 </div>
 
-
-<!-- The iframe element -->
+<div class="contaier">
+  {% for nekretnina in lista %}
+    {{ nekretnina.main_image }}
+  {% endfor %}
+</div>
 
 {% endblock %}
