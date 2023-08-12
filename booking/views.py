@@ -40,7 +40,10 @@ from wagtail.images.models import Image as WagtailImage
 from django.core.paginator import Paginator, Page
 from django.http import JsonResponse
 
-
+class DeleteAllBookingsView(View):
+    def get(self, request, *args, **kwargs):
+        BookingPage.objects.all().delete()
+        return redirect(reverse('booking:filteri'))
 
 class BookingMapList(ListView):
     model = BookingPage
