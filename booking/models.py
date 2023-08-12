@@ -376,6 +376,8 @@ class BookingPageGalleryImage(Orderable):
         FieldPanel('caption'),
     ]
 
+    def image_url(self):
+        return self.image.file.url if self.image else None
 
 
 class AgentIndexPage(Page):
