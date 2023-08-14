@@ -13,11 +13,17 @@
   grid-gap: 10px;
 }
 .pagination-container {
-    display: flex;
-    margin-bottom: 300px;
-    margin-left: 330px;
-    width: 100%;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 300px;
+  margin-left: 330px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
 
   #broj {
     color:black;
@@ -31,10 +37,11 @@
     border-radius: 4px;
     text-align: center;line-height: 40px;
     text-decoration: none;
-    color: #333;
     margin-right: 5px;
   }
-  }
+
+
+
   #dugme {
     width: 150px;
     height: 50px;
@@ -108,16 +115,8 @@
     object-position: center;
   }
 
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
+
+
 </style>
 
 
@@ -315,15 +314,11 @@ var js_objekti = [];
     var objekat = {
       nekretninaId: '{{ nekretnina }}',
       naziv: '{{ nekretnina.naziv }}',
-      vrsta: '{{ nekretnina.vrsta }}',
-      latitude: {{ nekretnina.latitude }},
-      longitude: {{ nekretnina.longitude }},
       url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
       image_url: '{{ nekretnina.gallery_images.first.image_url }}',
     };
 
     js_objekti.push(objekat);
-    console.log(objekat.naziv);
 {% endfor %}
 
  //################# UPDATE PAGINACIJE ###############################
@@ -350,7 +345,7 @@ var js_objekti = [];
      return pageNumFromUrl;
  }
 
- var currentPage = getPageNumberFromUrl();;
+ var currentPage = getPageNumberFromUrl();
  var startIndex = (currentPage - 1) * 10;
  var endIndex = startIndex + 10;
  var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
@@ -373,8 +368,8 @@ var js_objekti = [];
   document.getElementById('slides').innerHTML = slidesHTML.join('');
 }
 
+// ##################   OSTATAK KODA   ####################
 document.addEventListener('DOMContentLoaded', loadMapState);
-
 
 map.on('zoomend moveend', function () {
  var visibleNekretnineIds = markers.getLayers()
@@ -411,25 +406,7 @@ setTimeout(function () {
 </div>
 <div class="pagination-container">
   <ul class="pagination">
-    {% for page_num in paginated_lista.paginator.page_range %}
-      {% if paginated_lista.has_previous and page_num == 1 %}
         <li><a href="?page=1" id="broj">1</a></li>
-        {% if paginated_lista.number > 3 %}
-          <li><span>......</span></li>
-        {% endif %}
-      {% endif %}
-      {% if page_num >= paginated_lista.number|add:"-1" and page_num <= paginated_lista.number|add:"1" %}
-        <li class="{% if page_num == paginated_lista.number %}active{% endif %}">
-          <a href="?page={{ page_num }}" id="broj">{{ page_num }}</a>
-        </li>
-      {% endif %}
-      {% if paginated_lista.paginator.num_pages > paginated_lista.number|add:"2" and page_num == paginated_lista.paginator.num_pages %}
-        <li><span>......</span></li>
-      {% endif %}
-      {% if paginated_lista.has_next and page_num == paginated_lista.paginator.num_pages %}
-        <li><a href="?page={{ paginated_lista.paginator.num_pages }}" id="broj">{{ paginated_lista.paginator.num_pages }}</a></li>
-      {% endif %}
-    {% endfor %}
   </ul>
 </div>
 
