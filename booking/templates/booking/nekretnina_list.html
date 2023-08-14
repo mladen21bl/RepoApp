@@ -328,8 +328,8 @@ var js_objekti = [];
 
  //################# UPDATE PAGINACIJE ###############################
  function updatePaginationAndSlides(visibleNekretnineIds) {
- var numPages = Math.ceil(visibleNekretnineIds.length / 10);
 
+ var numPages = Math.ceil(visibleNekretnineIds.length / 10);
  var paginationContainer = document.querySelector('.pagination-container ul');
  paginationContainer.innerHTML = '';
 
@@ -353,8 +353,8 @@ var js_objekti = [];
  var currentPage = getPageNumberFromUrl();;
  var startIndex = (currentPage - 1) * 10;
  var endIndex = startIndex + 10;
-
  var visibleNekretnineOnPage = visibleNekretnineIds.slice(startIndex, endIndex);
+
  var slidesHTML = visibleNekretnineOnPage.map(function (nekretninaId) {
  var objekat = js_objekti.find(function (obj) {
    return obj.nekretninaId === nekretninaId;
@@ -375,40 +375,6 @@ var js_objekti = [];
 
 document.addEventListener('DOMContentLoaded', loadMapState);
 
-document.addEventListener('DOMContentLoaded', function () {
-
-
- var nekretninaLinks = document.getElementsByClassName('nekretnina');
-
- for (var i = 0; i < nekretninaLinks.length; i++) {
-     nekretninaLinks[i].addEventListener('click', function (event) {
-         event.preventDefault();
-         var nekretninaId = event.currentTarget.getAttribute('data-nekretnina-id');
-
-         fetch('/nekretnine/' + nekretninaId + '/')
-             .then(response => response.text())
-             .then(data => {
-                 document.getElementById('slides').innerHTML = data;
-
-
-                 var visibleNekretnineIds = markers.getLayers()
-                     .filter(function (marker) {
-                         return map.getBounds().contains(marker.getLatLng());
-                     })
-                     .map(function (marker) {
-                         return marker.nekretninaId;
-                     });
-
-
-                 updatePaginationAndSlides(visibleNekretnineIds);
-             })
-             .catch(error => {
-                 console.error('Error fetching data:', error);
-             });
-
-     });
- }
-});
 
 map.on('zoomend moveend', function () {
  var visibleNekretnineIds = markers.getLayers()
@@ -425,27 +391,6 @@ map.on('zoomend moveend', function () {
 
  var countElement = document.getElementById('count');
  countElement.textContent = countVisibleMarkers;
-});
-
-document.querySelectorAll('.pagination a').forEach(function (paginationLink) {
-    paginationLink.addEventListener('click', function (event) {
-        event.preventDefault();
-        var pageNum = parseInt(event.target.textContent);
-
-
-        currentPage = pageNum;
-
-        var visibleNekretnineIds = markers.getLayers()
-            .filter(function (marker) {
-                return map.getBounds().contains(marker.getLatLng());
-            })
-            .map(function (marker) {
-                return marker.nekretninaId;
-            });
-
-        updatePaginationAndSlides(visibleNekretnineIds);
-        updateSlidesForPage(pageNum, visibleNekretnineIds);
-    });
 });
 
 
