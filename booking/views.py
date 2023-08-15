@@ -41,7 +41,10 @@ from django.core.paginator import Paginator, Page
 from django.http import JsonResponse
 
 class IndexView(TemplateView):
-    template_name = 'home/home_page.html'
+    template_name = "booking/nekretnina_list.html"
+
+    def get(self, request, *args, **kwargs):
+        return redirect('booking:filteri')
 
 
 class SentView(TemplateView):
