@@ -45,7 +45,7 @@
         <a class="nav-link" href="{% url 'booking:agent_registracija' %}">Napravi nalog Agenta</a>
         {% endif %}
         {% if user.is_authenticated or request.user.is_superuser %}
-        <a class="nav-link" href="{% url 'booking:upit' %}">Inbox</a>
+        <a class="nav-link" href="{% url 'booking:upit' %}">Poruke</a>
         {% endif %}
         <a class="nav-link" href="{% url 'booking:logout' %}">Odjavi se</a>
         <span class="navbar-text ms-auto" style="color: white;">Dobrodošao: {{ user.username }}</span>

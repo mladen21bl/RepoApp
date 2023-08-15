@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<<div class="login-container" style="margin-top: 130px;">
+<div class="login-container" style="margin-top: 130px;">
   <h2>Login</h2>
   {% if form.errors %}
     <p class="error">Pristup odbijen.</p>
@@ -11,9 +11,16 @@
   {% endif %}
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-    <a href="{% url 'booking:forgot_password' %}">Forgot password?</a>
+    <div class="form-group">
+      <label for="{{ form.username.id_for_label }}">korisničko ime:</label>
+      {{ form.username }}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.password.id_for_label }}">šifra:</label>
+      {{ form.password }}
+    </div>
+    <button type="submit">Uloguj se</button>
+    <a href="{% url 'booking:forgot_password' %}">Zaboravio si šifru?</a>
   </form>
 </div>
 

@@ -64,7 +64,7 @@ class Korisnik(models.Model):
     username = models.CharField(max_length=255)
     sifra = models.CharField(max_length=255)
     email = models.EmailField()
-    odobreno = models.BooleanField(default=False)
+    odobreno = models.BooleanField(default=True)
     inbox = models.ManyToManyField(KontaktForma, blank=True)
     is_agent = models.BooleanField(default=False)
 
