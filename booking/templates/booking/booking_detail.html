@@ -37,7 +37,7 @@
     {% endif %}
 
     {% if request.user.is_superuser %}
-    <a href="{% url 'booking:booking_delete' pk=detail.pk %}" class="btn btn-primary">Obrisi</a>
+    <a href="{% url 'booking:booking_delete' pk=detail.pk %}" class="btn btn-primary">Obriši</a>
     <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
     {% endif %}
 
@@ -99,7 +99,7 @@
             <label for="id_upit">Upit:</label>
             <textarea id="id_upit" name="upit" class="form-control"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">pošalji upit</button>
     </form>
     {% endif %}
 

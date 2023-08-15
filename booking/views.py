@@ -41,7 +41,6 @@ from django.core.paginator import Paginator, Page
 from django.http import JsonResponse
 
 
-
 class BookingMapList(ListView):
     model = BookingPage
     context_object_name = 'nekretnine'

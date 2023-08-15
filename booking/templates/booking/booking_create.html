@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h1>Create Booking Page</h1>
+  <h1>Objavi oglas</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.media }}
@@ -17,7 +17,7 @@
     </div>
 
     <div class="form-group">
-      <label for="{{ form.povrsina.id_for_label }}">Povrsina:</label>
+      <label for="{{ form.povrsina.id_for_label }}">Površina:</label>
       {{ form.povrsina }}
     </div>
 
@@ -59,12 +59,12 @@
 
 
     <div class="form-group">
-       <label for="{{ form.dvoriste.id_for_label }}">Dvoriste:</label>
+       <label for="{{ form.dvoriste.id_for_label }}">Dvorište:</label>
        {{ form.dvoriste }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.garaza.id_for_label }}">Garaza:</label>
+       <label for="{{ form.garaza.id_for_label }}">Garaža:</label>
        {{ form.garaza }}
      </div>
 
@@ -130,7 +130,7 @@
        <input required name="slike" type="file" multiple class="form-control-file" style="margin-left:350px;">
      </div>
 
-    <button type="submit">Submit</button>
+    <button type="submit">Objavi</button>
   </form>
 </div>
 
