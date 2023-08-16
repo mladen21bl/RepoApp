@@ -4,6 +4,13 @@
 
 {% block content %}
 
+{% load i18n %}
+
+    {% for lang_code, lang_name in languages %}
+    <a href="{% url 'change_language' lang_code %}">{% trans lang_name %}</a>
+    {% endfor %}
+
+    <p>{% trans "Welcome to our website!" %}</p>
     <h1>agent data</h1>
     <p>username: {{ agent.username }}</p>
     <p>email: {{ agent.email }}</p>

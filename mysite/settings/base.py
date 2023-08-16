@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 import smtplib
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -126,14 +127,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 
-LANGUAGE_CODE = 'en-us'
-LANGUAGES = [
-    ('en', _('English')),
-    ('sr', _('Serbian')),
-]
+LANGUAGE_CODE = 'en'
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),  
+    os.path.join(BASE_DIR, 'locale'),
 ]
 
 TIME_ZONE = "UTC"
