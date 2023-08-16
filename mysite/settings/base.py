@@ -15,7 +15,6 @@ import os
 import smtplib
 from django.urls import reverse_lazy
 
-
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
@@ -126,7 +125,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+
+LANGUAGE_CODE = 'en-us'
+LANGUAGES = [
+    ('en', _('English')),
+    ('sr', _('Serbian')),
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),  
+]
 
 TIME_ZONE = "UTC"
 
