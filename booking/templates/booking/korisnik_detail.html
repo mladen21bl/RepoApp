@@ -4,12 +4,12 @@
 
 {% block content %}
 
-    <h1>Korisnik Details</h1>
-    <p>Username: {{ korisnik.username }}</p>
+    <h1>Podaci o korisniku</h1>
+    <p>Korisničko ime: {{ korisnik.username }}</p>
     <p>Email: {{ korisnik.email }}</p>
     <p>Status: {{ korisnik.odobreno }}</p>
 
-    <a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">Obrisi korisnika</a>
+    <a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">Obriši korisnika</a>
 
 
 {% endblock %}

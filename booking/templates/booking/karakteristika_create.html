@@ -5,9 +5,8 @@
   <h2>Nova karakteristika</h2>
   <form method="post">
     {% csrf_token %}
-
     <div class="form-group">
-      <label for="{{ form.name.id_for_label }}">ime:</label>
+      <label for="{{ form.name.id_for_label }}">naziv:</label>
       {{ form.name }}
     </div>
 
@@ -15,7 +14,6 @@
       <label for="{{ form.tip.id_for_label }}">Tip:</label>
       {{ form.tip }}
     </div>
-
     <button type="submit" class="btn">Kreiraj</button>
   </form>
 </div>

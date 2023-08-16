@@ -29,9 +29,9 @@ from .views import (
     BookingEditView,
     AgentDeleteView,
     KorisnikDeleteView,
-    BookingMapList,
     TipCreateView,
     KarakteristikaCreateView,
+
 )
 
 
@@ -47,7 +47,6 @@ urlpatterns = [
     path('kontakt/', KontaktFormaCreate.as_view(), name='kontakt_forma'),
     path('upiti', KontaktFormaList.as_view(), name='upit'),
     path('upiti/<int:pk>/', KontaktFormaDetail.as_view(), name='upit_detalj'),
-
     path('upiti/<int:pk>/odgovor', OdgovorView.as_view(), name='odgovor'),
 
     path('registracija/', KorisnikCreateView.as_view(), name='korisnik_registracija'),
@@ -55,13 +54,11 @@ urlpatterns = [
     path('korisnici/<int:pk>/delete', KorisnikDeleteView.as_view(), name='korisnik_delete'),
     path('korisnici/', KorisnikList.as_view(), name='korisnik_list'),
 
-
     path('nekretnine/', NekretninaList.as_view(), name='filteri'),
     path('nekretnine/<int:pk>/', BookingDetail.as_view(), name='nekretnina_detail'),
     path('nekretnine/create/', BookingCreateView.as_view(), name='booking_create'),
     path('nekretnine/<int:pk>/delete', BookingDeleteView.as_view(), name='booking_delete'),
     path('nekretnine/<int:pk>/edit', BookingEditView.as_view(), name='booking_edit'),
-    path('map-list/', BookingMapList.as_view(), name='map_list'),
 
     path('prijava/', CustomLoginView.as_view(), name='prijava'),
     path('logout/', CustomLogoutView, name='logout'),
@@ -72,7 +69,4 @@ urlpatterns = [
 
     path('tip/create/', TipCreateView.as_view(), name='tip_create'),
     path('karakteristika/create/', KarakteristikaCreateView.as_view(), name='karakteristika_create'),
-    path('update_nekretnine/', NekretninaList.as_view(), name='update_nekretnine'),
-
-
 ]

@@ -40,14 +40,12 @@ from wagtail.images.models import Image as WagtailImage
 from django.core.paginator import Paginator, Page
 from django.http import JsonResponse
 
+class IndexView(TemplateView):
+    template_name = "booking/nekretnina_list.html"
 
-class BookingMapList(ListView):
-    model = BookingPage
-    context_object_name = 'nekretnine'
-    template_name = 'booking/mapa.html'
+    def get(self, request, *args, **kwargs):
+        return redirect('booking:filteri')
 
-    def get_queryset(self):
-        return BookingPage.objects.all()
 
 class SentView(TemplateView):
     template_name = 'booking/sent.html'
@@ -192,8 +190,6 @@ class KontaktFormaDetail(DetailView):
     model = KontaktForma
     template_name = 'booking/kontakt_forma_detail.html'
     context_object_name = 'upit'
-
-
 
 class OdgovorView(LoginRequiredMixin, CreateView):
     model = Poruke
@@ -429,10 +425,6 @@ def CustomLogoutView(request):
     return redirect('booking:indexview')
 
 
-
-class VerificationSuccessView(TemplateView):
-    template_name = 'booking/verification_success.html'
-
 class KorisnikList(ListView):
     model = Korisnik
     context_object_name = 'korisnici'
@@ -445,24 +437,16 @@ class KorisnikDetailView(DetailView):
     template_name = 'booking/korisnik_detail.html'
 
 
-class IndexView(TemplateView):
-    template_name = 'home/home_page.html'
-
-
 class AgentiList(ListView):
     model = Agent
     context_object_name = 'agenti'
     template_name = 'booking/agenti_list.html'
 
 
-
 class AgentiDetailView(DetailView):
     context_object_name = 'agent'
     model = Agent
     template_name = 'booking/agenti_detail.html'
-
-
-
 
 
 class NekretninaList(ListView):
@@ -565,5 +549,4 @@ class NekretninaList(ListView):
         context['selected_parking'] = self.request.GET.get('parking', '')
         context['selected_klima'] = self.request.GET.get('klima', '')
 
-        
         return context
