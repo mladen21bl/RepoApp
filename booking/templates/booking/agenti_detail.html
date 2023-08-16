@@ -4,17 +4,17 @@
 
 {% block content %}
 
-    <h1>podaci o agentu</h1>
-    <p>korisničko ime: {{ agent.username }}</p>
-    <p>Email: {{ agent.email }}</p>
-    <p>Telefon: {{ agent.telefon }}</p>
-    <p>Nekretnine agenta {{ agent.username }}:</p>
+    <h1>agent data</h1>
+    <p>username: {{ agent.username }}</p>
+    <p>email: {{ agent.email }}</p>
+    <p>phone: {{ agent.telefon }}</p>
+    <p>{{ agent.username }} 's realestates:</p>
     {% for a in agent.nekretnine.all %}
         <li>{{ a.naziv }}</li>
     {% endfor %}
 
 
-<a href="{% url 'booking:agent_delete' pk=agent.pk %}">Obrisi agenta</a>
+<a href="{% url 'booking:agent_delete' pk=agent.pk %}">Delete agent</a>
 
 
 {% endblock %}

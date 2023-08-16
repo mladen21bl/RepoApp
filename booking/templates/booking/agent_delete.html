@@ -2,12 +2,12 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h2>Da li si siguran da zelis da obrišeš?</h2>
+  <h2>Are you sure that you want to delete?</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">Obriši</button>
-    <a href="{% url 'booking:agenti_list' %}" class="btn btn-warrning">Nazad</a>
+    <button type="submit" class="btn">Delete</button>
+    <a href="{% url 'booking:agenti_list' %}" class="btn btn-warrning">Back</a>
   </form>
 </div>
 

@@ -2,25 +2,25 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h2>Prijava</h2>
+  <h2>Login</h2>
   {% if form.errors %}
-    <p class="error">Pristup odbijen.</p>
+    <p class="error">Access denied</p>
   {% endif %}
   {% if account_not_approved %}
-    <p class="error">Pristup odbijen. Vaš nalog jos nije odobren</p>
+    <p class="error">Access denied. Your account is not approved yet!</p>
   {% endif %}
   <form method="post">
     {% csrf_token %}
     <div class="form-group">
-      <label for="{{ form.username.id_for_label }}">korisničko ime:</label>
+      <label for="{{ form.username.id_for_label }}">username:</label>
       {{ form.username }}
     </div>
     <div class="form-group">
-      <label for="{{ form.password.id_for_label }}">šifra:</label>
+      <label for="{{ form.password.id_for_label }}">password:</label>
       {{ form.password }}
     </div>
-    <button type="submit">Prijavi se</button>
-    <a href="{% url 'booking:forgot_password' %}">Zaboravio si šifru?</a>
+    <button type="submit">Login</button>
+    <a href="{% url 'booking:forgot_password' %}">Forgot password?</a>
   </form>
 </div>
 

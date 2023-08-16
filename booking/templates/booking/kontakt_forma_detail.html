@@ -23,7 +23,7 @@
 
 <div class="poruka">
   <p>{{ upit.ime }}: {{ upit.upit }}</p>
-  <p>Upit za: {{ upit.naziv_nekretnine }}</p>
+  <p>question for: {{ upit.naziv_nekretnine }}</p>
 </div>
 
 {% for poruka in upit.poruke.all %}
@@ -32,7 +32,7 @@
   </div>
 {% endfor %}
 
-<a href="{% url 'booking:odgovor' pk=upit.pk %}">Odgovori</a>
+<a href="{% url 'booking:odgovor' pk=upit.pk %}">answer</a>
 
 </div>
 {% endblock %}

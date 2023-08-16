@@ -6,95 +6,95 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h1>Objavi oglas</h1>
+  <h1>Create realestate</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.media }}
 
     <div class="form-group">
-      <label for="{{ form.naziv.id_for_label }}">Naziv:</label>
+      <label for="{{ form.naziv.id_for_label }}">name:</label>
       {{ form.naziv }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.povrsina.id_for_label }}">Površina:</label>
+      <label for="{{ form.povrsina.id_for_label }}">area:</label>
       {{ form.povrsina }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.cena.id_for_label }}">Cijena:</label>
+      <label for="{{ form.cena.id_for_label }}">price:</label>
       {{ form.cena }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.opis.id_for_label }}">Opis:</label>
+      <label for="{{ form.opis.id_for_label }}">description:</label>
       {{ form.opis }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.status.id_for_label }}">Status:</label>
+      <label for="{{ form.status.id_for_label }}">status:</label>
       {{ form.status }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.vrsta.id_for_label }}">Vrsta:</label>
+      <label for="{{ form.vrsta.id_for_label }}">type of realestate:</label>
       {{ form.vrsta }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.grad.id_for_label }}">Grad:</label>
+      <label for="{{ form.grad.id_for_label }}">city:</label>
       {{ form.grad }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.mjesto.id_for_label }}">Mjesto:</label>
+      <label for="{{ form.mjesto.id_for_label }}">neigborhood:</label>
       {{ form.mjesto }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.orjentacija.id_for_label }}">Orjentacija:</label>
+      <label for="{{ form.orjentacija.id_for_label }}">orientation:</label>
       {{ form.orjentacija }}
     </div>
 
 
 
     <div class="form-group">
-       <label for="{{ form.dvoriste.id_for_label }}">Dvorište:</label>
+       <label for="{{ form.dvoriste.id_for_label }}">backyard:</label>
        {{ form.dvoriste }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.garaza.id_for_label }}">Garaža:</label>
+       <label for="{{ form.garaza.id_for_label }}">garage:</label>
        {{ form.garaza }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.bazen.id_for_label }}">Bazen:</label>
+       <label for="{{ form.bazen.id_for_label }}">pool:</label>
        {{ form.bazen }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.centralno_grijanje.id_for_label }}">Centralno Grijanje:</label>
+       <label for="{{ form.centralno_grijanje.id_for_label }}">central heating:</label>
        {{ form.centralno_grijanje }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.lift.id_for_label }}">Lift:</label>
+       <label for="{{ form.lift.id_for_label }}">elevator:</label>
        {{ form.lift }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.parking.id_for_label }}">Parking:</label>
+       <label for="{{ form.parking.id_for_label }}">parking:</label>
        {{ form.parking }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.klima.id_for_label }}">Klima:</label>
+       <label for="{{ form.klima.id_for_label }}">aircondition:</label>
        {{ form.klima }}
      </div>
 
      <div class="form-group">
-       <label for="{{ form.agent.id_for_label }}">Agent:</label>
+       <label for="{{ form.agent.id_for_label }}">agent:</label>
        {{ form.agent }}
      </div>
 
@@ -126,11 +126,11 @@
 
 
      <div class="form-group">
-       <label for="{{ form.slike.id_for_label }}">slike:</label>
+       <label for="{{ form.slike.id_for_label }}">pictures:</label>
        <input required name="slike" type="file" multiple class="form-control-file" style="margin-left:350px;">
      </div>
 
-    <button type="submit">Objavi</button>
+    <button type="submit">Publish</button>
   </form>
 </div>
 

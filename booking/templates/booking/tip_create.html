@@ -2,14 +2,14 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h2>Novi tip</h2>
+  <h2>New type</h2>
   <form method="post">
     {% csrf_token %}
     <div class="form-group">
-      <label for="{{ form.name.id_for_label }}">naziv:</label>
+      <label for="{{ form.name.id_for_label }}">name:</label>
       {{ form.name }}
     </div>
-    <button type="submit" class="btn">Kreiraj</button>
+    <button type="submit" class="btn">create</button>
   </form>
 </div>
 
