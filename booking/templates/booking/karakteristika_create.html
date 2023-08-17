@@ -2,19 +2,19 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h2>New characteristics</h2>
+  <h2>{% trans "New characteristics" %}</h2>
   <form method="post">
     {% csrf_token %}
     <div class="form-group">
-      <label for="{{ form.name.id_for_label }}">name:</label>
+      <label for="{{ form.name.id_for_label }}">{{% trans "name" %}}:</label>
       {{ form.name }}
     </div>
 
     <div class="form-group">
-      <label for="{{ form.tip.id_for_label }}">type:</label>
+      <label for="{{ form.tip.id_for_label }}">{{% trans "type" %}}:</label>
       {{ form.tip }}
     </div>
-    <button type="submit" class="btn">create</button>
+    <button type="submit" class="btn">{% trans "create" %}</button>
   </form>
 </div>
 

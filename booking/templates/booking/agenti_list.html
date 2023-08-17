@@ -6,13 +6,14 @@
 
 
 <div class="container">
-
+<h3>{% trans "List of agents:" %}</h3>
 {% for agent in agenti %}
 
   <a href="{% url 'booking:agenti_detail' pk=agent.pk %}" style="text-decoration: none;">{{ agent.username }}</a><p></p>
 {% endfor %}
 
 </div>
+
 
 {% endblock %}
 

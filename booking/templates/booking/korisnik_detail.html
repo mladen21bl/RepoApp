@@ -4,12 +4,13 @@
 
 {% block content %}
 
-    <h1>user data</h1>
-    <p>username: {{ korisnik.username }}</p>
-    <p>email: {{ korisnik.email }}</p>
-    <p>status: {{ korisnik.odobreno }}</p>
+<h1>{% trans "user data" %}</h1>
+<p>{% trans "username" %}: {{ korisnik.username }}</p>
+<p>{% trans "email" %}: {{ korisnik.email }}</p>
+<p>{% trans "status" %}: {{ korisnik.odobreno }}</p>
 
-    <a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">delete user</a>
+<a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">{% trans "delete user" %}</a>
+
 
 
 {% endblock %}

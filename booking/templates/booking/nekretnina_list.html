@@ -130,131 +130,127 @@
   <form method="GET" action="">
 
     <div class="filter">
-      <label for="id_grad">city:</label>
-      <select name="grad" id="id_grad">
-          <option value="">-- All --</option>
-          {% for choice in grad_choices %}
-              <option value="{{ choice.0 }}" {% if choice.0 == selected_grad %}selected{% endif %}>{{ choice.1 }}</option>
-          {% endfor %}
-      </select>
-    </div>
+  <label for="id_grad">{% trans "city" %}:</label>
+  <select name="grad" id="id_grad">
+      <option value="">-- {% trans "All" %} --</option>
+      {% for choice in grad_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_grad %}selected{% endif %}>{{ choice.1 }}</option>
+      {% endfor %}
+  </select>
+</div>
 
 
-    <div class="filter">
-      <label for="id_mjesto">neigborhood:</label>
-      <select name="mjesto" id="id_mjesto">
-          <option value="">-- All --</option>
-          {% for choice in mjesto_choices %}
-              <option value="{{ choice.0 }}" {% if choice.0 == selected_mjesto %}selected{% endif %}>{{ choice.1 }}</option>
-          {% endfor %}
-      </select>
-    </div>
+<div class="filter">
+  <label for="id_mjesto">{% trans "neigborhood" %}:</label>
+  <select name="mjesto" id="id_mjesto">
+      <option value="">-- {% trans "All" %} --</option>
+      {% for choice in mjesto_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_mjesto %}selected{% endif %}>{{ choice.1 }}</option>
+      {% endfor %}
+  </select>
+</div>
 
 
-    <div class="filter">
-      <label for="id_orjentacija">orientation:</label>
-      <select name="orjentacija" id="id_orjentacija">
-          <option value="">-- All --</option>
-          {% for choice in orjentacija_choices %}
-              <option value="{{ choice.0 }}" {% if choice.0 == selected_orjentacija %}selected{% endif %}>{{ choice.1 }}</option>
-          {% endfor %}
-      </select>
-    </div>
-
-    <div class="filter">
-      <label for="id_vrsta">Type of realestate:</label>
-      <select name="vrsta" id="id_vrsta">
-          <option value="">-- All --</option>
-          {% for choice in vrsta_choices %}
-              <option value="{{ choice.0 }}" {% if choice.0 == selected_vrsta %}selected{% endif %}>{{ choice.1 }}</option>
-          {% endfor %}
-      </select>
-    </div>
-
-    {% if selected_vrsta == 'kuca' or selected_vrsta == 'vikendica' %}
-        <div class="filter">
-            <label for="dvoriste">backyard:</label>
-            <input type="checkbox" id="dvoriste" name="dvoriste" {% if request.GET.dvoriste %}checked{% endif %}>
-        </div>
-
-        <div class="filter">
-            <label for="bazen">pool:</label>
-            <input type="checkbox" id="bazen" name="bazen" {% if request.GET.bazen %}checked{% endif %}>
-        </div>
-
-        <div class="filter">
-            <label for="garaza">garage:</label>
-            <input type="checkbox" id="garaza" name="garaza" {% if request.GET.garaza %}checked{% endif %}>
-        </div>
-    {% endif %}
+<div class="filter">
+  <label for="id_orjentacija">{% trans "orientation" %}:</label>
+  <select name="orjentacija" id="id_orjentacija">
+      <option value="">-- {% trans "All" %} --</option>
+      {% for choice in orjentacija_choices %}
+          <option value="{{ choice.0 }}" {% if choice.0 == selected_orjentacija %}selected{% endif %}>{{ choice.1 }}</option>
+      {% endfor %}
+  </select>
+</div>
 
 
-    {% if selected_vrsta == 'stan' or selected_vrsta == 'garsonjera' %}
-        <div class="filter">
-            <label for="centralno_grijanje">central heating:</label>
-            <input type="checkbox" id="centralno_grijanje" name="centralno_grijanje" {% if request.GET.centralno_grijanje %}checked{% endif %}>
-        </div>
+<div class="filter">
+<label for="id_vrsta">{% trans "Type of realestate" %}:</label>
+<select name="vrsta" id="id_vrsta">
+  <option value="">-- {% trans "All" %} --</option>
+  {% for choice in vrsta_choices %}
+      <option value="{{ choice.0 }}" {% if choice.0 == selected_vrsta %}selected{% endif %}>{{ choice.1 }}</option>
+  {% endfor %}
+</select>
+</div>
+
+{% if selected_vrsta == 'kuca' or selected_vrsta == 'vikendica' %}
+<div class="filter">
+    <label for="dvoriste">{% trans "backyard" %}:</label>
+    <input type="checkbox" id="dvoriste" name="dvoriste" {% if request.GET.dvoriste %}checked{% endif %}>
+</div>
+
+<div class="filter">
+    <label for="bazen">{% trans "pool" %}:</label>
+    <input type="checkbox" id="bazen" name="bazen" {% if request.GET.bazen %}checked{% endif %}>
+</div>
+
+<div class="filter">
+    <label for="garaza">{% trans "garage" %}:</label>
+    <input type="checkbox" id="garaza" name="garaza" {% if request.GET.garaza %}checked{% endif %}>
+</div>
+{% endif %}
+
+{% if selected_vrsta == 'stan' or selected_vrsta == 'garsonjera' %}
+<div class="filter">
+    <label for="centralno_grijanje">{% trans "central heating" %}:</label>
+    <input type="checkbox" id="centralno_grijanje" name="centralno_grijanje" {% if request.GET.centralno_grijanje %}checked{% endif %}>
+</div>
+
+<div class="filter">
+    <label for="lift">{% trans "elevator" %}:</label>
+    <input type="checkbox" id="lift" name="lift" {% if request.GET.lift %}checked{% endif %}>
+</div>
+{% endif %}
+
+{% if selected_vrsta == 'poslovni_prostor' %}
+<div class="filter">
+    <label for="parking">{% trans "parking" %}:</label>
+    <input type="checkbox" id="parking" name="parking" {% if request.GET.parking %}checked{% endif %}>
+</div>
+
+<div class="filter">
+    <label for="klima">{% trans "aircondition" %}:</label>
+    <input type="checkbox" id="klima" name="klima" {% if request.GET.klima %}checked{% endif %}>
+</div>
+{% endif %}
+
+<div class="filter">
+<label for="id_status">{% trans "status" %}:</label>
+<select name="status" id="id_status">
+    <option value="">-- {% trans "All" %} --</option>
+    {% for choice in status_choices %}
+        <option value="{{ choice.0 }}" {% if choice.0 == selected_status %}selected{% endif %}>{{ choice.1 }}</option>
+    {% endfor %}
+</select>
+</div>
 
 
-        <div class="filter">
-            <label for="lift">elevator:</label>
-            <input type="checkbox" id="lift" name="lift" {% if request.GET.lift %}checked{% endif %}>
-        </div>
-    {% endif %}
+<div class="filter">
+<label for="naziv">{% trans "name" %}:</label>
+<input type="text" id="naziv" name="naziv" value="{{ request.GET.naziv }}">
+</div>
 
-    {% if selected_vrsta == 'poslovni_prostor' %}
-        <div class="filter">
-            <label for="parking">parking:</label>
-            <input type="checkbox" id="parking" name="parking" {% if request.GET.parking %}checked{% endif %}>
-        </div>
+<div class="filter">
+<label for="cena_od">{% trans "Price (from)" %}:</label>
+<input type="number" id="cena_od" name="cena_od" value="{{ request.GET.cena_od }}">
+</div>
 
+<div class="filter">
+<label for="cena_do">{% trans "Price (to)" %}:</label>
+<input type="number" id="cena_do" name="cena_do" value="{{ request.GET.cena_do }}">
+</div>
 
-        <div class="filter">
-            <label for="klima">aircondition:</label>
-            <input type="checkbox" id="klima" name="klima" {% if request.GET.klima %}checked{% endif %}>
-        </div>
-    {% endif %}
+<div class="filter">
+<label for="povrsina_od">{% trans "area (from)" %}:</label>
+<input type="number" id="povrsina_od" name="povrsina_od" value="{{ request.GET.povrsina_od }}">
+</div>
 
-    <div class="filter">
-        <label for="id_status">status:</label>
-        <select name="status" id="id_status">
-            <option value="">-- All --</option>
-            {% for choice in status_choices %}
-                <option value="{{ choice.0 }}" {% if choice.0 == selected_status %}selected{% endif %}>{{ choice.1 }}</option>
-            {% endfor %}
-        </select>
-    </div>
+<div class="filter">
+<label for="povrsina_do">{% trans "area (to)" %}:</label>
+<input type="number" id="povrsina_do" name="povrsina_do" value="{{ request.GET.povrsina_do }}">
+</div>
+</div>
 
-    <div class="filter">
-        <label for="naziv">name:</label>
-        <input type="text" id="naziv" name="naziv" value="{{ request.GET.naziv }}">
-    </div>
-
-    <div class="filter">
-        <label for="cena_od">Price (from):</label>
-        <input type="number" id="cena_od" name="cena_od" value="{{ request.GET.cena_od }}">
-    </div>
-
-    <div class="filter">
-        <label for="cena_do">Price (to):</label>
-        <input type="number" id="cena_do" name="cena_do" value="{{ request.GET.cena_do }}">
-    </div>
-
-
-
-
-    <div class="filter">
-        <label for="povrsina_od">area (from):</label>
-        <input type="number" id="povrsina_od" name="povrsina_od" value="{{ request.GET.povrsina_od }}">
-    </div>
-
-    <div class="filter">
-        <label for="povrsina_do">area (to):</label>
-        <input type="number" id="povrsina_do" name="povrsina_do" value="{{ request.GET.povrsina_do }}">
-    </div>
-    </div>
-
-    <button type="submit">Filter</button>
+<button type="submit">{% trans "Filter" %}</button>
     </div>
 
     <div id="flex-container">

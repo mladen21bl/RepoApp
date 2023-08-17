@@ -21,18 +21,18 @@
 </style>
 <div class="container">
 
-<div class="poruka">
-  <p>{{ upit.ime }}: {{ upit.upit }}</p>
-  <p>question for: {{ upit.naziv_nekretnine }}</p>
-</div>
-
-{% for poruka in upit.poruke.all %}
   <div class="poruka">
-    <p>{{ poruka.ime }}: {{ poruka.tekst }}</p>
+    <p>{{ upit.ime }}: {{ upit.upit }}</p>
+    <p>{% trans "question for" %}: {{ upit.naziv_nekretnine }}</p>
   </div>
-{% endfor %}
 
-<a href="{% url 'booking:odgovor' pk=upit.pk %}">answer</a>
+  {% for poruka in upit.poruke.all %}
+    <div class="poruka">
+      <p>{{ poruka.ime }}: {{ poruka.tekst }}</p>
+    </div>
+  {% endfor %}
 
-</div>
+  <a href="{% url 'booking:odgovor' pk=upit.pk %}">{% trans "answer" %}</a>
+
+  </div>
 {% endblock %}

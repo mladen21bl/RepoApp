@@ -2,58 +2,59 @@
 
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h2>Registration</h2>
+  <h2>{% trans "Registration" %}</h2>
   {% if messages %}
-  <ul class="errorlist">
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+    <ul class="errorlist">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <form method="post">
-  {% csrf_token %}
+    {% csrf_token %}
 
-  <div class="form-group">
-  <label for="{{ form.username.id_for_label }}">username:</label>
-  <input type="username" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-control" {% if form.username.errors %}aria-invalid="true"{% endif %}>
-  {% if form.username.errors %}
-    <ul class="errorlist">
-      {% for error in form.username.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+    <div class="form-group">
+      <label for="{{ form.username.id_for_label }}">{% trans "username" %}:</label>
+      <input type="username" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-control" {% if form.username.errors %}aria-invalid="true"{% endif %}>
+      {% if form.username.errors %}
+        <ul class="errorlist">
+          {% for error in form.username.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.sifra.id_for_label }}">{{% trans "password" %}}:</label>
+      <input type="password" name="{{ form.sifra.name }}" id="{{ form.sifra.id_for_label }}" class="form-control" {% if form.sifra.errors %}aria-invalid="true"{% endif %}>
+      {% if form.sifra.errors %}
+        <ul class="errorlist">
+          {% for error in form.sifra.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.email.id_for_label }}">{{% trans "email" %}}:</label>
+      <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" class="form-control" {% if form.email.errors %}aria-invalid="true"{% endif %}>
+      {% if form.email.errors %}
+        <ul class="errorlist">
+          {% for error in form.email.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    {{ form.odobreno.as_hidden }}
+    {{ form.inbox.as_hidden }}
+    {{ form.is_agent.as_hidden }}
+    <button type="submit" class="btn">{% trans "Register" %}</button>
+  </form>
 </div>
 
-<div class="form-group">
-  <label for="{{ form.sifra.id_for_label }}">password:</label>
-  <input type="password" name="{{ form.sifra.name }}" id="{{ form.sifra.id_for_label }}" class="form-control" {% if form.sifra.errors %}aria-invalid="true"{% endif %}>
-  {% if form.sifra.errors %}
-    <ul class="errorlist">
-      {% for error in form.sifra.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</div>
-
-<div class="form-group">
-  <label for="{{ form.email.id_for_label }}">email:</label>
-  <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" class="form-control" {% if form.email.errors %}aria-invalid="true"{% endif %}>
-  {% if form.email.errors %}
-    <ul class="errorlist">
-      {% for error in form.email.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</div>
-  {{ form.odobreno.as_hidden }}
-  {{ form.inbox.as_hidden }}
-  {{ form.is_agent.as_hidden }}
-  <button type="submit" class="btn">Register</button>
-</form>
-</div>
 
 <style>
   .login-container {

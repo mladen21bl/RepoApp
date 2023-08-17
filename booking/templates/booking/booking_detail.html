@@ -6,55 +6,54 @@
 {% block content %}
 
 <div class="container">
-    <p>name: {{ detail.naziv }}</p>
-    <p>agent: {{ detail.agent }}</p>
-    <p>types and characteristics:</p>
-    <ul>
-      {% for tip, names in grouped_karakteristikas.items %}
-        <li>{{ tip }}: {{ names|join:", " }}</li>
-      {% endfor %}
-    </ul>
-    <p>area: {{ detail.povrsina }}</p>
-    <p>price: {{ detail.cena }}</p>
-    <p>description: {{ detail.opis|richtext }}</p>
-    <p>status: {{ detail.status }}</p>
-    <p>type of realestate: {{ detail.vrsta }}</p>
-    <p>neigbourhood: {{ detail.mjesto }}</p>
-    {% if detail.vrsta == 'kuca' or detail.vrsta == 'vikendica' %}
-        <p>backyard: {{ detail.get_dvoriste_display }}</p>
-        <p>pool: {{ detail.get_bazen_display }}</p>
-        <p>garage: {{ detail.get_garaza_display }}</p>
-    {% endif %}
+  <p>{% trans "name" %}: {{ detail.naziv }}</p>
+  <p>{% trans "agent" %}: {{ detail.agent }}</p>
+  <p>{% trans "types and characteristics" %}:</p>
+  <ul>
+    {% for tip, names in grouped_karakteristikas.items %}
+      <li>{{ tip }}: {{ names|join:", " }}</li>
+    {% endfor %}
+  </ul>
+  <p>{% trans "area" %}: {{ detail.povrsina }}</p>
+  <p>{% trans "price" %}: {{ detail.cena }}</p>
+  <p>{% trans "description" %}: {{ detail.opis|richtext }}</p>
+  <p>{% trans "status" %}: {{ detail.status }}</p>
+  <p>{% trans "type of realestate" %}: {{ detail.vrsta }}</p>
+  <p>{% trans "neigbourhood" %}: {{ detail.mjesto }}</p>
+  {% if detail.vrsta == 'kuca' or detail.vrsta == 'vikendica' %}
+      <p>{% trans "backyard" %}: {{ detail.get_dvoriste_display }}</p>
+      <p>{% trans "pool" %}: {{ detail.get_bazen_display }}</p>
+      <p>{% trans "garage" %}: {{ detail.get_garaza_display }}</p>
+  {% endif %}
 
-    {% if detail.vrsta == 'stan' or detail.vrsta == 'garsonjera' %}
-        <p>central heating: {{ detail.get_centralno_grijanje_display }}</p>
-        <p>elevator: {{ detail.get_lift_display }}</p>
-    {% endif %}
+  {% if detail.vrsta == 'stan' or detail.vrsta == 'garsonjera' %}
+      <p>{% trans "central heating" %}: {{ detail.get_centralno_grijanje_display }}</p>
+      <p>{% trans "elevator" %}: {{ detail.get_lift_display }}</p>
+  {% endif %}
 
-    {% if detail.vrsta == 'poslovni_prostor' %}
-        <p>parking: {{ detail.get_parking_display }}</p>
-        <p>aircondition: {{ detail.get_klima_display }}</p>
-    {% endif %}
+  {% if detail.vrsta == 'poslovni_prostor' %}
+      <p>{% trans "parking" %}: {{ detail.get_parking_display }}</p>
+      <p>{% trans "aircondition" %}: {{ detail.get_klima_display }}</p>
+  {% endif %}
 
-    {% if request.user.is_superuser %}
-    <a href="{% url 'booking:booking_delete' pk=detail.pk %}" class="btn btn-primary">Delete</a>
-    <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edit</a>
-    {% endif %}
+  {% if request.user.is_superuser %}
+  <a href="{% url 'booking:booking_delete' pk=detail.pk %}" class="btn btn-primary">{% trans "Delete" %}</a>
+  <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">{% trans "Edit" %}</a>
+  {% endif %}
 
-    {% if request.user.username|lower == detail.agent|lower %}
-        <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">Edituj</a>
-    {% endif %}
+  {% if request.user.username|lower == detail.agent|lower %}
+      <a href="{% url 'booking:booking_edit' pk=detail.pk %}" class="btn btn-primary">{% trans "Edit" %}</a>
+  {% endif %}
 
-    <p>pictures:</p>
-    <div class="image-grid">
-      {% for item in detail.gallery_images.all %}
-              <div style="float: left; margin: 10px">
-                  {% image item.image fill-320x240 %}
-                  <p>{{ item.caption }}</p>
-              </div>
-          {% endfor %}
-    </div>
-    <div id="map" style="height:400px; width:700px; margin-bottom:30px;"></div>
+  <p>{% trans "pictures" %}:</p>
+  <div class="image-grid">
+    {% for item in detail.gallery_images.all %}
+            <div style="float: left; margin: 10px">
+                {% image item.image fill-320x240 %}
+                <p>{{ item.caption }}</p>
+            </div>
+        {% endfor %}
+  </div>
     <div id="map" style="height:400px; width:700px; margin-bottom:30px;"></div>
 <script>
   var map = L.map('map').setView([{{ detail.latitude }}, {{ detail.longitude }}], 15);
