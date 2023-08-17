@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-17 14:42+0200\n"
+"POT-Creation-Date: 2023-08-17 15:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,72 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\booking\templates\booking\agenti_detail.html:7
-msgid "agent data"
-msgstr "podaci o korisniku"
+#: .\booking\templates\booking\agent_delete.html:5
+#: .\booking\templates\booking\booking_delete.html:5
+#: .\booking\templates\booking\korisnik_delete.html:5
+msgid "Are you sure that you want to delete?"
+msgstr "Da li si siguran da želiš da obrišeš"
 
-#: .\booking\templates\booking\agenti_detail.html:8
-msgid "username"
+#: .\booking\templates\booking\agent_delete.html:9
+#: .\booking\templates\booking\booking_delete.html:9
+#: .\booking\templates\booking\booking_detail.html:40
+#: .\booking\templates\booking\korisnik_delete.html:9
+#: .\env\Lib\site-packages\django\forms\formsets.py:499
+msgid "Delete"
+msgstr "Obriši"
+
+#: .\booking\templates\booking\agent_delete.html:10
+#: .\booking\templates\booking\booking_delete.html:10
+#: .\booking\templates\booking\korisnik_delete.html:10
+msgid "Back"
+msgstr "Nazad"
+
+#: .\booking\templates\booking\agent_registracija.html:5
+#: .\booking\templates\booking\korisnik_registracija.html:5
+msgid "Registration"
+msgstr "Registracija"
+
+#: .\booking\templates\booking\agent_registracija.html:10
+#, fuzzy
+#| msgid "username"
+msgid "Username"
 msgstr "korisnicko ime"
 
+#: .\booking\templates\booking\agent_registracija.html:15
+msgid "Password"
+msgstr "Šifra"
+
+#: .\booking\templates\booking\agent_registracija.html:20
+#, fuzzy
+#| msgid "email"
+msgid "Email"
+msgstr "email"
+
+#: .\booking\templates\booking\agent_registracija.html:25
+#, fuzzy
+#| msgid "phone"
+msgid "Phone"
+msgstr "telefon"
+
+#: .\booking\templates\booking\agent_registracija.html:31
+#: .\booking\templates\booking\korisnik_registracija.html:54
+msgid "Register"
+msgstr "Registruj se"
+
+#: .\booking\templates\booking\agenti_detail.html:7
+msgid "agent data"
+msgstr "podaci o agentu"
+
+#: .\booking\templates\booking\agenti_detail.html:8
+#: .\booking\templates\booking\korisnik_detail.html:7
+#: .\booking\templates\booking\korisnik_registracija.html:17
+#: .\booking\templates\booking\login.html:15
+msgid "username"
+msgstr "korisničko ime"
+
 #: .\booking\templates\booking\agenti_detail.html:9
+#: .\booking\templates\booking\korisnik_detail.html:8
+#: .\booking\templates\booking\korisnik_registracija.html:41
 msgid "email"
 msgstr "email"
 
@@ -41,11 +98,316 @@ msgstr "nekretnine:"
 
 #: .\booking\templates\booking\agenti_detail.html:16
 msgid "Delete agent"
-msgstr "Obrisi agenta"
+msgstr "Obriši agenta"
+
+#: .\booking\templates\booking\agenti_list.html:9
+msgid "List of agents:"
+msgstr "Lista agenata"
+
+#: .\booking\templates\booking\booking_create.html:9
+#, fuzzy
+#| msgid "'s realestates:"
+msgid "Create realestate"
+msgstr "Kreiraj nekretninu:"
+
+#: .\booking\templates\booking\booking_create.html:129
+#: .\booking\templates\booking\booking_edit.html:129
+msgid "Publish"
+msgstr "Objavi"
+
+#: .\booking\templates\booking\booking_detail.html:9
+#: .\booking\templates\booking\kontakt_forma.html:8
+#: .\booking\templates\booking\nekretnina_list.html:228
+#: .\booking\templates\booking\tip_create.html:9
+#, fuzzy
+#| msgid "username"
+msgid "name"
+msgstr "korisničko ime"
+
+#: .\booking\templates\booking\booking_detail.html:10
+#, fuzzy
+#| msgid "agent data"
+msgid "agent"
+msgstr "podaci o agentu"
+
+#: .\booking\templates\booking\booking_detail.html:11
+msgid "types and characteristics"
+msgstr ""
+
+#: .\booking\templates\booking\booking_detail.html:17
+msgid "area"
+msgstr "površina"
+
+#: .\booking\templates\booking\booking_detail.html:18
+msgid "price"
+msgstr "cijena"
+
+#: .\booking\templates\booking\booking_detail.html:19
+msgid "description"
+msgstr "opis"
+
+#: .\booking\templates\booking\booking_detail.html:20
+#: .\booking\templates\booking\korisnik_detail.html:9
+#: .\booking\templates\booking\nekretnina_list.html:217
+msgid "status"
+msgstr "status"
+
+#: .\booking\templates\booking\booking_detail.html:21
+#, fuzzy
+#| msgid "'s realestates:"
+msgid "type of realestate"
+msgstr "tip nekretnine:"
+
+#: .\booking\templates\booking\booking_detail.html:22
+msgid "neigbourhood"
+msgstr "naselje"
+
+#: .\booking\templates\booking\booking_detail.html:24
+#: .\booking\templates\booking\nekretnina_list.html:177
+msgid "backyard"
+msgstr "dvorište"
+
+#: .\booking\templates\booking\booking_detail.html:25
+#: .\booking\templates\booking\nekretnina_list.html:182
+msgid "pool"
+msgstr "bazen"
+
+#: .\booking\templates\booking\booking_detail.html:26
+#: .\booking\templates\booking\nekretnina_list.html:187
+msgid "garage"
+msgstr "garaža"
+
+#: .\booking\templates\booking\booking_detail.html:30
+#: .\booking\templates\booking\nekretnina_list.html:194
+msgid "central heating"
+msgstr "centralno grijanje"
+
+#: .\booking\templates\booking\booking_detail.html:31
+#: .\booking\templates\booking\nekretnina_list.html:199
+msgid "elevator"
+msgstr "lift"
+
+#: .\booking\templates\booking\booking_detail.html:35
+#: .\booking\templates\booking\nekretnina_list.html:206
+msgid "parking"
+msgstr "parking"
+
+#: .\booking\templates\booking\booking_detail.html:36
+#: .\booking\templates\booking\nekretnina_list.html:211
+msgid "aircondition"
+msgstr "klima"
+
+#: .\booking\templates\booking\booking_detail.html:41
+#: .\booking\templates\booking\booking_detail.html:45
+msgid "Edit"
+msgstr "Uredi"
+
+#: .\booking\templates\booking\booking_detail.html:48
+msgid "pictures"
+msgstr "slike"
+
+#: .\booking\templates\booking\booking_edit.html:9
+#, fuzzy
+#| msgid "'s realestates:"
+msgid "Edit realestate"
+msgstr "Uredi nekretninu:"
+
+#: .\booking\templates\booking\email.html:6
+msgid "Email verification"
+msgstr "Email verifikacija"
+
+#: .\booking\templates\booking\email.html:9
+msgid "Greetings"
+msgstr "Pozdrav"
+
+#: .\booking\templates\booking\email.html:10
+msgid "Click on link below to reset password"
+msgstr "Kliknite na link ispod za reset šifre"
+
+#: .\booking\templates\booking\email.html:11
+msgid "Reset Password"
+msgstr "Reset šifre"
+
+#: .\booking\templates\booking\forgot_password.html:5
+msgid "enter email:"
+msgstr "unesite email"
+
+#: .\booking\templates\booking\forgot_password.html:9
+msgid "Send"
+msgstr "Pošalji"
+
+#: .\booking\templates\booking\karakteristika_create.html:5
+msgid "New characteristics"
+msgstr "Nova karakteristika"
+
+#: .\booking\templates\booking\karakteristika_create.html:17
+#: .\booking\templates\booking\tip_create.html:12
+msgid "create"
+msgstr "kreiraj"
+
+#: .\booking\templates\booking\kontakt_forma.html:4
+msgid "Contact Form"
+msgstr "Kontakt Forma"
+
+#: .\booking\templates\booking\kontakt_forma.html:12
+msgid "question"
+msgstr "upit"
+
+#: .\booking\templates\booking\kontakt_forma.html:16
+#, fuzzy
+#| msgid "'s realestates:"
+msgid "name of realestate"
+msgstr "naziv nekretnine:"
+
+#: .\booking\templates\booking\kontakt_forma.html:19
+#: .\booking\templates\booking\odgovor.html:9
+msgid "send"
+msgstr "pošalji"
+
+#: .\booking\templates\booking\kontakt_forma_detail.html:26
+#: .\booking\templates\booking\kontakt_forma_list.html:26
+msgid "question for"
+msgstr "upit za"
+
+#: .\booking\templates\booking\kontakt_forma_detail.html:35
+msgid "answer"
+msgstr "odgovori"
+
+#: .\booking\templates\booking\kontakt_forma_list.html:22
+msgid "messages"
+msgstr "poruke"
+
+#: .\booking\templates\booking\kontakt_forma_list.html:26
+msgid "Sent by"
+msgstr "Poslao:"
+
+#: .\booking\templates\booking\korisnici_list.html:7
+msgid "List of users"
+msgstr "Lista korisnika"
+
+#: .\booking\templates\booking\korisnik_detail.html:6
+#, fuzzy
+#| msgid "agent data"
+msgid "user data"
+msgstr "podaci o korisniku"
+
+#: .\booking\templates\booking\korisnik_detail.html:11
+#, fuzzy
+#| msgid "Delete agent"
+msgid "delete user"
+msgstr "Obriši korisnika"
+
+#: .\booking\templates\booking\korisnik_registracija.html:29
+#: .\booking\templates\booking\login.html:19
+msgid "password"
+msgstr "šifra"
+
+#: .\booking\templates\booking\login.html:5
+#: .\booking\templates\booking\login.html:22
+msgid "Login"
+msgstr "Prijava"
+
+#: .\booking\templates\booking\login.html:7
+msgid "Access denied"
+msgstr "Odbijen pristup"
+
+#: .\booking\templates\booking\login.html:10
+msgid "Access denied. Your account is not approved yet!"
+msgstr "Odbijen pristup. Vaš nalog još nije odobren!"
+
+#: .\booking\templates\booking\login.html:23
+msgid "Forgot password?"
+msgstr "Zaboravili ste šifru?"
+
+#: .\booking\templates\booking\nekretnina_list.html:133
+msgid "city"
+msgstr "grad"
+
+#: .\booking\templates\booking\nekretnina_list.html:135
+#: .\booking\templates\booking\nekretnina_list.html:146
+#: .\booking\templates\booking\nekretnina_list.html:157
+#: .\booking\templates\booking\nekretnina_list.html:168
+#: .\booking\templates\booking\nekretnina_list.html:219
+msgid "All"
+msgstr "Sve"
+
+#: .\booking\templates\booking\nekretnina_list.html:144
+msgid "neigborhood"
+msgstr "naselje"
+
+#: .\booking\templates\booking\nekretnina_list.html:155
+msgid "orientation"
+msgstr "orijentacija"
+
+#: .\booking\templates\booking\nekretnina_list.html:166
+#, fuzzy
+#| msgid "'s realestates:"
+msgid "Type of realestate"
+msgstr "Vrsta nekretnine:"
+
+#: .\booking\templates\booking\nekretnina_list.html:233
+msgid "Price (from)"
+msgstr "Cijena (od)"
+
+#: .\booking\templates\booking\nekretnina_list.html:238
+msgid "Price (to)"
+msgstr "Cijena (do)"
+
+#: .\booking\templates\booking\nekretnina_list.html:243
+msgid "area (from)"
+msgstr "površina (od)"
+
+#: .\booking\templates\booking\nekretnina_list.html:248
+msgid "area (to)"
+msgstr "površina (do)"
+
+#: .\booking\templates\booking\nekretnina_list.html:253
+msgid "Filter"
+msgstr "Filtriraj"
+
+#: .\booking\templates\booking\odgovor.html:5
+msgid "response"
+msgstr "odgovori"
+
+#: .\booking\templates\booking\reset_password.html:5
+msgid "Password reset"
+msgstr "Reset šifre"
+
+#: .\booking\templates\booking\reset_password.html:8
+msgid "new password:"
+msgstr "nova šifra"
+
+#: .\booking\templates\booking\reset_password.html:11
+msgid "confirm:"
+msgstr "potvrdi"
+
+#: .\booking\templates\booking\reset_password.html:13
+msgid "Reset password"
+msgstr "Resetuj šifru"
+
+#: .\booking\templates\booking\reset_password_email.html:3
+msgid "Click the following link to reset your password"
+msgstr "Kliknite na link ispod da resetujete šifru"
+
+#: .\booking\templates\booking\reset_password_email.html:7
+msgid "If you have not requested a password reset, ignore this message."
+msgstr "Ako niste zatražili promjenu šifre, ignorišite ovaj mejl."
+
+#: .\booking\templates\booking\reset_password_email.html:9
+msgid "Thank you."
+msgstr "Hvala Vam."
+
+#: .\booking\templates\booking\sent.html:8
+msgid "An email has been sent to enter a new password"
+msgstr "Poslan Vam je email za unos nove šifre"
+
+#: .\booking\templates\booking\tip_create.html:5
+msgid "New type"
+msgstr "Novi tip"
 
 #: .\env\Lib\site-packages\django\contrib\messages\apps.py:15
 msgid "Messages"
-msgstr ""
+msgstr "Poruke"
 
 #: .\env\Lib\site-packages\django\contrib\sitemaps\apps.py:8
 msgid "Site Maps"
@@ -497,11 +859,11 @@ msgstr ""
 
 #: .\env\Lib\site-packages\django\forms\fields.py:91
 msgid "This field is required."
-msgstr ""
+msgstr "Ovo polje je obavezno"
 
 #: .\env\Lib\site-packages\django\forms\fields.py:298
 msgid "Enter a whole number."
-msgstr ""
+msgstr "Unesi cijeli broj"
 
 #: .\env\Lib\site-packages\django\forms\fields.py:467
 #: .\env\Lib\site-packages\django\forms\fields.py:1238
@@ -616,10 +978,6 @@ msgstr[1] ""
 #: .\env\Lib\site-packages\django\forms\formsets.py:484
 #: .\env\Lib\site-packages\django\forms\formsets.py:491
 msgid "Order"
-msgstr ""
-
-#: .\env\Lib\site-packages\django\forms\formsets.py:499
-msgid "Delete"
 msgstr ""
 
 #: .\env\Lib\site-packages\django\forms\models.py:886
