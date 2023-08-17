@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-17 15:55+0200\n"
+"POT-Creation-Date: 2023-08-17 16:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Da li si siguran da želiš da obrišeš"
 #: .\booking\templates\booking\korisnik_delete.html:9
 #: .\env\Lib\site-packages\django\forms\formsets.py:499
 msgid "Delete"
-msgstr "Obriši"
+msgstr "Delete"
 
 #: .\booking\templates\booking\agent_delete.html:10
 #: .\booking\templates\booking\booking_delete.html:10
@@ -48,7 +48,7 @@ msgstr "Registracija"
 #, fuzzy
 #| msgid "username"
 msgid "Username"
-msgstr "korisnicko ime"
+msgstr "korisničko ime"
 
 #: .\booking\templates\booking\agent_registracija.html:15
 msgid "Password"
@@ -116,6 +116,7 @@ msgid "Publish"
 msgstr "Objavi"
 
 #: .\booking\templates\booking\booking_detail.html:9
+#: .\booking\templates\booking\karakteristika_create.html:9
 #: .\booking\templates\booking\kontakt_forma.html:8
 #: .\booking\templates\booking\nekretnina_list.html:228
 #: .\booking\templates\booking\tip_create.html:9
@@ -239,6 +240,12 @@ msgstr "Pošalji"
 #: .\booking\templates\booking\karakteristika_create.html:5
 msgid "New characteristics"
 msgstr "Nova karakteristika"
+
+#: .\booking\templates\booking\karakteristika_create.html:14
+#, fuzzy
+#| msgid "New type"
+msgid "type"
+msgstr "Novi tip"
 
 #: .\booking\templates\booking\karakteristika_create.html:17
 #: .\booking\templates\booking\tip_create.html:12
@@ -1658,4 +1665,52 @@ msgstr ""
 
 #: .\mysite\settings\base.py:135
 msgid "Serbian"
+msgstr ""
+
+#: .\mysite\templates\base.html:28
+msgid "LISTING"
+msgstr ""
+
+#: .\mysite\templates\base.html:30
+msgid "REGISTER"
+msgstr ""
+
+#: .\mysite\templates\base.html:34
+msgid "PUBLISH"
+msgstr ""
+
+#: .\mysite\templates\base.html:36
+msgid "NEW TYPE"
+msgstr ""
+
+#: .\mysite\templates\base.html:37
+msgid "NEW CHARACTERISTICS"
+msgstr ""
+
+#: .\mysite\templates\base.html:40
+msgid "USERS"
+msgstr ""
+
+#: .\mysite\templates\base.html:41
+msgid "AGENTS"
+msgstr ""
+
+#: .\mysite\templates\base.html:44
+msgid "CREATE AGENT ACCOUNT"
+msgstr ""
+
+#: .\mysite\templates\base.html:47
+msgid "INBOX"
+msgstr ""
+
+#: .\mysite\templates\base.html:49
+msgid "LOG OUT"
+msgstr ""
+
+#: .\mysite\templates\base.html:50
+msgid "WELCOME:"
+msgstr ""
+
+#: .\mysite\templates\base.html:52
+msgid "LOG IN"
 msgstr ""
