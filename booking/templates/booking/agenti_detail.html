@@ -1,27 +1,19 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags i18n %}
 
 {% block content %}
 
-{% load i18n %}
+<h1>{% trans "agent data" %}</h1>
+<p>{% trans "username" %}: {{ agent.username }}</p>
+<p>{% trans "email" %}: {{ agent.email }}</p>
+<p>{% trans "phone" %}: {{ agent.telefon }}</p>
+<p>{{ agent.username }} {% trans "'s realestates:" %}</p>
+{% for a in agent.nekretnine.all %}
+    <li>{{ a.naziv }}</li>
+{% endfor %}
 
-    {% for lang_code, lang_name in languages %}
-    <a href="{% url 'change_language' lang_code %}">{% trans lang_name %}</a>
-    {% endfor %}
-
-    <p>{% trans "Welcome to our website!" %}</p>
-    <h1>agent data</h1>
-    <p>username: {{ agent.username }}</p>
-    <p>email: {{ agent.email }}</p>
-    <p>phone: {{ agent.telefon }}</p>
-    <p>{{ agent.username }} 's realestates:</p>
-    {% for a in agent.nekretnine.all %}
-        <li>{{ a.naziv }}</li>
-    {% endfor %}
-
-
-<a href="{% url 'booking:agent_delete' pk=agent.pk %}">Delete agent</a>
+<a href="{% url 'booking:agent_delete' pk=agent.pk %}">{% trans "Delete agent" %}</a>
 
 
 {% endblock %}

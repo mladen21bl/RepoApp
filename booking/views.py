@@ -43,13 +43,6 @@ from django.shortcuts import render
 from django.utils.translation import gettext as _
 from django.utils.translation import activate
 
-def change_language(request, language_code):
-    activate(language_code)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
-def my_view(request):
-    return render(request, 'booking/agenti_detail.html')
-
 class IndexView(TemplateView):
     template_name = "booking/nekretnina_list.html"
 

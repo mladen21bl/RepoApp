@@ -4,11 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-msgid "Welcome to our website!"
-msgstr "Dobrodošli na naš sajt!"
+msgid ""
+msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:53+0200\n"
+"POT-Creation-Date: 2023-08-17 14:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,30 @@ msgstr "Dobrodošli na naš sajt!"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: .\booking\templates\booking\agenti_detail.html:7
+msgid "agent data"
+msgstr "podaci o korisniku"
+
+#: .\booking\templates\booking\agenti_detail.html:8
+msgid "username"
+msgstr "korisnicko ime"
+
+#: .\booking\templates\booking\agenti_detail.html:9
+msgid "email"
+msgstr "email"
+
+#: .\booking\templates\booking\agenti_detail.html:10
+msgid "phone"
+msgstr "telefon"
+
+#: .\booking\templates\booking\agenti_detail.html:11
+msgid "'s realestates:"
+msgstr "nekretnine:"
+
+#: .\booking\templates\booking\agenti_detail.html:16
+msgid "Delete agent"
+msgstr "Obrisi agenta"
 
 #: .\env\Lib\site-packages\django\contrib\messages\apps.py:15
 msgid "Messages"
@@ -1270,10 +1294,10 @@ msgstr ""
 msgid "Create your superuser first!"
 msgstr ""
 
-#: .\mysite\settings\base.py:131
+#: .\mysite\settings\base.py:134
 msgid "English"
 msgstr ""
 
-#: .\mysite\settings\base.py:132
+#: .\mysite\settings\base.py:135
 msgid "Serbian"
 msgstr ""

@@ -15,6 +15,7 @@ import os
 import smtplib
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -127,7 +128,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'sr'
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('sr', _('Serbian')),
+]
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
@@ -178,3 +184,6 @@ WAGTAILSEARCH_BACKENDS = {"default": {"BACKEND": "wagtail.search.backends.databa
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
+
+def ready():
+    pass
