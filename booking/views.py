@@ -41,7 +41,7 @@ from django.core.paginator import Paginator, Page
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext as _
-from django.utils.translation import activate
+from django.utils.translation import activate, get_language_info
 from django.shortcuts import redirect
 from django.utils import translation
 
@@ -52,7 +52,8 @@ def set_language(request):
         activate(lang_code)
         request.session['django_language'] = lang_code
         print(f"Language in session: {request.session['django_language']}")
-    return redirect(request.META.get('HTTP_REFERER'))
+
+    return redirect(reverse('booking:filteri'))
 
 class IndexView(TemplateView):
     template_name = "booking/index.html"

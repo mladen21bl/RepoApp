@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-18 21:19+0200\n"
+"POT-Creation-Date: 2023-08-18 22:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -301,7 +301,7 @@ msgid "Send"
 msgstr "Pošalji"
 
 #: .\booking\templates\booking\index.html:28
-msgid "Odaberi jezik"
+msgid "Choose language"
 msgstr "Odaberi jezik"
 
 #: .\booking\templates\booking\karakteristika_create.html:5
@@ -1707,50 +1707,53 @@ msgstr ""
 msgid "German"
 msgstr ""
 
-#: .\mysite\templates\500.html:29
+#: .\mysite\templates\500.html:29 .\mysite\templates\base.html:29
 msgid "LISTING"
 msgstr "NEKRETNINE"
 
-#: .\mysite\templates\500.html:31
+#: .\mysite\templates\500.html:31 .\mysite\templates\base.html:31
 msgid "REGISTER"
 msgstr "REGISTRUJ SE"
 
-#: .\mysite\templates\500.html:35
+#: .\mysite\templates\500.html:35 .\mysite\templates\base.html:35
 msgid "PUBLISH"
 msgstr "OBAJVI"
 
-#: .\mysite\templates\500.html:37
+#: .\mysite\templates\500.html:37 .\mysite\templates\base.html:37
 msgid "NEW TYPE"
 msgstr "NOVI TIP"
 
-#: .\mysite\templates\500.html:38
+#: .\mysite\templates\500.html:38 .\mysite\templates\base.html:38
 msgid "NEW CHARACTERISTICS"
 msgstr "NOVA KARAKTERISTIKA"
 
-#: .\mysite\templates\500.html:41
+#: .\mysite\templates\500.html:41 .\mysite\templates\base.html:41
 msgid "USERS"
 msgstr "KORISNICI"
 
-#: .\mysite\templates\500.html:42
+#: .\mysite\templates\500.html:42 .\mysite\templates\base.html:42
 msgid "AGENTS"
 msgstr "AGENTI"
 
-#: .\mysite\templates\500.html:45
+#: .\mysite\templates\500.html:45 .\mysite\templates\base.html:45
 msgid "CREATE AGENT ACCOUNT"
 msgstr "NAPRAVI NALOG AGENTA"
 
-#: .\mysite\templates\500.html:48
+#: .\mysite\templates\500.html:48 .\mysite\templates\base.html:48
 msgid "INBOX"
 msgstr "PORUKE"
 
-#: .\mysite\templates\500.html:50
+#: .\mysite\templates\500.html:50 .\mysite\templates\base.html:50
 msgid "LOG OUT"
 msgstr "ODJAVA"
 
-#: .\mysite\templates\500.html:51
+#: .\mysite\templates\500.html:51 .\mysite\templates\base.html:51
 msgid "WELCOME:"
 msgstr "DOBRODOŠLI:"
 
-#: .\mysite\templates\500.html:53
+#: .\mysite\templates\500.html:53 .\mysite\templates\base.html:53
 msgid "LOG IN"
 msgstr "PRIJAVA"
+
+#~ msgid "Odaberi jezik"
+#~ msgstr "Odaberi jezik"
