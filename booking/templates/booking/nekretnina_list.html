@@ -256,7 +256,7 @@
     <div id="flex-container">
       <div id="empty-space">
         <div id="map"></div>
-        <div id="visible-markers-count" style="font-size:1.4em;">number of realestates: <span id="count">0</span></div>
+        <div id="visible-markers-count" style="font-size:1.4em;">{% trans 'number of realestates:' %} <span id="count">0</span></div>
         <script>
           //############# POSTAVLJANJE MAPE ##########################
           var map = L.map('map').setView([44.784846, 17.186230], 10);
@@ -268,7 +268,7 @@
           //############# DODAVANJE MARKERA ##########################
           var markers = L.markerClusterGroup();
           {% for nekretnina in lista %}
-              var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
+              var marker = L.marker([{{ nekretnina.latitude|safe }}, {{ nekretnina.longitude|safe }}]);
               marker.nekretninaId = '{{ nekretnina.pk }}'; // Koristimo pk umesto cele nekretnine
               markers.addLayer(marker);
               marker.on('click', function () {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-17 21:40+0200\n"
+"POT-Creation-Date: 2023-08-18 13:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,6 +104,7 @@ msgstr "Kreiraj nekretninu"
 
 #: .\booking\templates\booking\booking_create.html:15
 #: .\booking\templates\booking\booking_detail.html:9
+#: .\booking\templates\booking\booking_edit.html:15
 #: .\booking\templates\booking\karakteristika_create.html:9
 #: .\booking\templates\booking\kontakt_forma.html:8
 #: .\booking\templates\booking\nekretnina_list.html:228
@@ -113,21 +114,25 @@ msgstr "naziv"
 
 #: .\booking\templates\booking\booking_create.html:20
 #: .\booking\templates\booking\booking_detail.html:17
+#: .\booking\templates\booking\booking_edit.html:20
 msgid "area"
 msgstr "površina"
 
 #: .\booking\templates\booking\booking_create.html:25
 #: .\booking\templates\booking\booking_detail.html:18
+#: .\booking\templates\booking\booking_edit.html:25
 msgid "price"
 msgstr "cijena"
 
 #: .\booking\templates\booking\booking_create.html:30
 #: .\booking\templates\booking\booking_detail.html:19
+#: .\booking\templates\booking\booking_edit.html:30
 msgid "description"
 msgstr "opis"
 
 #: .\booking\templates\booking\booking_create.html:35
 #: .\booking\templates\booking\booking_detail.html:20
+#: .\booking\templates\booking\booking_edit.html:35
 #: .\booking\templates\booking\korisnik_detail.html:9
 #: .\booking\templates\booking\nekretnina_list.html:217
 msgid "status"
@@ -135,81 +140,97 @@ msgstr "status"
 
 #: .\booking\templates\booking\booking_create.html:40
 #: .\booking\templates\booking\booking_detail.html:21
+#: .\booking\templates\booking\booking_edit.html:40
 msgid "type of realestate"
 msgstr "vrsta nekretnine"
 
 #: .\booking\templates\booking\booking_create.html:45
+#: .\booking\templates\booking\booking_edit.html:45
 #: .\booking\templates\booking\nekretnina_list.html:133
 msgid "city"
 msgstr "grad"
 
 #: .\booking\templates\booking\booking_create.html:50
+#: .\booking\templates\booking\booking_edit.html:50
 #: .\booking\templates\booking\nekretnina_list.html:144
 msgid "neigborhood"
 msgstr "naselje"
 
 #: .\booking\templates\booking\booking_create.html:55
+#: .\booking\templates\booking\booking_edit.html:55
 #: .\booking\templates\booking\nekretnina_list.html:155
 msgid "orientation"
 msgstr "orijentacija"
 
 #: .\booking\templates\booking\booking_create.html:60
 #: .\booking\templates\booking\booking_detail.html:24
+#: .\booking\templates\booking\booking_edit.html:60
 #: .\booking\templates\booking\nekretnina_list.html:177
 msgid "backyard"
 msgstr "dvorište"
 
 #: .\booking\templates\booking\booking_create.html:65
 #: .\booking\templates\booking\booking_detail.html:26
+#: .\booking\templates\booking\booking_edit.html:65
 #: .\booking\templates\booking\nekretnina_list.html:187
 msgid "garage"
 msgstr "garaža"
 
 #: .\booking\templates\booking\booking_create.html:70
 #: .\booking\templates\booking\booking_detail.html:25
+#: .\booking\templates\booking\booking_edit.html:70
 #: .\booking\templates\booking\nekretnina_list.html:182
 msgid "pool"
 msgstr "bazen"
 
 #: .\booking\templates\booking\booking_create.html:75
 #: .\booking\templates\booking\booking_detail.html:30
+#: .\booking\templates\booking\booking_edit.html:75
 #: .\booking\templates\booking\nekretnina_list.html:194
 msgid "central heating"
 msgstr "centralno grijanje"
 
 #: .\booking\templates\booking\booking_create.html:80
 #: .\booking\templates\booking\booking_detail.html:31
+#: .\booking\templates\booking\booking_edit.html:80
 #: .\booking\templates\booking\nekretnina_list.html:199
 msgid "elevator"
 msgstr "lift"
 
 #: .\booking\templates\booking\booking_create.html:85
 #: .\booking\templates\booking\booking_detail.html:35
+#: .\booking\templates\booking\booking_edit.html:85
 #: .\booking\templates\booking\nekretnina_list.html:206
 msgid "parking"
 msgstr "parking"
 
 #: .\booking\templates\booking\booking_create.html:90
 #: .\booking\templates\booking\booking_detail.html:36
+#: .\booking\templates\booking\booking_edit.html:90
 #: .\booking\templates\booking\nekretnina_list.html:211
 msgid "aircondition"
 msgstr "klima"
 
 #: .\booking\templates\booking\booking_create.html:95
 #: .\booking\templates\booking\booking_detail.html:10
+#: .\booking\templates\booking\booking_detail.html:93
+#: .\booking\templates\booking\booking_edit.html:95
 msgid "agent"
 msgstr "agent"
 
 #: .\booking\templates\booking\booking_create.html:115
+#: .\booking\templates\booking\booking_edit.html:115
 msgid "latitude"
 msgstr "latitude"
 
 #: .\booking\templates\booking\booking_create.html:120
+#: .\booking\templates\booking\booking_edit.html:120
 msgid "longitude"
 msgstr "longitude"
 
 #: .\booking\templates\booking\booking_create.html:125
 #: .\booking\templates\booking\booking_detail.html:48
+#: .\booking\templates\booking\booking_edit.html:125
 msgid "pictures"
 msgstr "slike"
 
@@ -230,6 +251,26 @@ msgstr "naselje"
 #: .\booking\templates\booking\booking_detail.html:45
 msgid "Edit"
 msgstr "Uredi"
+
+#: .\booking\templates\booking\booking_detail.html:83
+msgid "Name"
+msgstr "Ime"
+
+#: .\booking\templates\booking\booking_detail.html:88
+#: .\booking\templates\booking\kontakt_forma.html:16
+msgid "name of realestate"
+msgstr "naziv nekretnine"
+
+#: .\booking\templates\booking\booking_detail.html:98
+#: .\booking\templates\booking\kontakt_forma.html:12
+msgid "question"
+msgstr "upit"
+
+#: .\booking\templates\booking\booking_detail.html:101
+#: .\booking\templates\booking\kontakt_forma.html:19
+#: .\booking\templates\booking\odgovor.html:9
+msgid "send"
+msgstr "pošalji"
 
 #: .\booking\templates\booking\booking_edit.html:9
 msgid "Edit realestate"
@@ -275,19 +316,6 @@ msgstr "kreiraj"
 #: .\booking\templates\booking\kontakt_forma.html:4
 msgid "Contact Form"
 msgstr "Kontakt Forma"
-
-#: .\booking\templates\booking\kontakt_forma.html:12
-msgid "question"
-msgstr "upit"
-
-#: .\booking\templates\booking\kontakt_forma.html:16
-msgid "name of realestate"
-msgstr "naziv nekretnine"
-
-#: .\booking\templates\booking\kontakt_forma.html:19
-#: .\booking\templates\booking\odgovor.html:9
-msgid "send"
-msgstr "pošalji"
 
 #: .\booking\templates\booking\kontakt_forma_detail.html:26
 #: .\booking\templates\booking\kontakt_forma_list.html:26
@@ -371,6 +399,12 @@ msgstr "površina (do)"
 #: .\booking\templates\booking\nekretnina_list.html:253
 msgid "Filter"
 msgstr "Filtriraj"
+
+#: .\booking\templates\booking\nekretnina_list.html:259
+#, fuzzy
+#| msgid "name of realestate"
+msgid "number of realestates:"
+msgstr "broj nekretnina:"
 
 #: .\booking\templates\booking\odgovor.html:5
 msgid "response"
@@ -1659,58 +1693,58 @@ msgstr ""
 msgid "Create your superuser first!"
 msgstr ""
 
-#: .\mysite\settings\base.py:134
+#: .\mysite\settings\base.py:135
 msgid "English"
 msgstr ""
 
-#: .\mysite\settings\base.py:135
+#: .\mysite\settings\base.py:136
 msgid "Serbian"
 msgstr ""
 
 #: .\mysite\templates\base.html:29
 msgid "LISTING"
-msgstr "LISTING"
+msgstr "NEKRETNINE"
 
-#: .\mysite\templates\base.html:31
+#: .\mysite\templates\base.html:37
 msgid "REGISTER"
 msgstr "REGISTRUJ SE"
 
-#: .\mysite\templates\base.html:35
+#: .\mysite\templates\base.html:41
 msgid "PUBLISH"
 msgstr "OBJAVI"
 
-#: .\mysite\templates\base.html:37
+#: .\mysite\templates\base.html:43
 msgid "NEW TYPE"
 msgstr "NOVI TIP"
 
-#: .\mysite\templates\base.html:38
+#: .\mysite\templates\base.html:44
 msgid "NEW CHARACTERISTICS"
 msgstr "NOVA KARAKTERISTIKA"
 
-#: .\mysite\templates\base.html:41
+#: .\mysite\templates\base.html:47
 msgid "USERS"
 msgstr "KORISNICI"
 
-#: .\mysite\templates\base.html:42
+#: .\mysite\templates\base.html:48
 msgid "AGENTS"
 msgstr "AGENTI"
 
-#: .\mysite\templates\base.html:45
+#: .\mysite\templates\base.html:51
 msgid "CREATE AGENT ACCOUNT"
 msgstr "NAPRAVI NALOG AGENTA"
 
-#: .\mysite\templates\base.html:48
+#: .\mysite\templates\base.html:54
 msgid "INBOX"
 msgstr "PORUKE"
 
-#: .\mysite\templates\base.html:50
+#: .\mysite\templates\base.html:56
 msgid "LOG OUT"
 msgstr "ODJAVI SE"
 
-#: .\mysite\templates\base.html:51
+#: .\mysite\templates\base.html:57
 msgid "WELCOME:"
 msgstr "DOBRODOŠLI"
 
-#: .\mysite\templates\base.html:53
+#: .\mysite\templates\base.html:59
 msgid "LOG IN"
 msgstr "PRIJAVI SE"

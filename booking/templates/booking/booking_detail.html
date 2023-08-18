@@ -55,24 +55,28 @@
         {% endfor %}
   </div>
     <div id="map" style="height:400px; width:700px; margin-bottom:30px;"></div>
-<script>
-  var map = L.map('map').setView([{{ detail.latitude }}, {{ detail.longitude }}], 15);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
+    <script>
+      console.log("Script started"); // Pratimo početak izvršavanja skripte
 
-  var marker = L.marker([{{ detail.latitude }}, {{ detail.longitude }}]).addTo(map);
-  marker.detailId = '{{ detail.id }}';
+      var map = L.map('map').setView([{{ detail.latitude|safe }}, {{ detail.longitude|safe }}], 15);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
 
-  var southWest = L.latLng(44.706389, 17.035946);
-  var northEast = L.latLng(44.844916, 17.347521);
-  var bounds = L.latLngBounds(southWest, northEast);
-  map.setMaxBounds(bounds);
-  map.on('drag', function () {
-    map.panInsideBounds(bounds, { animate: false });
-  });
-</script>
+      var marker = L.marker([{{ detail.latitude|safe }}, {{ detail.longitude|safe }}]).addTo(map);
+      marker.detailId = '{{ detail.id }}';
+
+      var southWest = L.latLng(44.706389, 17.035946);
+      var northEast = L.latLng(44.844916, 17.347521);
+      var bounds = L.latLngBounds(southWest, northEast);
+      map.setMaxBounds(bounds);
+      map.on('drag', function () {
+        map.panInsideBounds(bounds, { animate: false });
+      });
+
+    </script>
+
 
 
 
@@ -80,28 +84,30 @@
     <form method="post" action="{% url 'booking:kontakt_forma' %}">
         {% csrf_token %}
         <div class="form-group">
-            <label for="id_ime">Name:</label>
+            <label for="id_ime">{% trans "Name" %}:</label>
             <input type="text" id="id_ime" name="ime" value="{{ user.username }}" class="form-control" readonly>
         </div>
 
         <div class="form-group" style="display: none;">
-            <label for="id_naziv_nekretnine">name of realestate:</label>
+            <label for="id_naziv_nekretnine">{% trans "name of realestate" %}:</label>
             <input type="text" id="id_naziv_nekretnine" name="naziv_nekretnine" value="{{ detail.naziv }}" class="form-control" readonly>
         </div>
 
         <div class="form-group" style="display: none;">
-            <label for="id_ime_agenta">agent:</label>
+            <label for="id_ime_agenta">{% trans "agent" %}:</label>
             <input type="text" id="id_ime_agenta" name="ime_agenta" class="form-control" readonly>
             <input type="hidden" name="ime_agenta" value="{{ detail.agent }}">
         </div>
         <div class="form-group">
-            <label for="id_upit">question:</label>
+            <label for="id_upit">{% trans "question" %}:</label>
             <textarea id="id_upit" name="upit" class="form-control"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">send</button>
+        <button type="submit" class="btn btn-primary">{% trans "send" %}</button>
     </form>
     {% endif %}
 
+    {{ detail.latitude }}
+    {{ detail.longitude }}
 
   </div>
 {% endblock %}

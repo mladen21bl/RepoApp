@@ -134,6 +134,7 @@ LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', _('English')),
     ('sr', _('Serbian')),
+    ('de', _('German')),
 ]
 
 LOCALE_PATHS = [
