@@ -39,12 +39,23 @@ from django.contrib import messages
 from wagtail.images.models import Image as WagtailImage
 from django.core.paginator import Paginator, Page
 from django.http import JsonResponse
+from django.shortcuts import render
+from django.utils.translation import gettext as _
+from django.utils.translation import activate
+from django.shortcuts import redirect
+from django.utils import translation
+
+def set_language(request):
+    if 'lang' in request.GET:
+        lang_code = request.GET['lang']
+        print(f"Selected language: {lang_code}")
+        activate(lang_code)
+        request.session['django_language'] = lang_code
+        print(f"Language in session: {request.session['django_language']}")
+    return redirect(request.META.get('HTTP_REFERER'))
 
 class IndexView(TemplateView):
-    template_name = "booking/nekretnina_list.html"
-
-    def get(self, request, *args, **kwargs):
-        return redirect('booking:filteri')
+    template_name = "booking/index.html"
 
 
 class SentView(TemplateView):

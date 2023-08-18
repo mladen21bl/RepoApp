@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
-
+{% load wagtailcore_tags i18n %}
 {% block content %}
 <div class="login-container" style="margin-top: 130px;">
-  <h2>Novi tip</h2>
+  <h2>{% trans "New type" %}</h2>
   <form method="post">
     {% csrf_token %}
     <div class="form-group">
-      <label for="{{ form.name.id_for_label }}">naziv:</label>
+      <label for="{{ form.name.id_for_label }}">{% trans "name" %}:</label>
       {{ form.name }}
     </div>
-    <button type="submit" class="btn">Kreiraj</button>
+    <button type="submit" class="btn">{% trans "create" %}</button>
   </form>
 </div>
-
 <style>
   .login-container {
     text-align: center;

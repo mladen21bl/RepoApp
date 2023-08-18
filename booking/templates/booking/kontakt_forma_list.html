@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load wagtailcore_tags i18n %}
 {% load wagtailcore_tags %}
 
 {% block content %}
@@ -19,14 +19,12 @@
 }
 </style>
 <div class="container">
-<p>poruke:</p>
+<p>{% trans "messages" %}:</p>
 {% for upit in upiti %}
     {% if user.username == upit.ime or user.username == upit.ime_agenta or request.user.is_superuser %}
         <div class="box">
-            <a href="{% url 'booking:upit_detalj' pk=upit.pk %}" class="box-link">Upit za: {{ upit.naziv_nekretnine }} Salje: {{ upit.ime }}</a>
+            <a href="{% url 'booking:upit_detalj' pk=upit.pk %}" class="box-link">{% trans "question for" %}: {{ upit.naziv_nekretnine }} {% trans "Sent by" %}: {{ upit.ime }}</a>
         </div>
     {% endif %}
 {% endfor %}
-
-</div>
 {% endblock %}

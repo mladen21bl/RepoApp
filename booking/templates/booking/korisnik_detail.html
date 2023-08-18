@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
-
+{% load wagtailcore_tags i18n %}
 {% block content %}
 
-    <h1>Podaci o korisniku</h1>
-    <p>Korisničko ime: {{ korisnik.username }}</p>
-    <p>Email: {{ korisnik.email }}</p>
-    <p>Status: {{ korisnik.odobreno }}</p>
+<h1>{% trans "user data" %}</h1>
+<p>{% trans "username" %}: {{ korisnik.username }}</p>
+<p>{% trans "email" %}: {{ korisnik.email }}</p>
+<p>{% trans "status" %}: {{ korisnik.odobreno }}</p>
 
-    <a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">Obriši korisnika</a>
+<a href="{% url 'booking:korisnik_delete' pk=korisnik.pk %}">{% trans "delete user" %}</a>
+
 
 
 {% endblock %}

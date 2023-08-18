@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-blogpage{% endblock %}
+<style>
+  .center {
+    text-align: center;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+</style>
+{% block content %}
+<div class="center">
+  <h3>{% trans 'Odaberi jezik' %}</h3>
+</div>
+<div class="image-grid">
+  <a href="{% url 'booking:set_language' %}?lang=sr"><img class="image" src="https://image1.challengermode.com/158263a8-293e-4b6a-01e4-08d9630aff88_256_256" alt="Image 1"></a>
+  <a href="{% url 'booking:set_language' %}?lang=en"><img class="image" src="https://www.thesims3.com/sims3_asset/sims3_asset/thumb/shard000/000/035/351/94/original.jpg" alt="Image 2"></a>
+  <a href="{% url 'booking:set_language' %}?lang=de"><img class="image" src="https://images.freeimages.com/fic/images/icons/658/european_flags/256/united_kingdom.png" alt="Image 3"></a>
+</div>
+{% endblock %}

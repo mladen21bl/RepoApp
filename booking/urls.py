@@ -31,7 +31,7 @@ from .views import (
     KorisnikDeleteView,
     TipCreateView,
     KarakteristikaCreateView,
-
+    set_language,
 )
 
 
@@ -69,4 +69,7 @@ urlpatterns = [
 
     path('tip/create/', TipCreateView.as_view(), name='tip_create'),
     path('karakteristika/create/', KarakteristikaCreateView.as_view(), name='karakteristika_create'),
+
+
+    path('set_language/', set_language, name='set_language'),
 ]

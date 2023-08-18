@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+{% load wagtailcore_tags i18n %}
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Verifikacija emaila</title>
+    <title>{% trans "Email verification" %}</title>
 </head>
 <body>
-    <h1>Pozdrav</h1>
-    <p>Klikinite na link kako bi unijeli novu lozinku</p>
-    <a href="#"></a>
+    <h1>{% trans "Greetings" %}</h1>
+    <p>{% trans "Click on link below to reset password" %}</p>
+    <a href="#">{% trans "Reset Password" %}</a>
 </body>
 </html>

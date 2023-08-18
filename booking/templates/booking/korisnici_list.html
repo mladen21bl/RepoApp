@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
-
+{% load wagtailcore_tags i18n %}
 {% block content %}
 
 <div class="container">
-
+<h3>{% trans "List of users" %}:</h3>
 {% for korisnik in korisnici %}
 
   <a href="{% url 'booking:korisnik_detail' pk=korisnik.pk %}" style="text-decoration: none;">{{ korisnik.username }}</a><p></p>
