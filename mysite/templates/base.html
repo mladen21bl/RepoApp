@@ -27,6 +27,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="{% url 'booking:filteri' %}">{% trans 'LISTING' %}</a>
+        <a class="nav-link" href="{% url 'booking:indexview' %}">{% trans 'LANGUAGE' %}</a>
         {% if not user.is_authenticated %}
         <a class="nav-link" href="{% url 'booking:korisnik_registracija' %}">{% trans 'REGISTER' %}</a>
         {% endif %}
