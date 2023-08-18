@@ -267,15 +267,15 @@
 
           //############# DODAVANJE MARKERA ##########################
           var markers = L.markerClusterGroup();
-{% for nekretnina in lista %}
-    var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
-    marker.nekretninaId = '{{ nekretnina.pk }}'; // Koristimo pk umesto cele nekretnine
-    markers.addLayer(marker);
-    marker.on('click', function () {
-        window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
-    });
-{% endfor %}
-map.addLayer(markers);
+          {% for nekretnina in lista %}
+              var marker = L.marker([{{ nekretnina.latitude }}, {{ nekretnina.longitude }}]);
+              marker.nekretninaId = '{{ nekretnina.pk }}'; // Koristimo pk umesto cele nekretnine
+              markers.addLayer(marker);
+              marker.on('click', function () {
+                  window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
+              });
+          {% endfor %}
+          map.addLayer(markers);
 
 
           //############# GRANICE ##########################
@@ -312,7 +312,7 @@ var js_objekti = [];
       url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
       image_url: '{{ nekretnina.gallery_images.first.image_url }}',
     };
-    console.log(objekat.naziv)
+    console.log(objekat.latitude)
     js_objekti.push(objekat);
 {% endfor %}
 
@@ -404,8 +404,5 @@ setTimeout(function () {
         <li><a href="?page=1" id="broj">1</a></li>
   </ul>
 </div>
-{% for nekretnina in lista %}
-    {{ nekretnina.latitude }}
-{% endfor %}
 
 {% endblock %}
