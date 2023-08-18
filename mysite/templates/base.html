@@ -27,13 +27,6 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="{% url 'booking:filteri' %}">{% trans 'LISTING' %}</a>
-        <div>
-            <ul>
-                <li><a href="{% url 'booking:set_language' %}?lang=en">English</a></li>
-                <li><a href="{% url 'booking:set_language' %}?lang=sr">Srpski</a></li>
-                <li><a href="{% url 'booking:set_language' %}?lang=de">Deutsch</a></li>
-            </ul>
-        </div>
         {% if not user.is_authenticated %}
         <a class="nav-link" href="{% url 'booking:korisnik_registracija' %}">{% trans 'REGISTER' %}</a>
         {% endif %}

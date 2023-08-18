@@ -269,7 +269,7 @@
           var markers = L.markerClusterGroup();
           {% for nekretnina in lista %}
               var marker = L.marker([{{ nekretnina.latitude|safe }}, {{ nekretnina.longitude|safe }}]);
-              marker.nekretninaId = '{{ nekretnina.pk }}'; // Koristimo pk umesto cele nekretnine
+              marker.nekretninaId = '{{ nekretnina.pk }}'; 
               markers.addLayer(marker);
               marker.on('click', function () {
                   window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';

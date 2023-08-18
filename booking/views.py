@@ -55,10 +55,7 @@ def set_language(request):
     return redirect(request.META.get('HTTP_REFERER'))
 
 class IndexView(TemplateView):
-    template_name = "booking/nekretnina_list.html"
-
-    def get(self, request, *args, **kwargs):
-        return redirect('booking:filteri')
+    template_name = "booking/index.html"
 
 
 class SentView(TemplateView):
