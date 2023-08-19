@@ -128,6 +128,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
+# settings.py
+SESSION_COOKIE_AGE = 60 * 60 * 24
 
 LANGUAGE_CODE = 'en'
 

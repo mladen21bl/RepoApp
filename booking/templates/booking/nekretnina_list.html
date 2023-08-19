@@ -252,20 +252,8 @@
 
 <button type="submit">{% trans "Filter" %}</button>
     </div>
-
     <div id="flex-container">
       <div id="empty-space">
-        <script>
-
-  function setChosenLanguage(langCode) {
-    localStorage.setItem('chosenLanguage', langCode);
-  }
-
-
-  function getChosenLanguage() {
-    return localStorage.getItem('chosenLanguage');
-  }
-</script>
         <div id="map"></div>
         <div id="visible-markers-count" style="font-size:1.4em;">{% trans 'number of realestates:' %} <span id="count">0</span></div>
         <script>
@@ -299,18 +287,26 @@
           });
 
           //############# SAVE & LOAD ##########################
-          function saveMapState() {
-            localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
-            localStorage.setItem('mapZoom', map.getZoom());
-          }
+          var currentLanguage = '{{ request.session.django_language|default:"" }}';
 
-          function loadMapState() {
-            var savedCenter = localStorage.getItem('mapCenter');
-            var savedZoom = localStorage.getItem('mapZoom');
-            if (savedCenter && savedZoom) {
-              map.setView(JSON.parse(savedCenter), savedZoom);
-            }
-          }
+  function saveMapState() {
+    localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
+    localStorage.setItem('mapZoom', map.getZoom());
+
+    localStorage.setItem('selectedLanguage', currentLanguage);
+  }
+
+  function loadMapState() {
+    var savedCenter = localStorage.getItem('mapCenter');
+    var savedZoom = localStorage.getItem('mapZoom');
+    if (savedCenter && savedZoom) {
+      map.setView(JSON.parse(savedCenter), savedZoom);
+    }
+
+    if (currentLanguage) {
+      activate(currentLanguage);
+    }
+  }
 
           map.on('moveend', saveMapState);
           map.on('zoomend', saveMapState);
@@ -328,12 +324,6 @@ var js_objekti = [];
 {% endfor %}
 
  //################# UPDATE PAGINACIJE ###############################
- var chosenLanguage = getChosenLanguage();
-
-
-if (chosenLanguage) {
-  set_language({ GET: { lang: chosenLanguage } });
-}
  function updatePaginationAndSlides(visibleNekretnineIds) {
 
  var numPages = Math.ceil(visibleNekretnineIds.length / 10);
