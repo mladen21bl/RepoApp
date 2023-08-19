@@ -255,6 +255,17 @@
 
     <div id="flex-container">
       <div id="empty-space">
+        <script>
+
+  function setChosenLanguage(langCode) {
+    localStorage.setItem('chosenLanguage', langCode);
+  }
+
+
+  function getChosenLanguage() {
+    return localStorage.getItem('chosenLanguage');
+  }
+</script>
         <div id="map"></div>
         <div id="visible-markers-count" style="font-size:1.4em;">{% trans 'number of realestates:' %} <span id="count">0</span></div>
         <script>
@@ -264,22 +275,6 @@
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(map);
-          //################### SACUVAVANJE JEZIKA #####################
-          function setLanguageInLocalStorage(lang) {
-            localStorage.setItem('selectedLanguage', lang);
-          }
-
-          function getLanguageFromLocalStorage() {
-            return localStorage.getItem('selectedLanguage');
-          }
-
-          function setLanguageOnLoad() {
-            var savedLang = getLanguageFromLocalStorage();
-            if (savedLang) {
-              activate(savedLang);
-            }
-          }
-          setLanguageOnLoad();
 
           //############# DODAVANJE MARKERA ##########################
           var markers = L.markerClusterGroup();
@@ -333,6 +328,12 @@ var js_objekti = [];
 {% endfor %}
 
  //################# UPDATE PAGINACIJE ###############################
+ var chosenLanguage = getChosenLanguage();
+
+
+if (chosenLanguage) {
+  set_language({ GET: { lang: chosenLanguage } });
+}
  function updatePaginationAndSlides(visibleNekretnineIds) {
 
  var numPages = Math.ceil(visibleNekretnineIds.length / 10);
