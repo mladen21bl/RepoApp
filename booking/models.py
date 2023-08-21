@@ -13,12 +13,13 @@ from imagekit.processors import ResizeToFill
 from wagtail.snippets.models import register_snippet
 from django import forms
 from django.utils.text import slugify
+import uuid
 
 
 
 class Tip(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, default=uuid.uuid1)
 
     def __str__(self):
         return self.name
