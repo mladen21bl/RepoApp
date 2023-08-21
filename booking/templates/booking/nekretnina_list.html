@@ -287,26 +287,25 @@
           });
 
           //############# SAVE & LOAD ##########################
-          var currentLanguage = '{{ request.session.django_language|default:"" }}';
+          //var currentLanguage = '{{ request.session.django_language|default:"" }}';
 
-  function saveMapState() {
-    localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
-    localStorage.setItem('mapZoom', map.getZoom());
+          function saveMapState() {
+            localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
+            localStorage.setItem('mapZoom', map.getZoom());
+            //localStorage.setItem('selectedLanguage', currentLanguage);
+          }
 
-    localStorage.setItem('selectedLanguage', currentLanguage);
-  }
+          function loadMapState() {
+            var savedCenter = localStorage.getItem('mapCenter');
+            var savedZoom = localStorage.getItem('mapZoom');
+            if (savedCenter && savedZoom) {
+              map.setView(JSON.parse(savedCenter), savedZoom);
+            }
 
-  function loadMapState() {
-    var savedCenter = localStorage.getItem('mapCenter');
-    var savedZoom = localStorage.getItem('mapZoom');
-    if (savedCenter && savedZoom) {
-      map.setView(JSON.parse(savedCenter), savedZoom);
-    }
-
-    if (currentLanguage) {
-      activate(currentLanguage);
-    }
-  }
+          //  if (currentLanguage) {
+          //    activate(currentLanguage);
+          //  }
+          }
 
           map.on('moveend', saveMapState);
           map.on('zoomend', saveMapState);
