@@ -251,75 +251,71 @@
 </div>
 
 <button type="submit">{% trans "Filter" %}</button>
-    </div>
-    <div id="flex-container">
-      <div id="empty-space">
-        <div id="map"></div>
-        <div id="visible-markers-count" style="font-size:1.4em;">{% trans 'number of realestates:' %} <span id="count">0</span></div>
-        <script>
-          //############# POSTAVLJANJE MAPE ##########################
-          var map = L.map('map').setView([44.784846, 17.186230], 10);
+</div>
+
+<div id="flex-container">
+  <div id="empty-space">
+    <div id="map"></div>
+      <div id="visible-markers-count" style="font-size:1.4em;">{% trans 'number of realestates:' %} <span id="count">0</span></div>
+<script>
+//############# POSTAVLJANJE MAPE ##########################
+var map = L.map('map').setView([44.784846, 17.186230], 10);
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(map);
 
-          //############# DODAVANJE MARKERA ##########################
-          var markers = L.markerClusterGroup();
-          {% for nekretnina in lista %}
-              var marker = L.marker([{{ nekretnina.latitude|safe }}, {{ nekretnina.longitude|safe }}]);
-              marker.nekretninaId = '{{ nekretnina.pk }}';
-              markers.addLayer(marker);
-              marker.on('click', function () {
-                  window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';
-              });
-          {% endfor %}
-          map.addLayer(markers);
+//############# DODAVANJE MARKERA ##########################
+var markers = L.markerClusterGroup();
 
+{% for nekretnina in lista %}
+var marker = L.marker([{{ nekretnina.latitude|safe }}, {{ nekretnina.longitude|safe }}]);
+marker.nekretninaId = '{{ nekretnina.pk }}';
+markers.addLayer(marker);
+marker.on('click', function () {window.location.href = '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}';});
+{% endfor %}
 
-          //############# GRANICE ##########################
-          var southWest = L.latLng(44.706389, 17.035946);
-          var northEast = L.latLng(44.844916, 17.347521);
-          var bounds = L.latLngBounds(southWest, northEast);
-          map.setMaxBounds(bounds);
-          map.on('drag', function () {
-            map.panInsideBounds(bounds, { animate: false });
-          });
+map.addLayer(markers);
 
-          //############# SAVE & LOAD ##########################
-          //var currentLanguage = '{{ request.session.django_language|default:"" }}';
+//############# GRANICE ##########################
+var southWest = L.latLng(44.706389, 17.035946);
+var northEast = L.latLng(44.844916, 17.347521);
+var bounds = L.latLngBounds(southWest, northEast);
+map.setMaxBounds(bounds);
+map.on('drag', function () {
+  map.panInsideBounds(bounds, { animate: false });
+});
 
-          function saveMapState() {
-            localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
-            localStorage.setItem('mapZoom', map.getZoom());
-            //localStorage.setItem('selectedLanguage', currentLanguage);
+//############# SAVE & LOAD ##########################
+//var currentLanguage = '{{ request.session.django_language|default:"" }}';
+function saveMapState() {
+  localStorage.setItem('mapCenter', JSON.stringify(map.getCenter()));
+  localStorage.setItem('mapZoom', map.getZoom());
+  //localStorage.setItem('selectedLanguage', currentLanguage);
+}
+
+function loadMapState() {
+  var savedCenter = localStorage.getItem('mapCenter');
+  var savedZoom = localStorage.getItem('mapZoom');
+  if (savedCenter && savedZoom) {
+    map.setView(JSON.parse(savedCenter), savedZoom);
+  }
+  //  if (currentLanguage) {
+  //    activate(currentLanguage);
+  //  }
           }
-
-          function loadMapState() {
-            var savedCenter = localStorage.getItem('mapCenter');
-            var savedZoom = localStorage.getItem('mapZoom');
-            if (savedCenter && savedZoom) {
-              map.setView(JSON.parse(savedCenter), savedZoom);
-            }
-
-          //  if (currentLanguage) {
-          //    activate(currentLanguage);
-          //  }
-          }
-
-          map.on('moveend', saveMapState);
-          map.on('zoomend', saveMapState);
+map.on('moveend', saveMapState);
+map.on('zoomend', saveMapState);
 //####################### KREIRANJE JS OBJEKATA ######################
 var js_objekti = [];
 {% for nekretnina in lista %}
-    var objekat = {
-      nekretninaId: '{{ nekretnina.pk }}',
-      naziv: '{{ nekretnina.naziv }}',
-      url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
-      image_url: '{{ nekretnina.gallery_images.first.image_url }}',
+var objekat = {
+  nekretninaId: '{{ nekretnina.pk }}',
+  naziv: '{{ nekretnina.naziv }}',
+  url: '{% url 'booking:nekretnina_detail' pk=nekretnina.pk %}',
+  image_url: '{{ nekretnina.gallery_images.first.image_url }}',
     };
-    console.log(objekat.latitude)
-    js_objekti.push(objekat);
+  js_objekti.push(objekat);
 {% endfor %}
 
  //################# UPDATE PAGINACIJE ###############################
